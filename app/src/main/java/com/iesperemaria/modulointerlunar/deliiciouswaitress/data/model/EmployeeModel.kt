@@ -10,5 +10,4 @@ data class EmployeeModel (
     var createdAt: String,
     var updatedAt: String,
     var isAdmin: Boolean
-
 )

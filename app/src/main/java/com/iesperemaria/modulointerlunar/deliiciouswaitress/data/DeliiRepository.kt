@@ -1,9 +1,7 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.data
 
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.model.EmployeeModel
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.model.EmployeeProvider
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.model.IngredientModel
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.model.IngredientProvider
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.network.DeliiService
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.Resource
 

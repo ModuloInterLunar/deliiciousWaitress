@@ -88,8 +88,7 @@ class MainActivity : ComponentActivity() {
             if (isLoading)
                 CircularProgressIndicator()
             for (ingredient in ingredients)
-                Text(text = ingredient.name ?: "default", color = Color.Black)
-
+                Text(text = ingredient.name, color = Color.Black)
         }
     }
 }

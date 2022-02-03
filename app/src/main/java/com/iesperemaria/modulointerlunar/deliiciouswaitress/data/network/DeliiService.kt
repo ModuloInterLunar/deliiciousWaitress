@@ -14,11 +14,11 @@ class DeliiService {
 
     suspend fun getEmployees():List<EmployeeModel>{
         val response = retrofit.getAllEmployees()
+        Logger.i(response.toString())
         return response.body() ?: emptyList()
     }
 
     suspend fun getIngredients():List<IngredientModel>{
-        Logger.i("hola")
         val response = retrofit.getAllIngredients()
         Logger.i(response.toString())
         return response.body() ?: emptyList()

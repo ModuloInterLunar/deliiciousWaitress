@@ -6,7 +6,7 @@ data class Dish(
     val description: String,
     val id: String,
     val image: String,
-    val ingredientQties: List<IngredientQty>,
+    val ingredientsQties: List<IngredientQty>,
     val name: String,
     val price: Int,
     val type: String
