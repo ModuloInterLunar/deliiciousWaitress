@@ -20,25 +20,30 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.MainScreen
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist.TableListScreen
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist.TableListViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.viewmodel.IngredientViewModel
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 
-
 class MainActivity : ComponentActivity() {
 
     private val ingredientViewModel: IngredientViewModel by viewModels()
+    private val tableListViewModel: TableListViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Logger.addLogAdapter(AndroidLogAdapter())
         ingredientViewModel.loadIngredients()
+        tableListViewModel.loadTables()
+
         setContent {
             DeliiciousWaitressTheme {
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,
-                    startDestination = "main_screen"
+                    startDestination = "table_list_screen"
                 ) {
                     composable("main_screen") {
                         MainScreen(
@@ -56,17 +61,19 @@ class MainActivity : ComponentActivity() {
                     ) {
 
                     }
+                    composable(
+                        route = "table_list_screen"
+                    ){
+                        TableListScreen(
+                            navController = navController,
+                            tableModelList = tableListViewModel.tables.value
+                        )
+                    }
                 }
-//                // A surface container using the 'background' color from the theme
-//                Surface(
-//                    modifier = Modifier.fillMaxSize(),
-//                    color = MaterialTheme.colors.background
-//                ) {
-//                    ViewContainer()
-//                }
             }
         }
     }
+
     @Preview
     @Composable
     fun ViewContainer() {

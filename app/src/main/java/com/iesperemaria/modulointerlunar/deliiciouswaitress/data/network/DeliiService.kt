@@ -6,6 +6,7 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exceptio
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.Auth
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Ingredient
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
 import com.orhanobut.logger.Logger
 
 class DeliiService {
@@ -31,6 +32,12 @@ class DeliiService {
     suspend fun getIngredients():List<Ingredient>{
         val response = RetrofitHelper.getDeliiApiClient().getAllIngredients()
         Log.i(TAG, response.toString())
+        return response.body() ?: emptyList()
+    }
+
+    suspend fun getTables():List<Table>{
+        val response = retrofit.getAllTables()
+        Logger.i(response.toString())
         return response.body() ?: emptyList()
     }
 

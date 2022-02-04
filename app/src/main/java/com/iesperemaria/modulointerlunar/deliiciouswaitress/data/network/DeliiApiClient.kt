@@ -3,6 +3,7 @@ package com.iesperemaria.modulointerlunar.deliiciouswaitress.data.network
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.Auth
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Ingredient
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Token
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -23,6 +24,9 @@ interface DeliiApiClient {
 
     @GET("api/ingredients")
     suspend fun getAllIngredients(): Response<List<Ingredient>>
+
+    @GET("api/tables")
+    suspend fun getAllTables(): Response<List<Table>>
 
     @GET("api/employees/-1")
     suspend fun getEmployeeFromToken(): Response<Employee>

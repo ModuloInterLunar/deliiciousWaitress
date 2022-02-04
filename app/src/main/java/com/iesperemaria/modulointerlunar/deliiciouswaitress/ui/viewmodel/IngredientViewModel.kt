@@ -25,7 +25,6 @@ class IngredientViewModel(application: Application) : AndroidViewModel(
     fun loadError() : MutableState<String> = loadError
 
     val ingredients: MutableState<List<Ingredient>> = mutableStateOf(listOf())
-
     var getIngredientsUseCase = GetIngredientsUseCase()
     var loginUseCase = LoginUseCase()
 
@@ -47,53 +46,6 @@ class IngredientViewModel(application: Application) : AndroidViewModel(
             } catch (e: Exception) {
                 Logger.e(e.message ?: e.toString())
             }
-
         }
     }
 }
-
-/*
-package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.viewmodel
-
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.core.RetrofitHelper.getRetrofit
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.EmployeeModel
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.IngredientModel
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.GetIngredientsUseCase
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.Resource
-import com.orhanobut.logger.Logger
-import kotlinx.coroutines.launch
-
-class IngredientViewModel : ViewModel() {
-    private val isLoading = mutableStateOf(false)
-    private val loadError = mutableStateOf("")
-
-    fun isLoading() : MutableState<Boolean> = isLoading
-    fun loadError() : MutableState<String> = loadError
-
-    val ingredients: MutableState<List<IngredientModel>> = mutableStateOf(listOf())
-
-    var getIngredientsUseCase = GetIngredientsUseCase()
-
-    fun loadIngredients() {
-        viewModelScope.launch{
-            isLoading.value = true
-            try {
-                val result = getIngredientsUseCase()
-//                val result = retrofit.getAllIngredients()
-                if (!response.isNullOrEmpty()){
-                    ingredients.value = response
-                    isLoading.value = false
-                }
-            } catch (e: Exception) {
-                Logger.e(e.message ?: e.toString())
-            }
-        }
-    }
-}
- */
