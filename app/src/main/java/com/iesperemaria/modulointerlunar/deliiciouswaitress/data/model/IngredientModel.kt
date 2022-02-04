@@ -4,6 +4,5 @@ class IngredientModel (
     var id: String,
     var name: String,
     var quantity: Double,
-    var measure: String,
-    var image: String
+    var measure: String
 )

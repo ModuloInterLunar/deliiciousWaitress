@@ -6,8 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.model.EmployeeModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.model.IngredientModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.GetEmployeesUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.Resource
+import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
 
 class EmployeeViewModel : ViewModel(){
@@ -17,26 +19,21 @@ class EmployeeViewModel : ViewModel(){
     fun isLoading() : LiveData<Boolean> = isLoading
     fun loadError() : LiveData<String> = loadError
 
-    val employeeModel = MutableLiveData<EmployeeModel>()
+    val employeeModel = MutableLiveData<List<Employee>>()
 
     var getEmployeesUseCase = GetEmployeesUseCase()
 
     fun onCreate() {
         viewModelScope.launch{
-            isLoading.postValue(true)
-            val result = getEmployeesUseCase()
-            when(result) {
-                is Resource.Success -> {
-                    if (!result.data.isNullOrEmpty()){
-                        val data = result.data
-                        employeeModel.postValue(data[0])
-                        isLoading.postValue(false)
-                    }
-                }
-                is Resource.Error -> {
-                    loadError.value = result.message!!
+            isLoading.value = true
+            try {
+                val result = getEmployeesUseCase()
+                if (!result.isNullOrEmpty()){
+                    employeeModel.value = result
                     isLoading.value = false
                 }
+            } catch (e: Exception) {
+                Logger.e(e.message ?: e.toString())
             }
         }
     }

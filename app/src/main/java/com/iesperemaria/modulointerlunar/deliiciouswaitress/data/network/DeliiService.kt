@@ -1,26 +1,28 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.data.network
 
-import android.util.Log
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.core.RetrofitHelper
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.model.EmployeeModel
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.model.IngredientModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Ingredient
 import com.orhanobut.logger.Logger
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class DeliiService {
-    private val TAG = "DeliiService"
     private val retrofit = RetrofitHelper.getRetrofit()
 
-    suspend fun getEmployees():List<EmployeeModel>{
+    suspend fun getEmployees():List<Employee>{
         val response = retrofit.getAllEmployees()
         Logger.i(response.toString())
         return response.body() ?: emptyList()
     }
 
-    suspend fun getIngredients():List<IngredientModel>{
+    suspend fun getIngredients():List<Ingredient>{
         val response = retrofit.getAllIngredients()
         Logger.i(response.toString())
         return response.body() ?: emptyList()
+    }
+
+    suspend fun getEmployeeFromToken(): Employee {
+        val response = retrofit.getEmployeeFromToken()
+        Logger.i(response.toString())
+        return response.body()!!
     }
 }

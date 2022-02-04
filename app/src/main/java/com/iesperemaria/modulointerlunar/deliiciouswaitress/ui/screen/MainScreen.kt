@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.model.IngredientModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Ingredient
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.IngredientItem
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.viewmodel.IngredientViewModel
 import retrofit2.Response
@@ -21,8 +22,22 @@ import retrofit2.Response
 @Composable
 fun MainScreen(
     navController: NavController,
-    ingredientModelList: List<IngredientModel>
+    ingredientModelList: List<Ingredient>
 ) {
+    @Composable
+    fun IngredientList() {
+        Column {
+//            val isLoading = ingredientModelList.isLoading().value
+//            if (isLoading)
+//                CircularProgressIndicator()
+            LazyColumn {
+                itemsIndexed(items = ingredientModelList) {
+                        index, item -> IngredientItem(id = index, navController = navController, ingredient = item)
+                }
+            }
+        }
+    }
+
     Surface(
         color = MaterialTheme.colors.background,
         modifier = Modifier.fillMaxSize()
@@ -35,20 +50,9 @@ fun MainScreen(
                     .fillMaxWidth()
                     .align(Alignment.CenterHorizontally)
             )
+            Spacer(modifier = Modifier.height(20.dp))
+            IngredientList()
         }
     }
 
-    @Composable
-    fun Test() {
-        Column {
-//            val isLoading = ingredientModelList.isLoading().value
-//            if (isLoading)
-//                CircularProgressIndicator()
-            LazyColumn {
-                itemsIndexed(items = ingredientModelList) {
-                    index, item -> IngredientItem(id = index, navController = navController, ingredientModel = item)
-                }
-            }
-        }
-    }
 }

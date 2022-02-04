@@ -1,13 +1,19 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view
 
+import android.graphics.Color
 import android.icu.number.Scale
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color.Companion.LightGray
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -17,11 +23,12 @@ import coil.compose.base.R
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.model.IngredientModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Ingredient
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 
 
 @Composable
-fun IngredientItem(navController: NavController, ingredientModel: IngredientModel, id: Int) {
+fun IngredientItem(navController: NavController, ingredient: Ingredient, id: Int) {
     Card(modifier = Modifier
         .padding(8.dp, 4.dp)
         .fillMaxWidth()
@@ -32,23 +39,20 @@ fun IngredientItem(navController: NavController, ingredientModel: IngredientMode
         shape = RoundedCornerShape(8.dp),
         elevation = 4.dp
     ) {
-        Row(
-            modifier = Modifier
-                .padding(4.dp)
-                .fillMaxSize()
+        Column(
+            modifier = Modifier.padding(4.dp)
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.Center,
         ) {
-            Image(
-                painter = rememberImagePainter(
-                    data = ingredientModel.image,
-                    builder = {
-                        scale(coil.size.Scale.FILL)
-                        placeholder(R.drawable.notification_action_background)
-                        transformations(CircleCropTransformation())
-                    }
-                ),
-                contentDescription = ingredientModel.name,
-                modifier = Modifier.fillMaxHeight()
-                    .weight(0.2f)
+            Text(
+                text = ingredient.name,
+                style = MaterialTheme.typography.subtitle1,
+                fontWeight = FontWeight.Bold,
+            )
+            Text(
+                text = ingredient.quantity.toString() + ingredient.measure,
+                style = MaterialTheme.typography.caption,
+                modifier = Modifier.padding(4.dp),
             )
         }
     }
@@ -59,8 +63,8 @@ fun IngredientItem(navController: NavController, ingredientModel: IngredientMode
 @Composable
 fun Preview2() {
     DeliiciousWaitressTheme() {
-        val ingredient = IngredientModel("aaaa", "sdsadsa", 2.0, "g", "asdf")
-        IngredientItem(navController = rememberNavController(), ingredientModel = ingredient, id = 0)
+        val ingredient = Ingredient(0,"","", "g", "sdsadsa", 2, 200)
+        IngredientItem(navController = rememberNavController(), ingredient = ingredient, id = 0)
     }
 }
 

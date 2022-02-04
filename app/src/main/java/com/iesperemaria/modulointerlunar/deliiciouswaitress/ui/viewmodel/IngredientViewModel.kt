@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.core.RetrofitHelper.getRetrofit
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.model.EmployeeModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.model.IngredientModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Ingredient
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.GetIngredientsUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.Resource
 import com.orhanobut.logger.Logger
@@ -21,7 +22,7 @@ class IngredientViewModel : ViewModel() {
     fun isLoading() : MutableState<Boolean> = isLoading
     fun loadError() : MutableState<String> = loadError
 
-    val ingredients: MutableState<List<IngredientModel>> = mutableStateOf(listOf())
+    val ingredients: MutableState<List<Ingredient>> = mutableStateOf(listOf())
 
     var getIngredientsUseCase = GetIngredientsUseCase()
 
@@ -29,18 +30,10 @@ class IngredientViewModel : ViewModel() {
         viewModelScope.launch{
             isLoading.value = true
             try {
-                when(val result = getIngredientsUseCase()) {
-                    is Resource.Success -> {
-                        if (!result.data.isNullOrEmpty()){
-                            ingredients.value = result.data
-                            isLoading.value = false
-                        }
-                    }
-                    is Resource.Error -> {
-                        loadError.value = result.message!!
-                        isLoading.value = false
-                    }
-                    is Resource.Loading -> {  }
+                val result = getIngredientsUseCase()
+                if (!result.isNullOrEmpty()){
+                    ingredients.value = result
+                    isLoading.value = false
                 }
             } catch (e: Exception) {
                 Logger.e(e.message ?: e.toString())
