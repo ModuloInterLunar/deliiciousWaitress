@@ -1,6 +1,5 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.domain
 
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.model.EmployeeModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.network.DeliiService
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
 

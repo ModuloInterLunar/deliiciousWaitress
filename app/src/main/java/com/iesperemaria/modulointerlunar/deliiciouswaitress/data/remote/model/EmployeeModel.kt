@@ -1,4 +1,4 @@
-package com.iesperemaria.modulointerlunar.deliiciouswaitress.data.model
+package com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model
 
 data class EmployeeModel (
     var id: String,

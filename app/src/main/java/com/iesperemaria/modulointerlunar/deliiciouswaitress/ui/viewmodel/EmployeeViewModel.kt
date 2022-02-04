@@ -4,11 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.model.EmployeeModel
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.model.IngredientModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.GetEmployeesUseCase
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.Resource
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
 

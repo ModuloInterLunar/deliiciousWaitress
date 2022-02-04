@@ -6,7 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -26,15 +25,14 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.viewmodel.Ingredi
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 
+
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: IngredientViewModel by viewModels()
-
+    private val ingredientViewModel: IngredientViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Logger.addLogAdapter(AndroidLogAdapter())
-        viewModel.loadIngredients()
-
+        ingredientViewModel.loadIngredients()
         setContent {
             DeliiciousWaitressTheme {
                 val navController = rememberNavController()
@@ -45,11 +43,11 @@ class MainActivity : ComponentActivity() {
                     composable("main_screen") {
                         MainScreen(
                             navController = navController,
-                            ingredientModelList = viewModel.ingredients.value
+                            ingredientModelList = ingredientViewModel.ingredients.value
                         )
                     }
                     composable(
-                        "table_screen",
+                        "table_screen/{tableId}",
                         arguments = listOf(
                             navArgument("tableId") {
                                 type = NavType.StringType
@@ -82,9 +80,9 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun Test() {
-        val ingredients = viewModel.ingredients.value
+        val ingredients = ingredientViewModel.ingredients.value
         Column {
-            val isLoading = viewModel.isLoading().value
+            val isLoading = ingredientViewModel.isLoading().value
             if (isLoading)
                 CircularProgressIndicator()
             for (ingredient in ingredients)

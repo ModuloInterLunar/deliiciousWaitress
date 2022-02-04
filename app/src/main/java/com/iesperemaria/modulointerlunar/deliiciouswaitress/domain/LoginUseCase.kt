@@ -3,8 +3,8 @@ package com.iesperemaria.modulointerlunar.deliiciouswaitress.domain
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.network.DeliiService
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
 
-class GetEmployeeFromTokenUseCase {
+class LoginUseCase {
     private val api = DeliiService()
 
-    suspend operator fun invoke(): Employee = api.getEmployeeFromToken()
+    suspend operator fun invoke(username: String, password: String): String = api.login(username, password)
 }

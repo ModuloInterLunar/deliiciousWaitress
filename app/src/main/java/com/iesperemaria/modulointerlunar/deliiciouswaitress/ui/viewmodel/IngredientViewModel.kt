@@ -1,21 +1,23 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.viewmodel
 
+import android.app.Application
+import android.content.SharedPreferences
+import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.core.RetrofitHelper.getRetrofit
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.model.EmployeeModel
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.model.IngredientModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.WrongCredentialsException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Ingredient
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.GetIngredientsUseCase
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.Resource
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.LoginUseCase
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
 
-class IngredientViewModel : ViewModel() {
+
+class IngredientViewModel(application: Application) : AndroidViewModel(
+    application
+) {
     private val isLoading = mutableStateOf(false)
     private val loadError = mutableStateOf("")
 
@@ -25,13 +27,20 @@ class IngredientViewModel : ViewModel() {
     val ingredients: MutableState<List<Ingredient>> = mutableStateOf(listOf())
 
     var getIngredientsUseCase = GetIngredientsUseCase()
+    var loginUseCase = LoginUseCase()
 
     fun loadIngredients() {
         viewModelScope.launch{
             isLoading.value = true
             try {
+                val token = loginUseCase("alvaro", "12345")
+                Logger.i(token)
+            } catch (e: WrongCredentialsException) {
+                Toast.makeText(getApplication(), "Combinación usuario/contraseña inválida", Toast.LENGTH_LONG).show()
+            }
+            try {
                 val result = getIngredientsUseCase()
-                if (!result.isNullOrEmpty()){
+                if (!result.isNullOrEmpty()) {
                     ingredients.value = result
                     isLoading.value = false
                 }
@@ -53,8 +62,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.core.RetrofitHelper.getRetrofit
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.model.EmployeeModel
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.model.IngredientModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.EmployeeModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.IngredientModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.GetIngredientsUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.Resource
 import com.orhanobut.logger.Logger
