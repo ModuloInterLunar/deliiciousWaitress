@@ -8,6 +8,6 @@ data class Dish(
     val image: String,
     val ingredientQties: List<IngredientQty>,
     val name: String,
-    val price: Int,
+    val price: Double,
     val type: String
 )

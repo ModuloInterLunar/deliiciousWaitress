@@ -6,7 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -21,6 +20,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.MainScreen
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist.TableListScreen
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist.TableListViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.viewmodel.IngredientViewModel
 import com.orhanobut.logger.AndroidLogAdapter
@@ -28,24 +29,26 @@ import com.orhanobut.logger.Logger
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: IngredientViewModel by viewModels()
+    private val ingredientViewModel: IngredientViewModel by viewModels()
+    private val tableListViewModel: TableListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Logger.addLogAdapter(AndroidLogAdapter())
-        viewModel.loadIngredients()
+        ingredientViewModel.loadIngredients()
+        tableListViewModel.loadTables()
 
         setContent {
             DeliiciousWaitressTheme {
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,
-                    startDestination = "main_screen"
+                    startDestination = "table_list_screen"
                 ) {
                     composable("main_screen") {
                         MainScreen(
                             navController = navController,
-                            ingredientModelList = viewModel.ingredients.value
+                            ingredientModelList = ingredientViewModel.ingredients.value
                         )
                     }
                     composable(
@@ -58,17 +61,19 @@ class MainActivity : ComponentActivity() {
                     ) {
 
                     }
+                    composable(
+                        route = "table_list_screen"
+                    ){
+                        TableListScreen(
+                            navController = navController,
+                            tableModelList = tableListViewModel.tables.value
+                        )
+                    }
                 }
-//                // A surface container using the 'background' color from the theme
-//                Surface(
-//                    modifier = Modifier.fillMaxSize(),
-//                    color = MaterialTheme.colors.background
-//                ) {
-//                    ViewContainer()
-//                }
             }
         }
     }
+
     @Preview
     @Composable
     fun ViewContainer() {
@@ -82,9 +87,9 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun Test() {
-        val ingredients = viewModel.ingredients.value
+        val ingredients = ingredientViewModel.ingredients.value
         Column {
-            val isLoading = viewModel.isLoading().value
+            val isLoading = ingredientViewModel.isLoading().value
             if (isLoading)
                 CircularProgressIndicator()
             for (ingredient in ingredients)
