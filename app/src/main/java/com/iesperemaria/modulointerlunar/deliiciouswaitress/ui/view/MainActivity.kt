@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -23,6 +24,8 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.MainScreen
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist.TableListScreen
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist.TableListViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.LoginScreen
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.LoginViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.viewmodel.IngredientViewModel
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -31,21 +34,31 @@ class MainActivity : ComponentActivity() {
 
     private val ingredientViewModel: IngredientViewModel by viewModels()
     private val tableListViewModel: TableListViewModel by viewModels()
+    private val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Logger.addLogAdapter(AndroidLogAdapter())
-        ingredientViewModel.loadIngredients()
-        tableListViewModel.loadTables()
 
         setContent {
+            var currentScreen by rememberSaveable{ mutableStateOf("login") }
+            Logger.i(currentScreen)
             DeliiciousWaitressTheme {
+
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,
-                    startDestination = "table_list_screen"
+                    startDestination = currentScreen
                 ) {
+                    composable("login") {
+                        LoginScreen(
+                            navController = navController,
+                            loginViewModel = loginViewModel
+                        )
+                    }
                     composable("main_screen") {
+                        currentScreen = "main_screen"
+                        ingredientViewModel.loadIngredients()
                         MainScreen(
                             navController = navController,
                             ingredientModelList = ingredientViewModel.ingredients.value
@@ -64,6 +77,7 @@ class MainActivity : ComponentActivity() {
                     composable(
                         route = "table_list_screen"
                     ){
+                        tableListViewModel.loadTables()
                         TableListScreen(
                             navController = navController,
                             tableModelList = tableListViewModel.tables.value

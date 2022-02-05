@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">deliiciousWaitress</string>
+    <string name="username">Usuario</string>
+    <string name="password">Contraseña</string>
+    <string name="moure_dev">¡Hola Hackermen!</string>
+    <string name="login">Conectarse</string>
+    <string name="wrong_credentials_exception_message">Combinación usuario/contraseña incorrecta</string>
 </resources>

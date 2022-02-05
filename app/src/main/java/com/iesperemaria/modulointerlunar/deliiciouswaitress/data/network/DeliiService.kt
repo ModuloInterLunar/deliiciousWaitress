@@ -36,7 +36,7 @@ class DeliiService {
     }
 
     suspend fun getTables():List<Table>{
-        val response = retrofit.getAllTables()
+        val response = RetrofitHelper.getDeliiApiClient().getAllTables()
         Logger.i(response.toString())
         return response.body() ?: emptyList()
     }
