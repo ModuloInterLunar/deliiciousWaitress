@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item.OrderItem
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 
 @Composable
@@ -85,11 +86,13 @@ fun Content(tableViewModel: TableViewModel){
                 textDecoration = TextDecoration.Underline
             )
 
-            LazyColumn  {
+            LazyColumn(modifier = Modifier.padding(10.dp))  {
                 itemsIndexed(
                     items = table.actualTicket?.orders?: emptyList()
                 ) {
-                        index, table -> Text(text = "$index. ${table.dish.name}")
+                        _, order ->
+                    OrderItem(order = order)
+                    Spacer(modifier = Modifier.height(5.dp))
                 }
             }
         }
