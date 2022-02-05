@@ -11,8 +11,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
-
-
+import retrofit2.http.Path
 
 
 interface DeliiApiClient {
@@ -27,6 +26,11 @@ interface DeliiApiClient {
 
     @GET("api/tables")
     suspend fun getAllTables(): Response<List<Table>>
+
+    @GET("api/tables/{id}")
+    suspend fun getTable(
+        @Path("id") id: String
+    ): Response<Table>
 
     @GET("api/employees/-1")
     suspend fun getEmployeeFromToken(): Response<Employee>

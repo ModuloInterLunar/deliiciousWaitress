@@ -2,6 +2,7 @@ package com.iesperemaria.modulointerlunar.deliiciouswaitress.data.network
 
 import android.util.Log
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.core.RetrofitHelper
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.ItemNotFoundException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.WrongCredentialsException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.Auth
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
@@ -11,6 +12,7 @@ import com.orhanobut.logger.Logger
 
 class DeliiService {
     private val TAG = "DeliiService"
+
     suspend fun login(username: String, password: String):String{
         val response = RetrofitHelper.getDeliiApiClient().login(Auth(username, password))
         Log.i(TAG, response.toString())
@@ -36,9 +38,17 @@ class DeliiService {
     }
 
     suspend fun getTables():List<Table>{
-        val response = retrofit.getAllTables()
+        val response = RetrofitHelper.getDeliiApiClient().getAllTables()
         Logger.i(response.toString())
         return response.body() ?: emptyList()
+    }
+
+    suspend fun getTableById(id: String) : Table? {
+        val response = RetrofitHelper.getDeliiApiClient().getTable(id)
+        Logger.i(response.toString())
+        if(response.code() == 404)
+            throw ItemNotFoundException(response.message())
+        return response.body() ?: null
     }
 
     suspend fun getEmployeeFromToken(): Employee {

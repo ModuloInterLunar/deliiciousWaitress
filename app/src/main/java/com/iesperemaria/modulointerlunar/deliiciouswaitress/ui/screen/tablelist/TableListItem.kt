@@ -32,7 +32,7 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousW
 import kotlin.math.roundToInt
 
 @Composable
-fun TableItem(navController: NavController, table: Table, id: String, parentSize: IntSize) {
+fun TableListItem(navController: NavController, table: Table, id: String, parentSize: IntSize) {
     val offsetX = remember { mutableStateOf(0.0) }
     val offsetY = remember { mutableStateOf(0.0) }
 
@@ -61,7 +61,9 @@ fun TableItem(navController: NavController, table: Table, id: String, parentSize
             .size(50.dp)
             .clip(CircleShape)
             .background(colorResource(id = R.color.table_color))
-            .clickable { navController.navigate("main_screen") },
+            .clickable {
+                navController.navigate("table_screen/$id")
+            },
         contentAlignment = Alignment.Center
     ) {
         Text(
@@ -79,7 +81,7 @@ fun TableItem(navController: NavController, table: Table, id: String, parentSize
 fun Preview2() {
     DeliiciousWaitressTheme {
         val table = Table(id = "1")
-        TableItem(rememberNavController(), table = table, id = table.id, IntSize(100, 100))
+        TableListItem(rememberNavController(), table = table, id = table.id, IntSize(100, 100))
     }
 }
 
