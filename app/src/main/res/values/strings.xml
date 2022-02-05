@@ -5,4 +5,8 @@
     <string name="moure_dev">¡Hola Hackermen!</string>
     <string name="login">Conectarse</string>
     <string name="wrong_credentials_exception_message">Combinación usuario/contraseña incorrecta</string>
+    <string name="selected_table">Mesa seleccionada:</string>
+    <string name="orders_list">Lista de pedidos:</string>
+    <string name="add_order">Añadir pedido</string>
+    <string name="table_not_found_exception_message">No se ha podido encontrar la mesa.</string>
 </resources>

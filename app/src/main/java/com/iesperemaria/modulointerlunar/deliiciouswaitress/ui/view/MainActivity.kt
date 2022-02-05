@@ -13,14 +13,20 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgs
 import androidx.navigation.navArgument
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.ItemNotFoundException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.MainScreen
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table.TableScreen
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table.TableViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist.TableListScreen
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist.TableListViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
@@ -34,6 +40,7 @@ class MainActivity : ComponentActivity() {
 
     private val ingredientViewModel: IngredientViewModel by viewModels()
     private val tableListViewModel: TableListViewModel by viewModels()
+    private val tableViewModel: TableViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +51,6 @@ class MainActivity : ComponentActivity() {
             var currentScreen by rememberSaveable{ mutableStateOf("login") }
             Logger.i(currentScreen)
             DeliiciousWaitressTheme {
-
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,
@@ -72,7 +78,22 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     ) {
+                        try{
+                            tableViewModel.loadTable(
+                                it.arguments?.getString("tableId")!!
+                            )
+                        }catch (e: ItemNotFoundException){
+                            Toast.makeText(
+                                applicationContext,
+                                stringResource(id = R.string.table_not_found_exception_message),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
 
+                        TableScreen(
+                            navController = navController,
+                            tableViewModel = tableViewModel
+                        )
                     }
                     composable(
                         route = "table_list_screen"
@@ -123,7 +144,7 @@ fun Toolbar() {
 fun FAB() {
     val context = LocalContext.current
     FloatingActionButton(onClick = {
-        Toast.makeText(context, "Suscríbete", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Suscríbete a MoureDev", Toast.LENGTH_SHORT).show()
     }) {
         Text("+")
     }

@@ -1,20 +1,15 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist
 
-import android.graphics.Point
-import android.util.Size
-import android.view.Surface
 import android.widget.Toast
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.LayoutCoordinates
-import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -58,7 +53,7 @@ fun TableListScreen(
                     .background(Color.White)
                     .fillMaxSize()
             ){
-                tableModelList.forEach { table -> TableItem(
+                tableModelList.forEach { table -> TableListItem(
                     navController = navController,
                     table = table,
                     id = table.id,

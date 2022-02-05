@@ -7,3 +7,5 @@ class WrongCredentialsException(message: String) : Exception(message)
 class NotEnoughStockException(message: String) : Exception(message)
 
 class AlreadyInUseException(message: String) : Exception(message)
+
+class ItemNotFoundException(message: String) : Exception(message)
