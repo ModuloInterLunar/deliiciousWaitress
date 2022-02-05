@@ -36,7 +36,7 @@ class LoginViewModel : ViewModel() {
                     isLoading.value = false
                 }
                 Logger.i(token)
-                navController.navigate("main_screen"){
+                navController.navigate("table_list_screen"){
                     popUpTo(0)
                 }
             } catch (e: WrongCredentialsException) {
