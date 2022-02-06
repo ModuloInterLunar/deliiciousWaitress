@@ -1,9 +1,6 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -16,6 +13,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
+import coil.transform.CircleCropTransformation
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Dish
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
@@ -29,11 +28,26 @@ fun OrderItem(order: Order) {
     ) {
         Row(
             modifier = Modifier
-                .height(50.dp)
+                .height(70.dp)
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            // IMAGE
+            Image(
+                painter = rememberImagePainter(
+                    data = order.dish.image,
+                    builder = {
+                        transformations(CircleCropTransformation())
+                    }
+                ),
+                contentDescription = order.dish.name,
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .size(55.dp)
+                    .padding(start = 8.dp)
+            )
+
+            Spacer(modifier = Modifier.width(10.dp))
+
+
             Text(
                 text = order.dish.name,
                 maxLines = 2,
@@ -43,27 +57,30 @@ fun OrderItem(order: Order) {
                     .padding(horizontal = 5.dp)
             )
 
-            Spacer(
-                modifier = Modifier.width(10.dp)
-            )
+            Spacer(modifier = Modifier.width(10.dp))
 
-            Text(
-                text = order.description,
-                maxLines = 3,
+            Column(
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
-                    .widthIn(max = 200.dp)
-            )
+                    .verticalScroll(rememberScrollState())
+                    .widthIn(max = 180.dp)
+                    .weight(1f, false)
+            ) {
+                Text(
+                    text = order.description,
+                    textAlign = TextAlign.Center,
+                )
+            }
 
-            Spacer(
-                modifier = Modifier.width(10.dp)
-            )
+            Spacer(modifier = Modifier.width(1.dp))
 
             Image(
                 painter = painterResource(id = R.drawable.bin_icon),
                 contentDescription = "",
                 modifier = Modifier
+                    .weight(1f)
                     .align(Alignment.CenterVertically)
+                    .wrapContentWidth(Alignment.End)
                     .width(30.dp)
                     .height(30.dp)
                     .padding(end = 5.dp)
