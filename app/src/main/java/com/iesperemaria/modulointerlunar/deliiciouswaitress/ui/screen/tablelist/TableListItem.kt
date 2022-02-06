@@ -32,9 +32,10 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousW
 import kotlin.math.roundToInt
 
 @Composable
-fun TableListItem(navController: NavController, table: Table, parentSize: IntSize) {
-    val offsetX = remember { mutableStateOf(0.0) }
-    val offsetY = remember { mutableStateOf(0.0) }
+fun TableListItem(navController: NavController, tableListViewModel: TableListViewModel, tableId: String, parentSize: IntSize) {
+    val table = tableListViewModel.tables.value.find { it.id == tableId }!!
+    val offsetX = remember { mutableStateOf(table.posX * parentSize.width) }
+    val offsetY = remember { mutableStateOf(table.posY * parentSize.height) }
 
     Box(
         modifier = Modifier
@@ -81,21 +82,21 @@ fun TableListItem(navController: NavController, table: Table, parentSize: IntSiz
 fun Preview2() {
     DeliiciousWaitressTheme {
         val table = Table(id = "1")
-        TableListItem(rememberNavController(), table = table, IntSize(100, 100))
+        TableListItem(rememberNavController(), TableListViewModel(), tableId = table.id, IntSize(100, 100))
     }
 }
 
 // Not working
-fun correctOutOfParent(newPosition: Offset, radius: Int, size: IntSize): Offset{
-    if(size.width == 0 || size.height == 0)
+fun correctOutOfParent(newPosition: Offset, radius: Int, size: IntSize): Offset {
+    if (size.width == 0 || size.height == 0)
         return newPosition
 
-    var x:Float = newPosition.x
-    var y:Float = newPosition.y
+    var x: Float = newPosition.x
+    var y: Float = newPosition.y
 
-    if(x + radius > size.width)
+    if (x + radius > size.width)
         x = (size.width - radius).toFloat()
-    if(y + radius > size.height)
+    if (y + radius > size.height)
         y = (size.height - radius).toFloat()
 
     return Offset(x, y)

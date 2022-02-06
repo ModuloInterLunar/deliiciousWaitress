@@ -23,7 +23,7 @@ fun IngredientScreen(
         Column {
             Spacer(modifier = Modifier.height(20.dp))
             Text(
-                text = "asdf",
+                text = "Ingredient Screen",
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(CenterHorizontally)

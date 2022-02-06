@@ -1,5 +1,6 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist
 
+import android.os.CountDownTimer
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -15,6 +16,17 @@ class TableListViewModel : ViewModel(){
 
     fun isLoading(): MutableState<Boolean> = isLoading
     fun loadError() : MutableState<String> = loadError
+
+//    val timer = object : CountDownTimer(Long.MAX_VALUE, 1000) {
+//        override fun onTick(millisRemaning: Long) {
+//            loadTables()
+//            Logger.i("ticking")
+//        }
+//
+//        override fun onFinish() {
+//        }
+//    }
+
 
     val tables: MutableState<List<Table>> = mutableStateOf(listOf())
     var getTablesUseCase = GetTablesUseCase()
@@ -32,5 +44,9 @@ class TableListViewModel : ViewModel(){
                 Logger.e(e.message ?: e.toString())
             }
         }
+    }
+
+    fun createTable() {
+        /* TODO("Not yet implemented") */
     }
 }

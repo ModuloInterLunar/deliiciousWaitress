@@ -1,55 +1,171 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen
 
+import android.widget.Toast
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Ingredient
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.IngredientItem
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.viewmodel.IngredientListViewModel
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.ItemNotFoundException
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.LoginScreen
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.LoginViewModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table.TableScreen
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table.TableViewModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist.TableListScreen
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist.TableListViewModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.Drawer
+import com.orhanobut.logger.Logger
+import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen(
-    navController: NavController,
-    ingredientListViewModel: IngredientListViewModel
+    tableListViewModel: TableListViewModel,
+    tableViewModel: TableViewModel,
+    loginViewModel: LoginViewModel
 ) {
-    val ingredients = ingredientListViewModel.ingredients.value
-    @Composable
-    fun IngredientList() {
-        Column {
-//            val isLoading = ingredientModelList.isLoading().value
-//            if (isLoading)
-//                CircularProgressIndicator()
-            LazyColumn {
-                itemsIndexed(items = ingredients) {
-                        index, item -> IngredientItem( navController = navController, ingredient = item, id = index)
+    var currentScreen by rememberSaveable { mutableStateOf("login") }
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+    val openDrawer = {
+        scope.launch {
+            drawerState.open()
+        }
+    }
+    val context = LocalContext.current
+    Logger.i(currentScreen)
+
+    DeliiciousWaitressTheme {
+        val navController = rememberNavController()
+
+        ModalDrawer(
+            drawerState = drawerState,
+            gesturesEnabled = true,
+            drawerContent = {
+                Drawer(
+                    onDestinationClicked = { route ->
+                        scope.launch {
+                            drawerState.close()
+                        }
+                        navController.navigate(route) {
+                            popUpTo = navController.graph.startDestinationId
+                            launchSingleTop = true
+                        }
+                    }
+                )
+            }
+        ) {
+            NavHost(
+                navController = navController,
+                startDestination = currentScreen
+            ) {
+                composable("login") {
+                    // auto-login
+                    loginViewModel.login("alvaro", "12345", navController, context)
+                    // auto-login
+                    LoginScreen(
+                        navController = navController,
+                        loginViewModel = loginViewModel
+                    )
                 }
+                composable("table_list_screen")
+                {
+                    currentScreen = "table_list_screen"
+                    tableListViewModel.loadTables()
+                    TableListScreen(
+                        navController = navController,
+                        tableListViewModel = tableListViewModel
+                    ) {
+                        openDrawer()
+                    }
+                }
+                composable(
+                    "table_screen/{tableId}",
+                    arguments = listOf(
+                        navArgument("tableId") {
+                            type = NavType.StringType
+                        }
+                    )
+                ) {
+                    try {
+                        tableViewModel.loadTable(
+                            it.arguments?.getString("tableId")!!
+                        )
+                    } catch (e: ItemNotFoundException) {
+                        Toast.makeText(
+                            context,
+                            stringResource(id = R.string.table_not_found_exception_message),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    TableScreen(
+                        navController = navController,
+                        tableViewModel = tableViewModel
+                    )
+                }
+                composable("ingredient_screen") {
+                    IngredientScreen(navController = navController)
+                }
+
             }
         }
     }
+}
 
-    Surface(
-        color = MaterialTheme.colors.background,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Column {
-            Spacer(modifier = Modifier.height(20.dp))
-            Text(
-                text = "MainScreen",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally)
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            IngredientList()
-        }
+@Preview
+@Composable
+fun ViewContainer() {
+    Scaffold(
+        topBar = { Toolbar() },
+        content = { Test() },
+        floatingActionButton = { FAB() },
+        floatingActionButtonPosition = FabPosition.End
+    )
+}
+
+@Composable
+fun Test() {
+}
+
+
+@Composable
+fun Toolbar() {
+    TopAppBar(title = { Text(text = "Hola mundo") })
+}
+
+@Composable
+fun FAB() {
+    val context = LocalContext.current
+    FloatingActionButton(onClick = {
+        Toast.makeText(context, "Suscríbete a MoureDev", Toast.LENGTH_SHORT).show()
+    }) {
+        Text("+")
     }
+}
 
+
+@Composable
+fun Greeting() {
+    Text(text = "Hello !", Modifier.padding(5.dp))
+}
+
+
+@Composable
+fun DefaultPreview() {
+    DeliiciousWaitressTheme {
+    }
 }
