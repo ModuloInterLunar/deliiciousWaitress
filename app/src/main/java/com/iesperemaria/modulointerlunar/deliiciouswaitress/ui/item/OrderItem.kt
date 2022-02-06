@@ -64,7 +64,6 @@ fun OrderItem(order: Order) {
                     .align(Alignment.CenterVertically)
                     .verticalScroll(rememberScrollState())
                     .widthIn(max = 180.dp)
-                    .weight(1f, false)
             ) {
                 Text(
                     text = order.description,
