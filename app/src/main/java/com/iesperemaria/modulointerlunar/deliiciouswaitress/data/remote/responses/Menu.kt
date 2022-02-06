@@ -2,7 +2,8 @@ package com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.respons
 
 data class Menu(
     var dishes: List<Dish>,
-    var id: String,
+    var id: String = "",
+    var name: String,
     var price: Double,
-    var image: String
+    var image: String = ""
 )
