@@ -48,6 +48,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             var currentScreen by rememberSaveable { mutableStateOf("login") }
+            var context = applicationContext
             Logger.i(currentScreen)
             DeliiciousWaitressTheme {
                 val navController = rememberNavController()
@@ -56,6 +57,9 @@ class MainActivity : ComponentActivity() {
                     startDestination = currentScreen
                 ) {
                     composable("login") {
+                        // auto-login
+                        loginViewModel.login("alvaro", "12345", navController, context)
+                        // auto-login
                         LoginScreen(
                             navController = navController,
                             loginViewModel = loginViewModel
@@ -96,6 +100,7 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("table_list_screen")
                     {
+                        currentScreen = "table_list_screen"
                         tableListViewModel.loadTables()
                         TableListScreen(
                             navController = navController,
