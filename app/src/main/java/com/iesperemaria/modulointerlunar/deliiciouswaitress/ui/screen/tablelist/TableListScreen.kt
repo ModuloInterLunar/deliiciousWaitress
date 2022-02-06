@@ -7,6 +7,7 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,15 +21,19 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table.TableViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 
 @Composable
 fun TableListScreen(
     navController: NavController,
-    tableModelList: List<Table>
+    tableListViewModel: TableListViewModel
 ){
-    var size = IntSize(0, 0)
+    var width by rememberSaveable { mutableStateOf( 0 ) }
+    var height by rememberSaveable { mutableStateOf( 0 ) }
+    var size = IntSize(width, height)
 
+    val tables = tableListViewModel.tables.value
     Surface {
         Column(
             modifier = Modifier.fillMaxSize()
@@ -49,14 +54,16 @@ fun TableListScreen(
 
             Box(
                 modifier = Modifier
-                    .onSizeChanged { size = it }
+                    .onSizeChanged {
+                        width = it.width
+                        height = it.height
+                    }
                     .background(Color.White)
                     .fillMaxSize()
             ){
-                tableModelList.forEach { table -> TableListItem(
+                tables.forEach { table -> TableListItem(
                     navController = navController,
                     table = table,
-                    id = table.id,
                     parentSize = size
                 ) }
             }
@@ -70,7 +77,7 @@ fun Preview() {
     DeliiciousWaitressTheme {
         TableListScreen(
             navController = rememberNavController(),
-            tableModelList = emptyList()
+            tableListViewModel = TableListViewModel()
         )
     }
 }

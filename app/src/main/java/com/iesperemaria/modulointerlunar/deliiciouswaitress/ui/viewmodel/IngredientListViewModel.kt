@@ -15,7 +15,7 @@ import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
 
 
-class IngredientViewModel(application: Application) : AndroidViewModel(
+class IngredientListViewModel(application: Application) : AndroidViewModel(
     application
 ) {
     private val isLoading = mutableStateOf(false)

@@ -22,11 +22,11 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.response
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
 
 @Composable
-fun OrderItem(order: Order){
-    Card (
+fun OrderItem(order: Order) {
+    Card(
         shape = RoundedCornerShape(8.dp),
         elevation = 4.dp
-            ){
+    ) {
         Row(
             modifier = Modifier
                 .height(50.dp)
@@ -75,28 +75,29 @@ fun OrderItem(order: Order){
 
 @Preview(showBackground = false)
 @Composable
-fun PreviewOrderItem(){
+fun PreviewOrderItem() {
     OrderItem(
         order = Order(
-        id = "1",
-        employee = Employee(
             id = "1",
-            dni = "abc",
-            name = "Alvaro",
-            surname = "Martinez"
-        ),
-        dish = Dish(
-            id = "1",
-            ingredientQties = emptyList(),
-            name = "Huevo con patatas",
-            price = 7.50,
-            type = "Food"
-        ),
-        hasBeenCoocked = false,
-        hasBeenServed = false,
-        isIncluded = false,
-        table = "1",
-        ticket = "1",
-        description = "Sin sal"
-    ))
+            employee = Employee(
+                id = "1",
+                dni = "abc",
+                name = "Alvaro",
+                surname = "Martinez"
+            ),
+            dish = Dish(
+                id = "1",
+                ingredientQties = emptyList(),
+                name = "Huevo con patatas",
+                price = 7.50,
+                type = "Food"
+            ),
+            hasBeenCoocked = false,
+            hasBeenServed = false,
+            isIncluded = false,
+            table = "1",
+            ticket = "1",
+            description = "Sin sal"
+        )
+    )
 }

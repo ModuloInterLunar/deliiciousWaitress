@@ -1,10 +1,10 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses
 
 data class Table(
-    val id: String = "",
-    val actualTicket: Ticket? = null,
-    val height: Int = 25,
-    val width: Int = 25,
-    val posX: Double = 0.0,
-    val posY: Double = 0.0
+    var id: String = "",
+    var actualTicket: Ticket? = null,
+    var height: Int = 25,
+    var width: Int = 25,
+    var posX: Double = 0.0,
+    var posY: Double = 0.0
 )

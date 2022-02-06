@@ -20,7 +20,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgs
 import androidx.navigation.navArgument
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.ItemNotFoundException
@@ -32,13 +31,13 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist.
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.LoginScreen
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.LoginViewModel
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.viewmodel.IngredientViewModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.viewmodel.IngredientListViewModel
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 
 class MainActivity : ComponentActivity() {
 
-    private val ingredientViewModel: IngredientViewModel by viewModels()
+    private val ingredientViewModel: IngredientListViewModel by viewModels()
     private val tableListViewModel: TableListViewModel by viewModels()
     private val tableViewModel: TableViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
@@ -48,7 +47,7 @@ class MainActivity : ComponentActivity() {
         Logger.addLogAdapter(AndroidLogAdapter())
 
         setContent {
-            var currentScreen by rememberSaveable{ mutableStateOf("login") }
+            var currentScreen by rememberSaveable { mutableStateOf("login") }
             Logger.i(currentScreen)
             DeliiciousWaitressTheme {
                 val navController = rememberNavController()
@@ -67,7 +66,7 @@ class MainActivity : ComponentActivity() {
                         ingredientViewModel.loadIngredients()
                         MainScreen(
                             navController = navController,
-                            ingredientModelList = ingredientViewModel.ingredients.value
+                            ingredientListViewModel = ingredientViewModel
                         )
                     }
                     composable(
@@ -78,11 +77,11 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     ) {
-                        try{
+                        try {
                             tableViewModel.loadTable(
                                 it.arguments?.getString("tableId")!!
                             )
-                        }catch (e: ItemNotFoundException){
+                        } catch (e: ItemNotFoundException) {
                             Toast.makeText(
                                 applicationContext,
                                 stringResource(id = R.string.table_not_found_exception_message),
@@ -95,13 +94,12 @@ class MainActivity : ComponentActivity() {
                             tableViewModel = tableViewModel
                         )
                     }
-                    composable(
-                        route = "table_list_screen"
-                    ){
+                    composable("table_list_screen")
+                    {
                         tableListViewModel.loadTables()
                         TableListScreen(
                             navController = navController,
-                            tableModelList = tableListViewModel.tables.value
+                            tableListViewModel = tableListViewModel
                         )
                     }
                 }
@@ -134,7 +132,6 @@ class MainActivity : ComponentActivity() {
 }
 
 
-
 @Composable
 fun Toolbar() {
     TopAppBar(title = { Text(text = "Hola mundo") })
@@ -155,7 +152,6 @@ fun FAB() {
 fun Greeting() {
     Text(text = "Hello !", Modifier.padding(5.dp))
 }
-
 
 
 @Composable

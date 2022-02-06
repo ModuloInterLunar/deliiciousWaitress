@@ -55,7 +55,7 @@ fun IngredientItem(navController: NavController, ingredient: Ingredient, id: Int
 @Composable
 fun Preview2() {
     DeliiciousWaitressTheme() {
-        val ingredient = Ingredient(0,"","", "g", "Salsa", 2, 200)
+        val ingredient = Ingredient("0","g","Salsa", 2, 200.0)
         IngredientItem(navController = rememberNavController(), ingredient = ingredient, id = 0)
     }
 }

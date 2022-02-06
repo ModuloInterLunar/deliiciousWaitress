@@ -1,11 +1,13 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses
 
 data class Employee(
-    val id: String,
-    val createdAt: String = "",
-    val dni: String,
-    val isAdmin: Boolean = false,
-    val name: String,
-    val surname: String,
-    val updatedAt: String = ""
+    var id: String = "",
+    var username: String = "",
+    var dni: String,
+    var name: String,
+    var surname: String,
+    var password: String = "",
+    var isAdmin: Boolean = false,
+    var createdAt: String = "",
+    var updatedAt: String = ""
 )

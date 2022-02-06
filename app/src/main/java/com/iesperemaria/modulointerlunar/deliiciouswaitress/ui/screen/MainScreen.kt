@@ -13,12 +13,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Ingredient
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.IngredientItem
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.viewmodel.IngredientListViewModel
 
 @Composable
 fun MainScreen(
     navController: NavController,
-    ingredientModelList: List<Ingredient>
+    ingredientListViewModel: IngredientListViewModel
 ) {
+    val ingredients = ingredientListViewModel.ingredients.value
     @Composable
     fun IngredientList() {
         Column {
@@ -26,8 +28,8 @@ fun MainScreen(
 //            if (isLoading)
 //                CircularProgressIndicator()
             LazyColumn {
-                itemsIndexed(items = ingredientModelList) {
-                        index, item -> IngredientItem(id = index, navController = navController, ingredient = item)
+                itemsIndexed(items = ingredients) {
+                        index, item -> IngredientItem( navController = navController, ingredient = item, id = index)
                 }
             }
         }

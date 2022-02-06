@@ -4,7 +4,7 @@ import android.util.Log
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.core.RetrofitHelper
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.ItemNotFoundException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.WrongCredentialsException
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.Auth
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.AuthModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Ingredient
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
@@ -14,7 +14,7 @@ class DeliiService {
     private val TAG = "DeliiService"
 
     suspend fun login(username: String, password: String):String{
-        val response = RetrofitHelper.getDeliiApiClient().login(Auth(username, password))
+        val response = RetrofitHelper.getDeliiApiClient().login(AuthModel(username, password))
         Log.i(TAG, response.toString())
         val token = response.body()?.token
         if (response.code() == 200) {

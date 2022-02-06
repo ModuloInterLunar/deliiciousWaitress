@@ -1,12 +1,10 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.data.network
 
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.Auth
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.AuthModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Ingredient
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Token
-import okhttp3.RequestBody
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -16,7 +14,7 @@ import retrofit2.http.Path
 
 interface DeliiApiClient {
     @POST("/login")
-    suspend fun login(@Body auth: Auth): Response<Token>
+    suspend fun login(@Body auth: AuthModel): Response<Token>
 
     @GET("api/employees")
     suspend fun getAllEmployees(): Response<List<Employee>>

@@ -1,7 +1,8 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses
 
 data class Menu(
-    val dishes: List<Dish>,
-    val id: String,
-    val price: Int
+    var dishes: List<Dish>,
+    var id: String,
+    var price: Double,
+    var image: String
 )

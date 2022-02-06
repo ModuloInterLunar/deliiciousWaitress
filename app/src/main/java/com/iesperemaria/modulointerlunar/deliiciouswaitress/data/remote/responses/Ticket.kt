@@ -1,11 +1,11 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses
 
 data class Ticket(
-    val id: String,
-    val createdAt: String,
-    val isPaid: Boolean,
-    val orders: List<Order>,
-    val text: Any,
-    val total: Int,
-    val updatedAt: String
+    var id: String,
+    var createdAt: String,
+    var isPaid: Boolean,
+    var orders: List<Order>,
+    var text: String,
+    var total: Double,
+    var updatedAt: String
 )

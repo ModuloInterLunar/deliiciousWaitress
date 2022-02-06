@@ -1,7 +1,7 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses
 
 data class IngredientQty(
-    val _id: String,
-    val ingredient: Ingredient,
-    val quantity: Int
+    var _id: String,
+    var ingredient: Ingredient,
+    var quantity: Double
 )
