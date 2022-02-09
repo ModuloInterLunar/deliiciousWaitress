@@ -1,23 +1,16 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login
 
-import android.app.Application
 import android.content.Context
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.WrongCredentialsException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.GetTablesUseCase
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.LoginUseCase
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table.TableViewModel
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist.TableListViewModel
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.viewmodel.IngredientListViewModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.employeeusecase.LoginUseCase
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
 

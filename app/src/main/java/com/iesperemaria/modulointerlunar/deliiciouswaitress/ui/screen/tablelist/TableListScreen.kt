@@ -24,6 +24,7 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table.*
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.FAB
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.TopBar
 import kotlin.math.absoluteValue
 
@@ -48,23 +49,11 @@ fun TableListScreen(
             )
         },
         floatingActionButton = {
-            TableListFAB(
-                tableListViewModel = tableListViewModel
-            )
+            FAB() {
+                tableListViewModel.createTable(Table())
+            }
         }
     )
-}
-
-@Composable
-fun TableListFAB(tableListViewModel: TableListViewModel) {
-    FloatingActionButton(
-        onClick = {
-            tableListViewModel.createTable(Table())
-
-        },
-    ) {
-        Text("+")
-    }
 }
 
 @Composable
@@ -110,9 +99,7 @@ fun Preview() {
         TableListScreen(
             navController = rememberNavController(),
             tableListViewModel = TableListViewModel(),
-            openDrawer = {
-
-            }
+            openDrawer = {}
         )
     }
 }

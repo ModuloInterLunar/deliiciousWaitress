@@ -8,6 +8,8 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.Au
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.OrderModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.TableModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.*
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.TicketModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.*
 import com.orhanobut.logger.Logger
 
 class DeliiService {
@@ -81,6 +83,22 @@ class DeliiService {
     suspend fun updateOrder(order: Order): Order {
         val orderModel = OrderModel(order)
         val response = RetrofitHelper.getDeliiApiClient().patchOrder(orderModel, order.id)
+        Log.i(TAG, response.toString())
+        if (response.code() == 404)
+            throw ItemNotFoundException(response.message())
+        return response.body()!!
+    }
+
+    suspend fun deleteOrder(order: Order) {
+        val response = RetrofitHelper.getDeliiApiClient().deleteOrder(order.id)
+        Log.i(TAG, response.toString())
+        if (response.code() == 404)
+            throw ItemNotFoundException(response.message())
+    }
+
+    suspend fun updateTicket(ticket: Ticket): Ticket {
+        val ticketModel = TicketModel(ticket)
+        val response = RetrofitHelper.getDeliiApiClient().patchTicket(ticketModel, ticket.id)
         Log.i(TAG, response.toString())
         if(response.code() == 404)
             throw ItemNotFoundException(response.message())

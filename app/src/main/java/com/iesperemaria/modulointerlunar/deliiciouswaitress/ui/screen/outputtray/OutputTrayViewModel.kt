@@ -7,10 +7,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.GetOrdersCookedNotServedUseCase
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.GetTablesUseCase
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.UpdateOrderUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.orderusecase.GetOrdersCookedNotServedUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.orderusecase.UpdateOrderUseCase
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
 

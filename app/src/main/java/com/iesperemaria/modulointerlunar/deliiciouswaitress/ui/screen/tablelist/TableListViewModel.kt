@@ -7,8 +7,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.CreateTableUseCase
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.GetTablesUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.tableusecase.CreateTableUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.tableusecase.GetTablesUseCase
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
 
