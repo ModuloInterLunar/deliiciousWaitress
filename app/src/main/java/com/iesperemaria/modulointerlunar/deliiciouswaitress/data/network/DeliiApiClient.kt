@@ -3,6 +3,7 @@ package com.iesperemaria.modulointerlunar.deliiciouswaitress.data.network
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.AuthModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.OrderModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.TableModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.TicketModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.*
 import retrofit2.Response
 import retrofit2.http.*
@@ -44,5 +45,11 @@ interface DeliiApiClient {
     @DELETE("api/orders/{id}")
     suspend fun deleteOrder(
         @Path("id") id: String
-    ): Response<String>
+    ): Response<Message>
+
+    @PATCH("api/tickets/{id}")
+    suspend fun patchTicket(
+        @Body ticketModel: TicketModel,
+        @Path("id") id: String
+    ): Response<Ticket>
 }

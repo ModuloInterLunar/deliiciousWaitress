@@ -12,6 +12,7 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.response
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Ticket
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.orderusecase.DeleteOrderUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.tableusecase.GetTableByIdUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.ticketusecase.UpdateTicketUseCase
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
 
@@ -37,6 +38,7 @@ class TableViewModel : ViewModel() {
     val table: MutableState<Table> = mutableStateOf(Table())
     val getTableByIdUseCase = GetTableByIdUseCase()
     val deleteOrderUseCase = DeleteOrderUseCase()
+    val updateTicketUseCase = UpdateTicketUseCase()
 
     fun loadTable(id: String) {
         viewModelScope.launch {
@@ -59,9 +61,10 @@ class TableViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 deleteOrderUseCase(order)
-                // TODO REMOVE FROM TICKET
+                ticket.orders.remove(order)
+                updateTicketUseCase(ticket)
             } catch (e: ItemNotFoundException) {
-                throw ItemNotFoundException("Error, order not found.")
+                throw ItemNotFoundException("Error, ${e.message} not found.")
             }
         }
     }

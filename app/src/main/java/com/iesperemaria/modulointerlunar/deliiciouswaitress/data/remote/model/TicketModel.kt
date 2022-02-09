@@ -7,7 +7,7 @@ data class TicketModel(
     var id: String,
     var isPaid: Boolean,
     var orders: List<String>,
-    var text: String,
+    var text: String?,
     var total: Double,
 )  {
     constructor(ticket: Ticket) : this(
