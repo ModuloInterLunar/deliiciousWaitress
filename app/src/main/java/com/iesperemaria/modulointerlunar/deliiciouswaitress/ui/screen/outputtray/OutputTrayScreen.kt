@@ -1,4 +1,5 @@
-package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table
+package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.outputtray
+
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -18,50 +19,49 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item.OrderItem
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table.TableViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.TopBar
 
 @Composable
-fun TableScreen(
+fun OutputTrayScreen(
     navController: NavController,
-    tableViewModel: TableViewModel
+    outputTrayViewModel: OutputTrayViewModel,
+    openDrawer: () -> Unit
 ) {
     Scaffold(
         topBar = {
             TopBar(
-                title = stringResource(id = R.string.table) + " " + tableViewModel.table.value.id,
-                buttonIcon = painterResource(id = R.drawable.back_arrow),
-                onButtonClicked = { navController.popBackStack() }
+                title = stringResource(id = R.string.output_tray),
+                buttonIcon = painterResource(id = R.drawable.hamburger_icon),
+                onButtonClicked = { openDrawer() }
             )
         },
         content = {
-            TableContent(
-                tableViewModel = tableViewModel
+            OutputTrayContent(
+                outputTrayViewModel = outputTrayViewModel
             )
-        },
-        floatingActionButton = {
-            TableFAB(
-                tableViewModel = tableViewModel
-            )
-        },
+        }
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewTableScreen() {
+fun PreviewOutputTrayScreen() {
     DeliiciousWaitressTheme {
-        TableScreen(
+        OutputTrayScreen(
             navController = rememberNavController(),
-            tableViewModel = TableViewModel()
+            outputTrayViewModel = OutputTrayViewModel(),
         )
+        {}
     }
 }
 
 @Composable
-fun TableContent(tableViewModel: TableViewModel) {
-    val table = tableViewModel.table.value
+fun OutputTrayContent(outputTrayViewModel: OutputTrayViewModel) {
+    val orders = outputTrayViewModel.orders.value
 
     Surface {
         Column(
@@ -80,28 +80,14 @@ fun TableContent(tableViewModel: TableViewModel) {
 
             LazyColumn(modifier = Modifier.padding(10.dp)) {
                 itemsIndexed(
-                    items = table.actualTicket?.orders ?: emptyList()
+                    items = orders
                 ) { _, order ->
-                    OrderItem(order = order, R.drawable.bin_icon) {
-
+                    OrderItem(order = order, imageId = R.drawable.checkmark) {
+                        outputTrayViewModel.setServed(order)
                     }
                     Spacer(modifier = Modifier.height(5.dp))
                 }
             }
         }
-    }
-}
-
-@Composable
-fun TableFAB(tableViewModel: TableViewModel) {
-    val ticket = tableViewModel.table.value.actualTicket
-
-    if (ticket == null)
-        tableViewModel.createTicket()
-
-    FloatingActionButton(
-        onClick = { /*TODO*/ },
-    ) {
-        Text("+")
     }
 }

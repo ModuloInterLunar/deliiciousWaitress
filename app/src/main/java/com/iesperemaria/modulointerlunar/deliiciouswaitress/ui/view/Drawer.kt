@@ -34,8 +34,19 @@ fun Drawer(
             style = MaterialTheme.typography.h6,
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(vertical = 20.dp)
                 .clickable {
                     onDestinationClicked("table_list_screen")
+                }
+        )
+        Text(
+            text = stringResource(id = R.string.output_tray),
+            style = MaterialTheme.typography.h6,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 20.dp)
+                .clickable {
+                    onDestinationClicked("output_tray")
                 }
         )
         Text(

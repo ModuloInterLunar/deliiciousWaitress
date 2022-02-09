@@ -33,6 +33,7 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist.
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.LoginScreen
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.LoginViewModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.outputtray.OutputTrayViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.viewmodel.IngredientListViewModel
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -43,6 +44,7 @@ class MainActivity : ComponentActivity() {
     private val ingredientViewModel: IngredientListViewModel by viewModels()
     private val tableListViewModel: TableListViewModel by viewModels()
     private val tableViewModel: TableViewModel by viewModels()
+    private val outputTrayViewModel: OutputTrayViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +55,7 @@ class MainActivity : ComponentActivity() {
             MainScreen(
                 tableListViewModel,
                 tableViewModel,
+                outputTrayViewModel,
                 loginViewModel
             )
         }

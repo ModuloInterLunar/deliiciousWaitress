@@ -12,4 +12,5 @@
     <string name="tables">Mesas</string>
     <string name="table">Mesa</string>
     <string name="ingredients">Ingredientes</string>
+    <string name="output_tray">Bandeja de salida</string>
 </resources>

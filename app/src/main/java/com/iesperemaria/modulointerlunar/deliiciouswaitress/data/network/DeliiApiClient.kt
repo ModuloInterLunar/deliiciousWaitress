@@ -1,15 +1,10 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.data.network
 
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.AuthModel
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Ingredient
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Token
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.OrderModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.*
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 
 interface DeliiApiClient {
@@ -25,6 +20,9 @@ interface DeliiApiClient {
     @GET("api/tables")
     suspend fun getAllTables(): Response<List<Table>>
 
+    @GET("api/orders/cookednotserved")
+    suspend fun getAllOrdersCookedNotServed(): Response<List<Order>>
+
     @GET("api/tables/{id}")
     suspend fun getTable(
         @Path("id") id: String
@@ -32,4 +30,10 @@ interface DeliiApiClient {
 
     @GET("api/employees/-1")
     suspend fun getEmployeeFromToken(): Response<Employee>
+
+    @PATCH("api/orders/{id}")
+    suspend fun patchOrder(
+        @Body orderModel: OrderModel,
+        @Path("id") id: String
+    ): Response<Order>
 }

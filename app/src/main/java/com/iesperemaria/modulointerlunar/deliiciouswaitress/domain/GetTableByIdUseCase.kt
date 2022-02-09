@@ -5,5 +5,5 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.response
 
 class GetTableByIdUseCase {
     private val api = DeliiService()
-    suspend operator fun invoke(id: String) : Table? = api.getTableById(id)
+    suspend operator fun invoke(id: String) : Table = api.getTableById(id)
 }

@@ -21,7 +21,7 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.response
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
 
 @Composable
-fun OrderItem(order: Order) {
+fun OrderItem(order: Order, imageId: Int, action: () -> Unit) {
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = 4.dp
@@ -75,7 +75,7 @@ fun OrderItem(order: Order) {
             Spacer(modifier = Modifier.width(1.dp))
 
             Image(
-                painter = painterResource(id = R.drawable.bin_icon),
+                painter = painterResource(id = imageId),
                 contentDescription = "",
                 modifier = Modifier
                     .weight(1f)
@@ -84,7 +84,7 @@ fun OrderItem(order: Order) {
                     .width(30.dp)
                     .height(30.dp)
                     .padding(end = 5.dp)
-                    .clickable { /*TODO*/ }
+                    .clickable { action() }
             )
         }
     }
@@ -109,12 +109,15 @@ fun PreviewOrderItem() {
                 price = 7.50,
                 type = "Food"
             ),
-            hasBeenCoocked = false,
+            hasBeenCooked = false,
             hasBeenServed = false,
             isIncluded = false,
             table = "1",
             ticket = "1",
             description = "Sin sal"
-        )
-    )
+        ),
+        R.drawable.bin_icon,
+    ) {
+
+    }
 }

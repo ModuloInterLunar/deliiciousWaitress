@@ -22,6 +22,8 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.ItemNotFoundException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.LoginScreen
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.LoginViewModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.outputtray.OutputTrayScreen
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.outputtray.OutputTrayViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table.TableScreen
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table.TableViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist.TableListScreen
@@ -35,6 +37,7 @@ import kotlinx.coroutines.launch
 fun MainScreen(
     tableListViewModel: TableListViewModel,
     tableViewModel: TableViewModel,
+    outputTrayViewModel: OutputTrayViewModel,
     loginViewModel: LoginViewModel
 ) {
     var currentScreen by rememberSaveable { mutableStateOf("login") }
@@ -101,9 +104,8 @@ fun MainScreen(
                     )
                 ) {
                     try {
-                        tableViewModel.loadTable(
-                            it.arguments?.getString("tableId")!!
-                        )
+                        tableViewModel.tableId = it.arguments?.getString("tableId")!!
+                        tableViewModel.timer.start()
                     } catch (e: ItemNotFoundException) {
                         Toast.makeText(
                             context,
@@ -116,6 +118,15 @@ fun MainScreen(
                         navController = navController,
                         tableViewModel = tableViewModel
                     )
+                }
+                composable("output_tray") {
+                    outputTrayViewModel.timer.start()
+                    OutputTrayScreen(
+                        navController = navController,
+                        outputTrayViewModel = outputTrayViewModel
+                    ) {
+                        openDrawer()
+                    }
                 }
                 composable("ingredient_screen") {
                     IngredientScreen(navController = navController)
