@@ -6,6 +6,7 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exceptio
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.WrongCredentialsException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.AuthModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.OrderModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.TableModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Ingredient
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
@@ -43,6 +44,15 @@ class DeliiService {
         val response = RetrofitHelper.getDeliiApiClient().getAllTables()
         Logger.i(response.toString())
         return response.body() ?: emptyList()
+    }
+
+    suspend fun createTable(table: Table):Table{
+        val tableModel = TableModel(table)
+        val response = RetrofitHelper.getDeliiApiClient().createTable(tableModel)
+        Logger.i(response.toString())
+        if(response.code() == 404)
+            throw ItemNotFoundException(response.message())
+        return response.body()!!
     }
 
     suspend fun getTableById(id: String) : Table {

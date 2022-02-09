@@ -1,5 +1,6 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -48,6 +49,10 @@ fun TableListItem(navController: NavController, tableListViewModel: TableListVie
             .pointerInput(Unit) {
                 detectDragGestures { change, dragAmount ->
                     change.consumeAllChanges()
+
+                    Toast
+                        .makeText(navController.context, "$parentSize", Toast.LENGTH_SHORT)
+                        .show()
 
                     val newOffset = correctOutOfParent(
                         newPosition = Offset(dragAmount.x, dragAmount.y),

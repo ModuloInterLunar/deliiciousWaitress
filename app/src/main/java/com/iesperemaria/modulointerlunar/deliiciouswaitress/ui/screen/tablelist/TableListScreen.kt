@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -20,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table.*
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.TopBar
@@ -57,7 +59,8 @@ fun TableListScreen(
 fun TableListFAB(tableListViewModel: TableListViewModel) {
     FloatingActionButton(
         onClick = {
-            tableListViewModel.createTable()
+            tableListViewModel.createTable(Table())
+
         },
     ) {
         Text("+")
@@ -66,9 +69,7 @@ fun TableListFAB(tableListViewModel: TableListViewModel) {
 
 @Composable
 fun TableListContent(navController: NavController, tableListViewModel: TableListViewModel) {
-    var width by remember { mutableStateOf(1080) }
-    var height by remember { mutableStateOf(2113) }
-    val size by remember { mutableStateOf(IntSize(width.absoluteValue, height.absoluteValue)) }
+    var size by remember { mutableStateOf(IntSize.Zero) }
 
     val tables = tableListViewModel.tables.value
     Surface {
@@ -77,20 +78,17 @@ fun TableListContent(navController: NavController, tableListViewModel: TableList
         ) {
             Box(
                 modifier = Modifier
-                    .onSizeChanged {
-                        width = it.width
-                        height = it.height
-                    }
                     .background(Color.White)
                     .fillMaxSize()
-                    .then(
+                    .onGloballyPositioned { size = it.size }
+                    /*.then(
                         with(LocalDensity.current) {
                             Modifier.size(
                                 width = size.width.toDp(),
                                 height = size.height.toDp()
                             )
                         }
-                    )
+                    )*/
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.restaurante),
@@ -120,7 +118,9 @@ fun Preview() {
         TableListScreen(
             navController = rememberNavController(),
             tableListViewModel = TableListViewModel(),
-            openDrawer = {}
+            openDrawer = {
+
+            }
         )
     }
 }

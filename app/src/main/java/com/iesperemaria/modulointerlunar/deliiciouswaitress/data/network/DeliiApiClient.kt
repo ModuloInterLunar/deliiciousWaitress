@@ -2,6 +2,7 @@ package com.iesperemaria.modulointerlunar.deliiciouswaitress.data.network
 
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.AuthModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.OrderModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.TableModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.*
 import retrofit2.Response
 import retrofit2.http.*
@@ -22,6 +23,9 @@ interface DeliiApiClient {
 
     @GET("api/orders/cookednotserved")
     suspend fun getAllOrdersCookedNotServed(): Response<List<Order>>
+
+    @POST("api/tables")
+    suspend fun createTable(@Body table: TableModel): Response<Table>
 
     @GET("api/tables/{id}")
     suspend fun getTable(
