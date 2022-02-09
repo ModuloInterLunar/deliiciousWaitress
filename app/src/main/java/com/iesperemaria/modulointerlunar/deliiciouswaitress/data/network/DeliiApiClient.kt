@@ -24,6 +24,9 @@ interface DeliiApiClient {
     @GET("api/orders/cookednotserved")
     suspend fun getAllOrdersCookedNotServed(): Response<List<Order>>
 
+    @GET("api/dishes")
+    suspend fun getAllDishes(): Response<List<Dish>>
+
     @POST("api/tables")
     suspend fun createTable(@Body table: TableModel): Response<Table>
 

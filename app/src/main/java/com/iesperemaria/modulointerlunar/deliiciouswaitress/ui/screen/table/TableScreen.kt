@@ -42,7 +42,8 @@ fun TableScreen(
         },
         floatingActionButton = {
             TableFAB(
-                tableViewModel = tableViewModel
+                navController,
+                tableViewModel
             )
         },
     )
@@ -93,14 +94,17 @@ fun TableContent(tableViewModel: TableViewModel) {
 }
 
 @Composable
-fun TableFAB(tableViewModel: TableViewModel) {
+fun TableFAB(navController: NavController, tableViewModel: TableViewModel) {
     val ticket = tableViewModel.table.value.actualTicket
 
     if (ticket == null)
         tableViewModel.createTicket()
 
     FloatingActionButton(
-        onClick = { /*TODO*/ },
+        onClick = {
+            navController.navigate(
+                "dish_selector_screen/${tableViewModel.table.value.id}"
+            )}
     ) {
         Text("+")
     }

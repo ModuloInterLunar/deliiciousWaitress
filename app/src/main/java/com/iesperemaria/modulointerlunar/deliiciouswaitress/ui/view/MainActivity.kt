@@ -26,6 +26,7 @@ import androidx.navigation.navArgument
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.ItemNotFoundException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.MainScreen
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselector.DishSelectorViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table.TableScreen
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table.TableViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist.TableListScreen
@@ -46,6 +47,7 @@ class MainActivity : ComponentActivity() {
     private val tableViewModel: TableViewModel by viewModels()
     private val outputTrayViewModel: OutputTrayViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
+    private val dishSelectorViewModel: DishSelectorViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +58,8 @@ class MainActivity : ComponentActivity() {
                 tableListViewModel,
                 tableViewModel,
                 outputTrayViewModel,
-                loginViewModel
+                loginViewModel,
+                dishSelectorViewModel
             )
         }
     }

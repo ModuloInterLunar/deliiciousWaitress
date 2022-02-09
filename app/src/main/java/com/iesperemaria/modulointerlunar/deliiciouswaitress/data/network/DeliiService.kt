@@ -7,10 +7,7 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exceptio
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.AuthModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.OrderModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.TableModel
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Ingredient
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.*
 import com.orhanobut.logger.Logger
 
 class DeliiService {
@@ -71,6 +68,12 @@ class DeliiService {
 
     suspend fun getOrdersCookedNotServed(): List<Order> {
         val response = RetrofitHelper.getDeliiApiClient().getAllOrdersCookedNotServed()
+        Log.i(TAG, response.toString())
+        return response.body() ?: emptyList()
+    }
+
+    suspend fun getDishes(): List<Dish> {
+        val response = RetrofitHelper.getDeliiApiClient().getAllDishes()
         Log.i(TAG, response.toString())
         return response.body() ?: emptyList()
     }

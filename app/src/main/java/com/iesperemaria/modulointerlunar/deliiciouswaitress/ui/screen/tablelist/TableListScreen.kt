@@ -81,14 +81,6 @@ fun TableListContent(navController: NavController, tableListViewModel: TableList
                     .background(Color.White)
                     .fillMaxSize()
                     .onGloballyPositioned { size = it.size }
-                    /*.then(
-                        with(LocalDensity.current) {
-                            Modifier.size(
-                                width = size.width.toDp(),
-                                height = size.height.toDp()
-                            )
-                        }
-                    )*/
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.restaurante),
