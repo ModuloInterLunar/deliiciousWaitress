@@ -144,6 +144,7 @@ fun MainScreen(
                 {
                     try{
                         dishSelectorViewModel.loadTable(it.arguments?.getString("tableId")!!)
+                        dishSelectorViewModel.loadEmployee()
                         dishSelectorViewModel.loadDishes()
                     }catch (e: ItemNotFoundException){
                         Toast.makeText(

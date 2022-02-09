@@ -63,6 +63,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-compose:2.4.0'
     implementation 'androidx.activity:activity-compose:1.4.0'
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
+    implementation 'androix.test.espresso:espresso-core:3.4.0@aar'
 
 
     // retrofit
@@ -89,8 +90,6 @@ dependencies {
 
     // datastore
     implementation("androidx.datastore:datastore-preferences-core:1.0.0")
-
-
 
     implementation 'androidx.compose.runtime:runtime-livedata:1.0.5'
 

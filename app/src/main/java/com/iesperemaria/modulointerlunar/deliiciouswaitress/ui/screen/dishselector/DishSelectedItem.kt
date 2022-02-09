@@ -26,13 +26,12 @@ import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Dish
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselector.DishSelectorViewModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 
 @Composable
-fun DishSelectedItem(dish: Dish, dishSelectorViewModel: DishSelectorViewModel) {
+fun DishSelectedItem(order: Order, dishSelectorViewModel: DishSelectorViewModel) {
     var description by rememberSaveable { mutableStateOf("") }
-
 
     Card(
         shape = RoundedCornerShape(8.dp),
@@ -45,10 +44,10 @@ fun DishSelectedItem(dish: Dish, dishSelectorViewModel: DishSelectorViewModel) {
         ) {
             Image(
                 painter = rememberImagePainter(
-                    data = dish.image,
+                    data = order.dish.image,
                     builder = { transformations(CircleCropTransformation()) }
                 ),
-                contentDescription = dish.name,
+                contentDescription = order.dish.name,
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .size(55.dp)
@@ -57,11 +56,10 @@ fun DishSelectedItem(dish: Dish, dishSelectorViewModel: DishSelectorViewModel) {
 
             Spacer(modifier = Modifier.width(10.dp))
 
-
             Column(
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
-                    .padding(end = 15.dp)
+                    .fillMaxWidth(0.8f)
             ) {
                 Row(
                     horizontalArrangement = Arrangement.End,
@@ -69,7 +67,7 @@ fun DishSelectedItem(dish: Dish, dishSelectorViewModel: DishSelectorViewModel) {
                     modifier = Modifier.padding(bottom = 10.dp)
                 ){
                     Text(
-                        text = dish.name,
+                        text = order.dish.name,
                         maxLines = 2,
                         textAlign = TextAlign.Center
                     )
@@ -77,7 +75,7 @@ fun DishSelectedItem(dish: Dish, dishSelectorViewModel: DishSelectorViewModel) {
                     Spacer(modifier = Modifier.width(10.dp))
 
                     Text(
-                        text = dish.formatedPrice(),
+                        text = order.dish.formatedPrice(),
                         textAlign = TextAlign.Right
                     )
                 }
@@ -100,30 +98,11 @@ fun DishSelectedItem(dish: Dish, dishSelectorViewModel: DishSelectorViewModel) {
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .wrapContentWidth(Alignment.End)
-                    .width(30.dp)
-                    .height(30.dp)
-                    .padding(end = 5.dp)
-                    .clickable {  }
+                    .width(50.dp)
+                    .height(50.dp)
+                    .padding(end = 5.dp, start = 10.dp)
+                    .clickable { dishSelectorViewModel.selectedOrders.value.remove(order) }
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewDishSelectedItem(){
-    DeliiciousWaitressTheme {
-        DishSelectedItem(
-            dish = Dish(
-                id = "1",
-                description = "abc",
-                image = "https://www.encopadebalon.com/3497-large_default/fanta-naranja-pack-24-unidades-33cl.jpg",
-                ingredientQties = emptyList(),
-                name = "Fanta de naranja",
-                price = 2.00,
-                type = "Food"
-            ),
-            dishSelectorViewModel =  DishSelectorViewModel()
-        )
     }
 }

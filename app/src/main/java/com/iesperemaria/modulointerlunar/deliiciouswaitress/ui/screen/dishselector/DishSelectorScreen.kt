@@ -1,6 +1,5 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselector
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -16,8 +15,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Dish
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item.DishItem
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.TopBar
 
@@ -45,8 +42,8 @@ fun DishSelectorScreen(
 
 @Composable
 fun DishSelectorContent(navController: NavController, dishSelectorViewModel: DishSelectorViewModel){
-    val dishes = dishSelectorViewModel.dishes.value
-    val selectedDishes = dishSelectorViewModel.selectedDishes.value
+    val dishes by rememberUpdatedState(newValue = dishSelectorViewModel.dishes.value)
+    val selectedOrders by rememberUpdatedState(newValue =dishSelectorViewModel.selectedOrders.value)
 
     Surface {
         Column(
@@ -78,11 +75,11 @@ fun DishSelectorContent(navController: NavController, dishSelectorViewModel: Dis
                     .weight(1f)
             ){
                 itemsIndexed(
-                    items = dishSelectorViewModel.selectedDishes.value
+                    items = selectedOrders
                 ){
                     _, dish ->
                     DishSelectedItem(
-                        dish = dish,
+                        order = dish,
                         dishSelectorViewModel = dishSelectorViewModel
                     )
                     Spacer(

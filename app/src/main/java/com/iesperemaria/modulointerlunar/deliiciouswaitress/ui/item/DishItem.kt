@@ -18,10 +18,9 @@ import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Dish
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselector.DishSelectorViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
-import com.orhanobut.logger.Logger.i
-import java.util.logging.Logger
 
 @Composable
 fun DishItem(dish: Dish, dishSelectorViewModel: DishSelectorViewModel) {
@@ -85,8 +84,11 @@ fun DishItem(dish: Dish, dishSelectorViewModel: DishSelectorViewModel) {
 
 fun addDishToSelecteds(dish: Dish, dishSelectorViewModel: DishSelectorViewModel) {
     val TAG = "AddDishToSelecteds"
-    dishSelectorViewModel.selectedDishes.value.add(dish)
-    Log.i(TAG, "${dishSelectorViewModel.selectedDishes.value.size}")
+    dishSelectorViewModel.selectedOrders.value.add(Order(
+        dish = dish,
+        table = dishSelectorViewModel.table.value.id
+    ))
+    Log.i(TAG, "${dishSelectorViewModel.selectedOrders.value.size}")
 }
 
 @Preview(showBackground = true)

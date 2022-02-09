@@ -5,6 +5,5 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.response
 
 class GetEmployeeFromTokenUseCase {
     private val api = DeliiService()
-
     suspend operator fun invoke(): Employee = api.getEmployeeFromToken()
 }

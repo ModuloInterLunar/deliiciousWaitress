@@ -10,6 +10,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -86,8 +88,8 @@ fun LoginScreen (
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 trailingIcon = {
                     val image = if (passwordVisibility)
-                        Icons.Filled.AccountBox
-                    else Icons.Filled.AccountBox
+                        Icons.Filled.Visibility
+                    else Icons.Filled.VisibilityOff
 
                     IconButton(onClick = {
                         passwordVisibility = !passwordVisibility
