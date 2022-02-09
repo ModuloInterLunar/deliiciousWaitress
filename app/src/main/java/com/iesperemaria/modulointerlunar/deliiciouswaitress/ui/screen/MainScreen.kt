@@ -87,7 +87,7 @@ fun MainScreen(
                 composable("table_list_screen")
                 {
                     currentScreen = "table_list_screen"
-                    tableListViewModel.loadTables()
+                    tableListViewModel.timer.start()
                     TableListScreen(
                         navController = navController,
                         tableListViewModel = tableListViewModel
