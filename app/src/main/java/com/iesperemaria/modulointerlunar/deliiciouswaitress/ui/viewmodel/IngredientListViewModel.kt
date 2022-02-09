@@ -1,7 +1,6 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.viewmodel
 
 import android.app.Application
-import android.content.SharedPreferences
 import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -9,8 +8,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.WrongCredentialsException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Ingredient
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.GetIngredientsUseCase
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.LoginUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.ingredientusecase.GetIngredientsUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.employeeusecase.LoginUseCase
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
 

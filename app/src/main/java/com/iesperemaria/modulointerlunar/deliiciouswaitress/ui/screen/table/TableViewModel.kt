@@ -6,13 +6,12 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.ItemNotFoundException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Ticket
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.DeleteOrderUseCase
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.GetTableByIdUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.orderusecase.DeleteOrderUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.tableusecase.GetTableByIdUseCase
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
 

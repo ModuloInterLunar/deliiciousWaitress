@@ -1,10 +1,10 @@
-package com.iesperemaria.modulointerlunar.deliiciouswaitress.domain
+package com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.orderusecase
 
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.network.DeliiService
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
 
-class DeleteOrderUseCase {
+class UpdateOrderUseCase {
     private val api = DeliiService()
 
-    suspend operator fun invoke(order: Order) = api.deleteOrder(order)
+    suspend operator fun invoke(order: Order): Order = api.updateOrder(order)
 }
