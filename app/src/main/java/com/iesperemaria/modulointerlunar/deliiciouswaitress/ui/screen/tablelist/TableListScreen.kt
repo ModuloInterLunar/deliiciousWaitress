@@ -22,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table.*
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.FAB
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.TopBar
 import kotlin.math.absoluteValue
 
@@ -46,22 +47,11 @@ fun TableListScreen(
             )
         },
         floatingActionButton = {
-            TableListFAB(
-                tableListViewModel = tableListViewModel
-            )
+            FAB() {
+                tableListViewModel.createTable()
+            }
         }
     )
-}
-
-@Composable
-fun TableListFAB(tableListViewModel: TableListViewModel) {
-    FloatingActionButton(
-        onClick = {
-            tableListViewModel.createTable()
-        },
-    ) {
-        Text("+")
-    }
 }
 
 @Composable

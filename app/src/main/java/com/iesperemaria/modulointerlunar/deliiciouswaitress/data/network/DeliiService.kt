@@ -48,7 +48,7 @@ class DeliiService {
     suspend fun getTableById(id: String) : Table {
         val response = RetrofitHelper.getDeliiApiClient().getTable(id)
         Logger.i(response.toString())
-        if(response.code() == 404)
+        if (response.code() == 404)
             throw ItemNotFoundException(response.message())
         return response.body()!!
     }
@@ -69,8 +69,15 @@ class DeliiService {
         val orderModel = OrderModel(order)
         val response = RetrofitHelper.getDeliiApiClient().patchOrder(orderModel, order.id)
         Log.i(TAG, response.toString())
-        if(response.code() == 404)
+        if (response.code() == 404)
             throw ItemNotFoundException(response.message())
         return response.body()!!
+    }
+
+    suspend fun deleteOrder(order: Order) {
+        val response = RetrofitHelper.getDeliiApiClient().deleteOrder(order.id)
+        Log.i(TAG, response.toString())
+        if (response.code() == 404)
+            throw ItemNotFoundException(response.message())
     }
 }

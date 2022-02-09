@@ -83,7 +83,7 @@ fun TableContent(tableViewModel: TableViewModel) {
                     items = table.actualTicket?.orders ?: emptyList()
                 ) { _, order ->
                     OrderItem(order = order, R.drawable.bin_icon) {
-
+                        tableViewModel.deleteOrder(order, table.actualTicket!!)
                     }
                     Spacer(modifier = Modifier.height(5.dp))
                 }

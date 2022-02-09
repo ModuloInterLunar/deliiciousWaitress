@@ -36,4 +36,9 @@ interface DeliiApiClient {
         @Body orderModel: OrderModel,
         @Path("id") id: String
     ): Response<Order>
+
+    @DELETE("api/orders/{id}")
+    suspend fun deleteOrder(
+        @Path("id") id: String
+    ): Response<String>
 }
