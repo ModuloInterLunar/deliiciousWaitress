@@ -1,11 +1,13 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -37,7 +39,8 @@ fun TableScreen(
         },
         content = {
             TableContent(
-                tableViewModel = tableViewModel
+                tableViewModel = tableViewModel,
+                navController = navController
             )
         },
         floatingActionButton = {
@@ -61,7 +64,7 @@ fun PreviewTableScreen() {
 }
 
 @Composable
-fun TableContent(tableViewModel: TableViewModel) {
+fun TableContent(tableViewModel: TableViewModel, navController: NavController) {
     val table = tableViewModel.table.value
 
     Surface {
@@ -79,7 +82,11 @@ fun TableContent(tableViewModel: TableViewModel) {
                 textDecoration = TextDecoration.Underline
             )
 
-            LazyColumn(modifier = Modifier.padding(10.dp)) {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxHeight(0.9f)
+            ) {
                 itemsIndexed(
                     items = table.actualTicket?.orders ?: emptyList()
                 ) { _, order ->
@@ -89,6 +96,16 @@ fun TableContent(tableViewModel: TableViewModel) {
                     Spacer(modifier = Modifier.height(5.dp))
                 }
             }
+
+            Button(
+                onClick = { tableViewModel.loadPaymentScreen(navController) },
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .fillMaxHeight()
+                    .padding(bottom = 10.dp)
+            ) {
+                Text(text = "Pedir Cuenta")
+            }
         }
     }
 }
@@ -96,7 +113,6 @@ fun TableContent(tableViewModel: TableViewModel) {
 @Composable
 fun TableFAB(navController: NavController, tableViewModel: TableViewModel) {
     val ticket = tableViewModel.table.value.actualTicket
-
     if (ticket == null)
         tableViewModel.createTicket()
 

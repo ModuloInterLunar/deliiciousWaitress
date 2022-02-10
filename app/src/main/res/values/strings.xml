@@ -19,4 +19,5 @@
     <string name="description">Descripción</string>
     <string name="send_dishes">Acceptar y enviar platos</string>
     <string name="connection_error_exception_message">Ha habido un problema de conexión con la API REST</string>
+    <string name="ticket">Ticket:</string>
 </resources>

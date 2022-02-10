@@ -2,10 +2,12 @@ package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table
 
 import android.os.CountDownTimer
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.ItemNotFoundException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
@@ -68,7 +70,19 @@ class TableViewModel : ViewModel() {
             }
         }
     }
+    
+    fun loadPaymentScreen(navController: NavController){
+        if(table.value.actualTicket == null)
+            return Toast.makeText(
+                navController.context,
+                "Error, la mesa ${table.value.id} no tiene ningún ticket.",
+                Toast.LENGTH_SHORT
+            ).show()
 
-    fun createTicket() { /*TODO*/
+        navController.navigate("payment_screen/${table.value.id}")
+    }
+
+    fun createTicket() { 
+        /*TODO*/
     }
 }

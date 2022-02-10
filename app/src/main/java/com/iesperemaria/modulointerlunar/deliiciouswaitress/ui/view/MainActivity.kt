@@ -35,6 +35,7 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousW
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.LoginScreen
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.LoginViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.outputtray.OutputTrayViewModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.payment.PaymentViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.viewmodel.IngredientListViewModel
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -48,6 +49,7 @@ class MainActivity : ComponentActivity() {
     private val outputTrayViewModel: OutputTrayViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
     private val dishSelectorViewModel: DishSelectorViewModel by viewModels()
+    private val paymentViewModel: PaymentViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +61,8 @@ class MainActivity : ComponentActivity() {
                 tableViewModel,
                 outputTrayViewModel,
                 loginViewModel,
-                dishSelectorViewModel
+                dishSelectorViewModel,
+                paymentViewModel
             )
         }
     }
