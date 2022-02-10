@@ -35,7 +35,7 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousW
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-fun DishSelectorItem(order: Order, elevation: Dp) {
+fun DishSelectorItem(order: Order, elevation: Dp = 5.dp) {
     var description by rememberSaveable { mutableStateOf("") }
 
     Card(

@@ -78,6 +78,6 @@ class DishSelectorViewModel : ViewModel() {
 
     fun addOrder(dish: Dish) {
         // we create a new list to trigger the state change
-        selectedOrders = selectedOrders + Order(dish = dish, table = table.value.id, _id = selectedOrders.size)
+        selectedOrders = selectedOrders + Order(dish = dish, table = table.value.id, _id = (selectedOrders.maxOfOrNull { order -> order._id }?: 0 + 1))
     }
 }

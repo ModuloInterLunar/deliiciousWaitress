@@ -35,6 +35,7 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Dish
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item.DishItem
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.CustomSwipeToDismiss
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.TopBar
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -128,56 +129,28 @@ fun FrontLayerDishSelectorContent(navController: NavController, dishSelectorView
                  .padding(10.dp)
                  .fillMaxWidth()
          ) {
+             item{
+                 Text(
+                     text = "Platos Seleccionados:",
+                     color = Color.DarkGray,
+                     fontWeight = FontWeight.SemiBold,
+                     modifier = Modifier.padding(10.dp)
+                 )
+             }
             items(
                 selectedOrders, { it._id }
             ) { order ->
                 val dismissState = rememberDismissState()
-                if (dismissState.isDismissed(DismissDirection.StartToEnd)) {
-                    dishSelectorViewModel.removeOrder(order)
+                CustomSwipeToDismiss(
+                    dishSelectorViewModel = dishSelectorViewModel,
+                    order,
+                    dismissState
+                ) {
+                    DishSelectorItem(
+                        order = order,
+                        elevation = animateDpAsState(targetValue = if (dismissState.dismissDirection != null) 4.dp else 0.dp).value
+                    )
                 }
-                SwipeToDismiss(
-                    state = dismissState,
-                    directions = setOf(DismissDirection.StartToEnd),
-                    dismissThresholds = { FractionalThreshold(0.3f) },
-                    background = {
-                        val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
-                        val color by animateColorAsState(
-                            targetValue = when (dismissState.targetValue) {
-                                DismissValue.Default -> Color.LightGray
-                                DismissValue.DismissedToEnd -> Color.Red
-                                DismissValue.DismissedToStart -> Color.Red
-                            }
-                        )
-
-                        val icon = when(direction) {
-                            DismissDirection.StartToEnd -> Icons.Default.Delete
-                            DismissDirection.EndToStart -> Icons.Default.Delete
-                        }
-                        
-                        val scale by animateFloatAsState(targetValue = if (dismissState.targetValue == DismissValue.Default) 0.8f else 1.2f)
-
-                        Box(modifier = Modifier
-                            .fillMaxSize()
-                            .background(color)
-                            .padding(horizontal = 12.dp))
-                        {
-                            Icon(
-                                icon, 
-                                contentDescription = "Icon", 
-                                modifier = Modifier
-                                    .scale(scale)
-                            )
-                        }
-                    },
-                    dismissContent = {
-                        DishSelectorItem(
-                            order = order,
-                            elevation = animateDpAsState(targetValue = if (dismissState.dismissDirection != null) 4.dp else 0.dp).value
-                        )
-                    }
-                )
-
-
                 Spacer(
                     modifier = Modifier
                         .height(5.dp)
