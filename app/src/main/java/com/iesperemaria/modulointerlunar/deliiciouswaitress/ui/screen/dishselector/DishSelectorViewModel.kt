@@ -1,5 +1,6 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselector
 
+import android.os.CountDownTimer
 import androidx.compose.runtime.*
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -68,5 +69,15 @@ class DishSelectorViewModel : ViewModel() {
                 Logger.e(e.message ?: e.toString())
             }
         }
+    }
+
+    fun removeOrder(order: Order) {
+        // we create a new list to trigger the state change
+        selectedOrders = selectedOrders.toMutableList().also { it.remove(order) }
+    }
+
+    fun addOrder(dish: Dish) {
+        // we create a new list to trigger the state change
+        selectedOrders = selectedOrders + Order(dish = dish, table = table.value.id, _id = selectedOrders.size)
     }
 }

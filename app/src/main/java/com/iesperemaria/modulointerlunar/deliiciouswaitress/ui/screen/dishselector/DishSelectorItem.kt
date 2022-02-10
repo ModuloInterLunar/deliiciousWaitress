@@ -1,6 +1,7 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselector
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
@@ -16,11 +17,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
@@ -32,12 +35,12 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousW
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-fun DishSelectorItem(order: Order, dishSelectorViewModel: DishSelectorViewModel) {
+fun DishSelectorItem(order: Order, elevation: Dp) {
     var description by rememberSaveable { mutableStateOf("") }
 
     Card(
         shape = RoundedCornerShape(8.dp),
-        elevation = 4.dp
+        elevation = elevation
     ) {
         Row(
             modifier = Modifier
@@ -55,8 +58,6 @@ fun DishSelectorItem(order: Order, dishSelectorViewModel: DishSelectorViewModel)
                     .size(55.dp)
                     .padding(start = 8.dp)
             )
-
-            Spacer(modifier = Modifier.width(10.dp))
 
             Column(
                 modifier = Modifier
@@ -93,19 +94,6 @@ fun DishSelectorItem(order: Order, dishSelectorViewModel: DishSelectorViewModel)
                     )
                 )
             }
-
-            Image(
-                painter = painterResource(id = R.drawable.bin_icon),
-                contentDescription = "",
-                modifier = Modifier
-                    .weight(1f)
-                    .align(Alignment.CenterVertically)
-                    .wrapContentWidth(Alignment.End)
-                    .width(50.dp)
-                    .height(50.dp)
-                    .padding(end = 5.dp, start = 10.dp)
-                    .clickable { dishSelectorViewModel.selectedOrders = dishSelectorViewModel.selectedOrders.toMutableList().also { it.remove(order) } }
-            )
         }
     }
 }

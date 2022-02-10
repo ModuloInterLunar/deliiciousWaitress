@@ -2,6 +2,7 @@ package com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.respons
 
 data class Order(
     var id: String = "",
+    var _id: Int = 0,
     var createdAt: String = "",
     var description: String = "",
     var dish: Dish = Dish(),

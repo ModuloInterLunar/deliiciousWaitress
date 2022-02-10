@@ -44,6 +44,11 @@ class LoginViewModel : ViewModel() {
                     Toast.LENGTH_SHORT
                 ).show()
             } catch (e: Exception) {
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.connection_error_exception_message),
+                    Toast.LENGTH_SHORT
+                ).show()
                 Logger.e(e.message ?: e.toString())
             }
         }

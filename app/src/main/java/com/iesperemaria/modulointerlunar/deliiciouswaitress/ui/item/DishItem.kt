@@ -89,9 +89,9 @@ fun DishItem(dish: Dish, action: () -> Unit) {
                     .weight(1f)
                     .align(Alignment.CenterVertically)
                     .wrapContentWidth(Alignment.End)
-                    .width(30.dp)
-                    .height(30.dp)
-                    .padding(end = 10.dp)
+                    .width(50.dp)
+                    .height(50.dp)
+                    .padding(5.dp)
                     .clickable { action() }
             )
         }
