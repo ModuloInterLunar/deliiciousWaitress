@@ -14,7 +14,7 @@
     <string name="ingredients">Ingredientes</string>
     <string name="output_tray">Bandeja de salida</string>
     <string name="dish_selector">Seleciona los platos</string>
-    <string name="dishes_list">Lista de paltos:</string>
+    <string name="dishes_list">Lista de platos:</string>
     <string name="dishes_selected">Platos seleccionados:</string>
     <string name="description">Descripción</string>
     <string name="send_dishes">Acceptar y enviar platos</string>
