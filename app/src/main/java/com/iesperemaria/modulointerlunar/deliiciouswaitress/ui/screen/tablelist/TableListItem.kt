@@ -34,7 +34,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun TableListItem(navController: NavController, tableListViewModel: TableListViewModel, tableId: String, parentSize: IntSize) {
-    val table = tableListViewModel.tables.value.find { it.id == tableId }!!
+    val table = tableListViewModel.tables.find { it.id == tableId }!!
     val offsetX = remember { mutableStateOf(table.posX * parentSize.width) }
     val offsetY = remember { mutableStateOf(table.posY * parentSize.height) }
 

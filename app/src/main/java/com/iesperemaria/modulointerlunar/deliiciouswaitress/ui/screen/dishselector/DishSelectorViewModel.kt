@@ -1,7 +1,7 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselector
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Dish
@@ -27,7 +27,7 @@ class DishSelectorViewModel : ViewModel() {
     val getTableByIdUseCase = GetTableByIdUseCase()
     val employee: MutableState<Employee> = mutableStateOf(Employee())
     val getEmployeeFromTokenUseCase = GetEmployeeFromTokenUseCase()
-    val selectedOrders: MutableState<MutableList<Order>> = mutableStateOf(mutableListOf())
+    var selectedOrders by mutableStateOf(listOf<Order>())
 
     fun loadDishes(){
         viewModelScope.launch {
@@ -49,10 +49,8 @@ class DishSelectorViewModel : ViewModel() {
         viewModelScope.launch {
             try{
                 val result = getEmployeeFromTokenUseCase()
-                if(result != null){
-                    employee.value = result
-                    isLoading.value = false
-                }
+                employee.value = result
+                isLoading.value = false
             }catch (e: Exception) {
                 Logger.e(e.message ?: e.toString())
             }
@@ -64,10 +62,8 @@ class DishSelectorViewModel : ViewModel() {
             isLoading.value = true
             try{
                 val result = getTableByIdUseCase(id)
-                if(result != null){
-                    table.value = result
-                    isLoading.value = false
-                }
+                table.value = result
+                isLoading.value = false
             }catch (e: Exception) {
                 Logger.e(e.message ?: e.toString())
             }

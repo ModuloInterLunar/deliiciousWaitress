@@ -60,7 +60,7 @@ fun TableListScreen(
 fun TableListContent(navController: NavController, tableListViewModel: TableListViewModel) {
     var size by remember { mutableStateOf(IntSize.Zero) }
 
-    val tables = tableListViewModel.tables.value
+    val tables = tableListViewModel.tables
     Surface {
         Column(
             modifier = Modifier.fillMaxSize()

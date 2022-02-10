@@ -1,26 +1,25 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselector
 
-import android.view.Gravity
-import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.ScrollableDefaults
-import androidx.compose.foundation.gestures.scrollable
+import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Dish
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item.DishItem
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.TopBar
 
@@ -30,9 +29,16 @@ fun DishSelectorScreen(
     navController: NavController,
     dishSelectorViewModel: DishSelectorViewModel
 ) {
+    val config = LocalConfiguration.current
     val scaffoldState = rememberBackdropScaffoldState(
         BackdropValue.Revealed
     )
+    var peekHeight = 50.dp
+    var headerHeight = 30.dp
+    if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
+        peekHeight = 150.dp
+        headerHeight = 150.dp
+    }
     BackdropScaffold (
         scaffoldState = scaffoldState,
         appBar = {
@@ -53,8 +59,8 @@ fun DishSelectorScreen(
                 navController = navController,
                 dishSelectorViewModel = dishSelectorViewModel)
         },
-        peekHeight = 150.dp,
-        headerHeight = 150.dp,
+        peekHeight = peekHeight,
+        headerHeight = headerHeight,
         gesturesEnabled = true
     )
 }
@@ -73,9 +79,10 @@ fun BackLayerDishSelectorContent(navController: NavController, dishSelectorViewM
                 items = dishes
             ) { _, dish ->
                 DishItem(
-                    dish = dish,
-                    dishSelectorViewModel = dishSelectorViewModel
-                )
+                    dish = dish
+                ) {
+                    addDishToSelecteds(dish, dishSelectorViewModel)
+                }
                 Spacer(modifier = Modifier.height(5.dp))
             }
         }
@@ -84,8 +91,8 @@ fun BackLayerDishSelectorContent(navController: NavController, dishSelectorViewM
 
 @Composable
 fun FrontLayerDishSelectorContent(navController: NavController, dishSelectorViewModel: DishSelectorViewModel) {
-    val selectedOrders by rememberUpdatedState(newValue = dishSelectorViewModel.selectedOrders.value)
-    Surface {
+    val selectedOrders = dishSelectorViewModel.selectedOrders
+     Surface {
         LazyColumn(
             modifier = Modifier
                 .padding(10.dp)
@@ -101,9 +108,9 @@ fun FrontLayerDishSelectorContent(navController: NavController, dishSelectorView
             }
             itemsIndexed(
                 items = selectedOrders
-            ) { _, dish ->
-                DishSelectedItem(
-                    order = dish,
+            ) { _, order ->
+                DishSelectorItem(
+                    order = order,
                     dishSelectorViewModel = dishSelectorViewModel
                 )
                 Spacer(
@@ -128,4 +135,14 @@ fun FrontLayerDishSelectorContent(navController: NavController, dishSelectorView
             }
         }
     }
+}
+
+fun addDishToSelecteds(dish: Dish, dishSelectorViewModel: DishSelectorViewModel) {
+    dishSelectorViewModel.selectedOrders =
+        dishSelectorViewModel.selectedOrders + mutableListOf(
+            Order(
+                dish = dish,
+                table = dishSelectorViewModel.table.value.id
+            )
+    )
 }

@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
@@ -29,8 +30,9 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.response
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
-fun DishSelectedItem(order: Order, dishSelectorViewModel: DishSelectorViewModel) {
+fun DishSelectorItem(order: Order, dishSelectorViewModel: DishSelectorViewModel) {
     var description by rememberSaveable { mutableStateOf("") }
 
     Card(
@@ -96,12 +98,13 @@ fun DishSelectedItem(order: Order, dishSelectorViewModel: DishSelectorViewModel)
                 painter = painterResource(id = R.drawable.bin_icon),
                 contentDescription = "",
                 modifier = Modifier
+                    .weight(1f)
                     .align(Alignment.CenterVertically)
                     .wrapContentWidth(Alignment.End)
                     .width(50.dp)
                     .height(50.dp)
                     .padding(end = 5.dp, start = 10.dp)
-                    .clickable { dishSelectorViewModel.selectedOrders.value.remove(order) }
+                    .clickable { dishSelectorViewModel.selectedOrders = dishSelectorViewModel.selectedOrders.toMutableList().also { it.remove(order) } }
             )
         }
     }

@@ -3,7 +3,9 @@ package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist
 import android.os.CountDownTimer
 import android.util.Log
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
@@ -30,7 +32,7 @@ class TableListViewModel : ViewModel(){
         }
     }
 
-    val tables: MutableState<MutableList<Table>> = mutableStateOf(mutableListOf())
+    var tables by mutableStateOf(listOf<Table>())
     var getTablesUseCase = GetTablesUseCase()
     var createTableUseCase = CreateTableUseCase()
 
@@ -40,7 +42,7 @@ class TableListViewModel : ViewModel(){
             try {
                 val result = getTablesUseCase()
                 if (!result.isNullOrEmpty()){
-                    tables.value = result.toMutableList()
+                    tables = result.toMutableList()
                     isLoading.value = false
                 }
             } catch (e: Exception) {
@@ -54,7 +56,7 @@ class TableListViewModel : ViewModel(){
             isLoading.value = true
             try {
                 createTableUseCase(table)
-                tables.value.add(table)
+                tables = tables + table
                 isLoading.value = false
             }catch (e: Exception){
                 Logger.e(e.message ?: e.toString())

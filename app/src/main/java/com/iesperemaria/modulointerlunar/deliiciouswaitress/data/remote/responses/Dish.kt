@@ -13,4 +13,6 @@ data class Dish(
 ) {
     override fun toString(): String = "$name, $price."
     fun formatedPrice(): String = "${price.format(2)} €"
+    fun getIngredients(): String = ingredientQties.fold("") { acc, cur -> acc + "${cur}\n"}
+    fun getFullDescription(): String = "$description\n${getIngredients()}"
 }
