@@ -26,6 +26,8 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.Logi
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.LoginViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.outputtray.OutputTrayScreen
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.outputtray.OutputTrayViewModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.payment.PaymentScreen
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.payment.PaymentViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table.TableScreen
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table.TableViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist.TableListScreen
@@ -42,7 +44,8 @@ fun MainScreen(
     tableViewModel: TableViewModel,
     outputTrayViewModel: OutputTrayViewModel,
     loginViewModel: LoginViewModel,
-    dishSelectorViewModel: DishSelectorViewModel
+    dishSelectorViewModel: DishSelectorViewModel,
+    paymentViewModel: PaymentViewModel
 ) {
     var currentScreen by rememberSaveable { mutableStateOf("login") }
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -140,8 +143,7 @@ fun MainScreen(
                     arguments = listOf(
                         navArgument("tableId") { type = NavType.StringType }
                     )
-                )
-                {
+                ) {
                     try{
                         dishSelectorViewModel.loadTable(it.arguments?.getString("tableId")!!)
                         dishSelectorViewModel.loadEmployee()
@@ -159,7 +161,27 @@ fun MainScreen(
                         dishSelectorViewModel = dishSelectorViewModel
                     )
                 }
+                composable(
+                    "payment_screen/{tableId}",
+                    arguments = listOf(
+                        navArgument("tableId") { type = NavType.StringType }
+                    )
+                ) {
+                    try{
+                        paymentViewModel.loadTable(it.arguments?.getString("tableId")!!)
+                    }catch (e: ItemNotFoundException){
+                        Toast.makeText(
+                            context,
+                            stringResource(id = R.string.table_not_found_exception_message),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
 
+                    PaymentScreen(
+                        navController = navController,
+                        paymentViewModel = paymentViewModel
+                    )
+                }
             }
         }
     }

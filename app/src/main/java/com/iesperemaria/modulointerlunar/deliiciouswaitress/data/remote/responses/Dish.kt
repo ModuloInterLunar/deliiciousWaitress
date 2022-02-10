@@ -1,6 +1,6 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses
 
-fun Double.format(digits: Int) = "%.${digits}f".format(this)
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.format
 
 data class Dish(
     var id: String = "",

@@ -18,4 +18,5 @@
     <string name="dishes_selected">Platos seleccionados:</string>
     <string name="description">Descripción</string>
     <string name="send_dishes">Acceptar y enviar platos</string>
+    <string name="ticket">Ticket:</string>
 </resources>
