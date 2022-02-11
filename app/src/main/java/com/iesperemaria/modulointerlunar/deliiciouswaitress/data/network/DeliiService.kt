@@ -89,6 +89,24 @@ class DeliiService {
         return response.body()!!
     }
 
+    suspend fun updateTicket(ticket: Ticket): Ticket {
+        val ticketModel = TicketModel(ticket)
+        val response = RetrofitHelper.getDeliiApiClient().patchTicket(ticketModel, ticket.id)
+        Log.i(TAG, response.toString())
+        if(response.code() == 404)
+            throw ItemNotFoundException(response.message())
+        return response.body()!!
+    }
+
+    suspend fun updateTable(table: Table): Table {
+        val tableModel = TableModel(table)
+        val response = RetrofitHelper.getDeliiApiClient().patchTable(tableModel, table.id)
+        Log.i(TAG, response.toString())
+        if(response.code() == 404)
+            throw ItemNotFoundException(response.message())
+        return response.body()!!
+    }
+
     suspend fun deleteOrder(order: Order) {
         val response = RetrofitHelper.getDeliiApiClient().deleteOrder(order.id)
         Log.i(TAG, response.toString())
@@ -96,11 +114,11 @@ class DeliiService {
             throw ItemNotFoundException(response.message())
     }
 
-    suspend fun updateTicket(ticket: Ticket): Ticket {
+    suspend fun createTicket(ticket: Ticket): Ticket {
         val ticketModel = TicketModel(ticket)
-        val response = RetrofitHelper.getDeliiApiClient().patchTicket(ticketModel, ticket.id)
+        val response = RetrofitHelper.getDeliiApiClient().createTicket(ticketModel)
         Log.i(TAG, response.toString())
-        if(response.code() == 404)
+        if (response.code() == 404)
             throw ItemNotFoundException(response.message())
         return response.body()!!
     }

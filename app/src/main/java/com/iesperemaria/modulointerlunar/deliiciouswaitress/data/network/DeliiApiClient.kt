@@ -55,4 +55,13 @@ interface DeliiApiClient {
         @Body ticketModel: TicketModel,
         @Path("id") id: String
     ): Response<Ticket>
+
+    @PATCH("api/tables/{id}")
+    suspend fun patchTable(
+        @Body tableModel: TableModel,
+        @Path("id") id: String
+    ): Response<Table>
+
+    @POST("api/tickets")
+    suspend fun createTicket(@Body ticketModel: TicketModel): Response<Ticket>
 }
