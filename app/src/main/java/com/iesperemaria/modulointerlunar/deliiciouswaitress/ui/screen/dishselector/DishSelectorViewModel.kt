@@ -1,17 +1,21 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselector
 
-import android.os.CountDownTimer
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.*
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.NotEnoughStockException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Dish
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.employeeusecase.GetEmployeeFromTokenUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.ingredientusecase.ReduceIngredientQuantityUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.orderusecase.CreateOrderUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.tableusecase.GetTableByIdUseCase
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.orderusecase.GetDishesUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.dishusecase.GetDishesUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.ticketusecase.UpdateTicketUseCase
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
 
@@ -22,12 +26,16 @@ class DishSelectorViewModel : ViewModel() {
     fun isLoading() : MutableState<Boolean> = isLoading
     fun loadError() : MutableState<String> = loadError
 
-    val dishes: MutableState<MutableList<Dish>> = mutableStateOf(mutableListOf())
     val getDishesUseCase = GetDishesUseCase()
-    val table: MutableState<Table> = mutableStateOf(Table())
     val getTableByIdUseCase = GetTableByIdUseCase()
-    val employee: MutableState<Employee> = mutableStateOf(Employee())
     val getEmployeeFromTokenUseCase = GetEmployeeFromTokenUseCase()
+    val reduceIngredientQuantityUseCase = ReduceIngredientQuantityUseCase()
+    val createOrderUseCase = CreateOrderUseCase()
+    val updateTicketUseCase = UpdateTicketUseCase()
+
+    val dishes: MutableState<MutableList<Dish>> = mutableStateOf(mutableListOf())
+    val table: MutableState<Table> = mutableStateOf(Table())
+    val employee: MutableState<Employee> = mutableStateOf(Employee())
     var selectedOrders by mutableStateOf(listOf<Order>())
 
     fun loadDishes(){
@@ -78,6 +86,37 @@ class DishSelectorViewModel : ViewModel() {
 
     fun addOrder(dish: Dish) {
         // we create a new list to trigger the state change
-        selectedOrders = selectedOrders + Order(dish = dish, table = table.value.id, _id = (selectedOrders.maxOfOrNull { order -> order._id }?: 0 + 1))
+        selectedOrders = selectedOrders + Order(dish = dish, table = table.value.id, _id = System.currentTimeMillis())
+    }
+
+    fun sendOrders(context: Context) {
+        viewModelScope.launch {
+
+            isLoading.value = true
+            selectedOrders.forEach { order ->
+                try {
+                    reduceIngredientQuantityUseCase(order.dish)
+                } catch (e: NotEnoughStockException) {
+                    Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
+                    return@forEach
+                }
+
+                try {
+                    createOrderUseCase(order)
+                } catch (e: Exception){
+                    Logger.e(e.message ?: e.toString())
+                }
+
+                val ticket = table.value.actualTicket!!
+
+                try {
+                    ticket.orders.add(order)
+                    updateTicketUseCase(ticket)
+                } catch (e: Exception) {
+                    Logger.e(e.message ?: e.toString())
+                }
+            }
+
+        }
     }
 }

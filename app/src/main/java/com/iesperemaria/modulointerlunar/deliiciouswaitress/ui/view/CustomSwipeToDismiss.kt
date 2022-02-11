@@ -63,6 +63,7 @@ fun CustomSwipeToDismiss(
                     modifier = Modifier
                         .fillMaxHeight()
                         .align(Alignment.CenterStart)
+                        .padding(start = 5.dp)
                         .scale(scale)
                 )
             }

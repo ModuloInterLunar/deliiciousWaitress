@@ -107,6 +107,7 @@ fun BackLayerDishSelectorContent(navController: NavController, dishSelectorViewM
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FrontLayerDishSelectorContent(navController: NavController, dishSelectorViewModel: DishSelectorViewModel) {
+    val context = LocalContext.current
     val selectedOrders = dishSelectorViewModel.selectedOrders
      Surface {
          Column(
@@ -163,7 +164,7 @@ fun FrontLayerDishSelectorContent(navController: NavController, dishSelectorView
                 if (selectedOrders.isNotEmpty())
                     Box(modifier = Modifier.fillMaxWidth()){
                         Button(
-                            onClick = { /*TODO*/ },
+                            onClick = { dishSelectorViewModel.sendOrders(context) },
                             Modifier.align(Alignment.Center)
                         ) {
                             Text(text = stringResource(id = R.string.send_dishes))

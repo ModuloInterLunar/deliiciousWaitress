@@ -14,6 +14,7 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.response
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Ticket
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.orderusecase.DeleteOrderUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.tableusecase.GetTableByIdUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.ticketusecase.CreateTicketUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.ticketusecase.UpdateTicketUseCase
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
@@ -41,6 +42,7 @@ class TableViewModel : ViewModel() {
     val getTableByIdUseCase = GetTableByIdUseCase()
     val deleteOrderUseCase = DeleteOrderUseCase()
     val updateTicketUseCase = UpdateTicketUseCase()
+    val createTicketUseCase = CreateTicketUseCase()
 
     fun loadTable(id: String) {
         viewModelScope.launch {
@@ -63,7 +65,7 @@ class TableViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 deleteOrderUseCase(order)
-                ticket.orders.remove(order)
+                ticket.orders!!.remove(order)
                 updateTicketUseCase(ticket)
             } catch (e: ItemNotFoundException) {
                 throw ItemNotFoundException("Error, ${e.message} not found.")
@@ -82,7 +84,14 @@ class TableViewModel : ViewModel() {
         navController.navigate("payment_screen/${table.value.id}")
     }
 
-    fun createTicket() { 
-        /*TODO*/
+    fun createTicket() {
+        viewModelScope.launch {
+            isLoading.value = true
+            try {
+                val ticket = createTicketUseCase(Ticket())
+            }catch (e: Exception){
+                Logger.e(e.message ?: e.toString())
+            }
+        }
     }
 }

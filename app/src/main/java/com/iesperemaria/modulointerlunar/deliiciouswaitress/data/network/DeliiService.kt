@@ -3,12 +3,9 @@ package com.iesperemaria.modulointerlunar.deliiciouswaitress.data.network
 import android.util.Log
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.core.RetrofitHelper
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.ItemNotFoundException
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.NotEnoughStockException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.WrongCredentialsException
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.AuthModel
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.OrderModel
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.TableModel
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.*
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.TicketModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.*
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.*
 import com.orhanobut.logger.Logger
 
@@ -100,6 +97,34 @@ class DeliiService {
         val ticketModel = TicketModel(ticket)
         val response = RetrofitHelper.getDeliiApiClient().patchTicket(ticketModel, ticket.id)
         Log.i(TAG, response.toString())
+        if(response.code() == 404)
+            throw ItemNotFoundException(response.message())
+        return response.body()!!
+    }
+
+    suspend fun reduceIngredientQuantity(dish: Dish) {
+        dish.ingredientQties.map { ingredientQty ->
+            val id = ingredientQty.ingredient.id
+            val ingredientQtyModel = IngredientQtyModel(quantity = ingredientQty.quantity)
+            val response = RetrofitHelper.getDeliiApiClient().reduceIngredientQuantity(ingredientQtyModel, id)
+            if (response.code() == 400)
+                throw NotEnoughStockException(response.message())
+        }
+    }
+
+    suspend fun createOrder(order: Order): Order {
+        val orderModel = OrderModel(order)
+        val response = RetrofitHelper.getDeliiApiClient().createOrder(orderModel)
+        Logger.i(response.toString())
+        if(response.code() == 404)
+            throw ItemNotFoundException(response.message())
+        return response.body()!!
+    }
+
+    suspend fun createTicket(ticket: Ticket): Ticket {
+        val ticketModel = TicketModel(ticket)
+        val response = RetrofitHelper.getDeliiApiClient().createTicket(ticketModel)
+        Logger.i(response.toString())
         if(response.code() == 404)
             throw ItemNotFoundException(response.message())
         return response.body()!!
