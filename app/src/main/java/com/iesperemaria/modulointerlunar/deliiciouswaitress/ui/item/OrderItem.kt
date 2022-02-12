@@ -7,6 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,12 +19,14 @@ import coil.transform.CircleCropTransformation
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Dish
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun OrderItem(order: Order, imageId: Int? = null, elevation: Dp = 8.dp, imageAction: (() -> Unit)? = null) {
     Card(
         shape = RoundedCornerShape(8.dp),
+        backgroundColor = colorResource(id = R.color.white_2),
         elevation = elevation
     ) {
         Row(

@@ -103,12 +103,12 @@ fun TableContent(tableViewModel: TableViewModel, navController: NavController) {
                     ) {
                         OrderItem(
                             order = order,
-                            elevation = animateDpAsState(targetValue = if (dismissState.dismissDirection != null) 4.dp else 0.dp).value
+                            elevation = animateDpAsState(targetValue = if (dismissState.dismissDirection != null) 8.dp else 0.dp).value
                         ) {
                             tableViewModel.deleteOrder(order)
                         }
-                        Spacer(modifier = Modifier.height(5.dp))
                     }
+                    Spacer(modifier = Modifier.height(5.dp))
                 }
             }
 

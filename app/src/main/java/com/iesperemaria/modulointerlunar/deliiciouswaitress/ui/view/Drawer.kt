@@ -27,7 +27,6 @@ fun Drawer(
     )
 
     Column(
-        verticalArrangement = Arrangement.Center,
         modifier = modifier
             .fillMaxSize()
             .padding(start = 35.dp, top = 24.dp)
