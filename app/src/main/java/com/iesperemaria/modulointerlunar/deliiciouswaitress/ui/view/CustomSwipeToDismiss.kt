@@ -23,13 +23,12 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselect
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CustomSwipeToDismiss(
-    dishSelectorViewModel: DishSelectorViewModel,
-    order: Order,
+    swipeAction: () -> Unit,
     dismissState: DismissState,
     content: @Composable () -> Unit
 ) {
     if (dismissState.isDismissed(DismissDirection.StartToEnd)) {
-        dishSelectorViewModel.removeOrder(order)
+        swipeAction()
     }
     SwipeToDismiss(
         state = dismissState,

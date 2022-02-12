@@ -50,9 +50,9 @@ fun TableListItem(navController: NavController, tableListViewModel: TableListVie
                 detectDragGestures { change, dragAmount ->
                     change.consumeAllChanges()
 
-                    Toast
-                        .makeText(navController.context, "$parentSize", Toast.LENGTH_SHORT)
-                        .show()
+//                    Toast
+//                        .makeText(navController.context, "$parentSize", Toast.LENGTH_SHORT)
+//                        .show()
 
                     val newOffset = correctOutOfParent(
                         newPosition = Offset(dragAmount.x, dragAmount.y),

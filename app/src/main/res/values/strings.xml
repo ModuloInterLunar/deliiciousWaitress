@@ -20,4 +20,7 @@
     <string name="send_dishes">Acceptar y enviar platos</string>
     <string name="connection_error_exception_message">Ha habido un problema de conexión con la API REST</string>
     <string name="ticket">Ticket:</string>
+    <string name="not_enough_stockt_exception_message">No hay suficientes ingredientes</string>
+    <string name="payment">Pago</string>
+    <string name="selected_dishes">Platos Seleccionados:</string>
 </resources>

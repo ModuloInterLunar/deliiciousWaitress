@@ -47,9 +47,10 @@ fun MainScreen(
     dishSelectorViewModel: DishSelectorViewModel,
     paymentViewModel: PaymentViewModel
 ) {
-    var currentScreen by rememberSaveable { mutableStateOf("login") }
+    var currentScreen by rememberSaveable { mutableStateOf(AppScreens.LoginScreen.route) }
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    var gesturesEnabled by remember { mutableStateOf(false) }
     val openDrawer = {
         scope.launch {
             drawerState.open()
@@ -63,7 +64,7 @@ fun MainScreen(
 
         ModalDrawer(
             drawerState = drawerState,
-            gesturesEnabled = true,
+            gesturesEnabled = gesturesEnabled,
             drawerContent = {
                 Drawer(
                     onDestinationClicked = { route ->
@@ -82,18 +83,24 @@ fun MainScreen(
                 navController = navController,
                 startDestination = currentScreen
             ) {
-                composable("login") {
+                composable(AppScreens.LoginScreen.route) {
+                    gesturesEnabled = false
                     // auto-login
-                    loginViewModel.login("alvaro", "12345", navController, context)
+                    loginViewModel.login("alvaro", "12345", context) {
+                        navController.navigate(AppScreens.TableListScreen.route){
+                            popUpTo(0)
+                        }
+                    }
                     // auto-login
                     LoginScreen(
                         navController = navController,
                         loginViewModel = loginViewModel
                     )
                 }
-                composable("table_list_screen")
+                composable(AppScreens.TableListScreen.route)
                 {
-                    currentScreen = "table_list_screen"
+                    gesturesEnabled = true
+                    currentScreen = AppScreens.TableListScreen.route
                     tableListViewModel.timer.start()
                     TableListScreen(
                         navController = navController,
@@ -103,13 +110,14 @@ fun MainScreen(
                     }
                 }
                 composable(
-                    "table_screen/{tableId}",
+                    AppScreens.TableScreen.route + "/{tableId}",
                     arguments = listOf(
                         navArgument("tableId") {
                             type = NavType.StringType
                         }
                     )
                 ) {
+                    gesturesEnabled = false
                     try {
                         tableViewModel.tableId = it.arguments?.getString("tableId")!!
                         tableViewModel.timer.start()
@@ -126,7 +134,8 @@ fun MainScreen(
                         tableViewModel = tableViewModel
                     )
                 }
-                composable("output_tray") {
+                composable(AppScreens.OutputTrayScreen.route) {
+                    gesturesEnabled = true
                     outputTrayViewModel.timer.start()
                     OutputTrayScreen(
                         navController = navController,
@@ -135,15 +144,16 @@ fun MainScreen(
                         openDrawer()
                     }
                 }
-                composable("ingredient_screen") {
+                composable(AppScreens.IngredientScreen.route) {
                     IngredientScreen(navController = navController)
                 }
                 composable(
-                    "dish_selector_screen/{tableId}",
+                    AppScreens.DishSelectorScreen.route + "/{tableId}",
                     arguments = listOf(
                         navArgument("tableId") { type = NavType.StringType }
                     )
                 ) {
+                    gesturesEnabled = false
                     try{
                         dishSelectorViewModel.loadTable(it.arguments?.getString("tableId")!!)
                         dishSelectorViewModel.loadEmployee()
@@ -162,11 +172,12 @@ fun MainScreen(
                     )
                 }
                 composable(
-                    "payment_screen/{tableId}",
+                    AppScreens.PaymentScreen.route + "/{tableId}",
                     arguments = listOf(
                         navArgument("tableId") { type = NavType.StringType }
                     )
                 ) {
+                    gesturesEnabled = false
                     try{
                         paymentViewModel.loadTable(it.arguments?.getString("tableId")!!)
                     }catch (e: ItemNotFoundException){

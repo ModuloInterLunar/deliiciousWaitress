@@ -3,6 +3,7 @@ package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselec
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.NotEnoughStockException
@@ -16,6 +17,7 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.orderusecase.
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.tableusecase.GetTableByIdUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.dishusecase.GetDishesUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.ticketusecase.UpdateTicketUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
 
@@ -91,31 +93,26 @@ class DishSelectorViewModel : ViewModel() {
 
     fun sendOrders(context: Context) {
         viewModelScope.launch {
-
             isLoading.value = true
+            val ticket = table.value.actualTicket!!
             selectedOrders.forEach { order ->
                 try {
                     reduceIngredientQuantityUseCase(order.dish)
                 } catch (e: NotEnoughStockException) {
-                    Toast.makeText(context, "", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "${context.getString(R.string.not_enough_stockt_exception_message)}: ${e.message}", Toast.LENGTH_SHORT).show()
                     return@forEach
                 }
-
+                order.ticket = ticket.id
+                order.employee = employee.value
                 try {
-                    createOrderUseCase(order)
+                    val updatedOrder = createOrderUseCase(order)
+                    ticket.orders.add(updatedOrder)
                 } catch (e: Exception){
                     Logger.e(e.message ?: e.toString())
                 }
 
-                val ticket = table.value.actualTicket!!
-
-                try {
-                    ticket.orders.add(order)
-                    updateTicketUseCase(ticket)
-                } catch (e: Exception) {
-                    Logger.e(e.message ?: e.toString())
-                }
             }
+            updateTicketUseCase(ticket)
 
         }
     }

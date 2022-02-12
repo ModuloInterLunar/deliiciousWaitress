@@ -10,5 +10,6 @@
     <color name="middle_blue_green">#49BA68</color>
     <color name="light_grey">#FFAEAEAE</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="white2">#FFD1D1D1</color>
     <color name="table_color">#FF7AA0CD</color>
 </resources>

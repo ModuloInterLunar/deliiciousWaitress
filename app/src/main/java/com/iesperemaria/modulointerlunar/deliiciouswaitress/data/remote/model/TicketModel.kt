@@ -13,7 +13,7 @@ data class TicketModel(
     constructor(ticket: Ticket) : this(
         id = ticket.id,
         isPaid = ticket.isPaid,
-        orders = ticket.orders?.map(Order::id) ?: emptyList(),
+        orders = ticket.orders.map(Order::id),
         text = ticket.text,
         total = ticket.total
     )

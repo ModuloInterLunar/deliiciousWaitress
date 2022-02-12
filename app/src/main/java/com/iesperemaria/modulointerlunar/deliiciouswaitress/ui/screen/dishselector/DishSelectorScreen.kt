@@ -35,6 +35,7 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Dish
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item.DishItem
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.AppScreens
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.CustomSwipeToDismiss
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.TopBar
 
@@ -58,7 +59,7 @@ fun DishSelectorScreen(
         scaffoldState = scaffoldState,
         appBar = {
             TopBar(
-                title = stringResource(id = R.string.dishes_list),
+                title = stringResource(id = AppScreens.DishSelectorScreen.name),
                 buttonIcon = painterResource(id = R.drawable.back_arrow),
                 onButtonClicked = { navController.popBackStack() }
             )
@@ -132,7 +133,7 @@ fun FrontLayerDishSelectorContent(navController: NavController, dishSelectorView
          ) {
              item{
                  Text(
-                     text = "Platos Seleccionados:",
+                     text = stringResource(id = R.string.selected_dishes),
                      color = Color.DarkGray,
                      fontWeight = FontWeight.SemiBold,
                      modifier = Modifier.padding(10.dp)
@@ -143,8 +144,9 @@ fun FrontLayerDishSelectorContent(navController: NavController, dishSelectorView
             ) { order ->
                 val dismissState = rememberDismissState()
                 CustomSwipeToDismiss(
-                    dishSelectorViewModel = dishSelectorViewModel,
-                    order,
+                    swipeAction = {
+                        dishSelectorViewModel.removeOrder(order)
+                    },
                     dismissState
                 ) {
                     DishSelectorItem(

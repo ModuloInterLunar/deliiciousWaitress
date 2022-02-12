@@ -49,7 +49,7 @@ fun TableListScreen(
             )
         },
         floatingActionButton = {
-            FAB() {
+            FAB {
                 tableListViewModel.createTable(Table())
             }
         }

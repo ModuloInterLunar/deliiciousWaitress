@@ -33,6 +33,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.WrongCredentialsException
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.AppScreens
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -107,7 +108,11 @@ fun LoginScreen (
                     .height(50.dp)
                     .width(200.dp),
                 onClick = {
-                    loginViewModel.login(username, password, navController, context)
+                    loginViewModel.login(username, password, context) {
+                        navController.navigate(AppScreens.TableListScreen.route){
+                            popUpTo(0)
+                        }
+                    }
                 }
             ) {
                 Text(text = stringResource(id = R.string.login))

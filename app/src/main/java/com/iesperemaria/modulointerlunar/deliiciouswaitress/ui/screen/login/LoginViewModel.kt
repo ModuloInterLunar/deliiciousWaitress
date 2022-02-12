@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
@@ -25,7 +26,7 @@ class LoginViewModel : ViewModel() {
     var loginUseCase = LoginUseCase()
 
 
-    fun login(username: String, password: String, navController: NavController, context: Context){
+    fun login(username: String, password: String, context: Context, ifSuccessfulCallback: () -> Unit){
         viewModelScope.launch {
             isLoading.value = true
             try {
@@ -34,9 +35,9 @@ class LoginViewModel : ViewModel() {
                     isLoading.value = false
                 }
                 Logger.i(token)
-                navController.navigate("table_list_screen"){
-                    popUpTo(0)
-                }
+
+                ifSuccessfulCallback()
+
             } catch (e: WrongCredentialsException) {
                 Toast.makeText(
                     context,

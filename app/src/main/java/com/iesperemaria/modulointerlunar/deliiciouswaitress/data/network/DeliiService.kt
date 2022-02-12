@@ -138,13 +138,4 @@ class DeliiService {
             throw ItemNotFoundException(response.message())
         return response.body()!!
     }
-
-    suspend fun createTicket(ticket: Ticket): Ticket {
-        val ticketModel = TicketModel(ticket)
-        val response = RetrofitHelper.getDeliiApiClient().createTicket(ticketModel)
-        Logger.i(response.toString())
-        if(response.code() == 404)
-            throw ItemNotFoundException(response.message())
-        return response.body()!!
-    }
 }

@@ -10,19 +10,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Dish
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
-fun OrderItem(order: Order, imageId: Int, action: () -> Unit) {
+fun OrderItem(order: Order, imageId: Int? = null, elevation: Dp = 8.dp, imageAction: (() -> Unit)? = null) {
     Card(
         shape = RoundedCornerShape(8.dp),
-        elevation = 4.dp
+        elevation = elevation
     ) {
         Row(
             modifier = Modifier
@@ -72,18 +74,21 @@ fun OrderItem(order: Order, imageId: Int, action: () -> Unit) {
 
             Spacer(modifier = Modifier.width(1.dp))
 
-            Image(
-                painter = painterResource(id = imageId),
-                contentDescription = "",
-                modifier = Modifier
-                    .weight(1f)
-                    .align(Alignment.CenterVertically)
-                    .wrapContentWidth(Alignment.End)
-                    .width(30.dp)
-                    .height(30.dp)
-                    .padding(end = 5.dp)
-                    .clickable { action() }
-            )
+            if (imageId != null)
+                Image(
+                    painter = painterResource(id = imageId),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .weight(1f)
+                        .align(Alignment.CenterVertically)
+                        .wrapContentWidth(Alignment.End)
+                        .width(30.dp)
+                        .height(30.dp)
+                        .padding(end = 5.dp)
+                        .clickable { imageAction!!() }
+                )
+
+
         }
     }
 }
@@ -113,9 +118,6 @@ fun PreviewOrderItem() {
             table = "1",
             ticket = "1",
             description = "Sin sal"
-        ),
-        R.drawable.bin_icon,
-    ) {
-
-    }
+        )
+    )
 }

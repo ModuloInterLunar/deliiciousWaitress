@@ -26,10 +26,8 @@ class PaymentViewModel : ViewModel() {
             isLoading.value = true
             try {
                 val result = getTableByIdUseCase(id)
-                if (result != null) {
-                    table.value = result
-                    isLoading.value = false
-                }
+                table.value = result
+                isLoading.value = false
             } catch (e: ItemNotFoundException) {
                 throw ItemNotFoundException("Error, table not found.")
             } catch (e: Exception) {

@@ -60,10 +60,14 @@ interface DeliiApiClient {
     ): Response<Message>
 
     @POST("api/orders")
-    suspend fun createOrder(orderModel: OrderModel): Response<Order>
+    suspend fun createOrder(
+        @Body orderModel: OrderModel
+    ): Response<Order>
 
     @POST("api/tickets")
-    suspend fun createTicket(ticketModel: TicketModel): Response<Ticket>
+    suspend fun createTicket(
+        @Body ticketModel: TicketModel
+    ): Response<Ticket>
 
     @PATCH("api/tables/{id}")
     suspend fun patchTable(
