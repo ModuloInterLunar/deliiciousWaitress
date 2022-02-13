@@ -101,6 +101,7 @@ fun MainScreen(
                 {
                     gesturesEnabled = true
                     currentScreen = AppScreens.TableListScreen.route
+                    tableListViewModel.timer.cancel()
                     tableListViewModel.timer.start()
                     TableListScreen(
                         navController = navController,
@@ -120,6 +121,7 @@ fun MainScreen(
                     gesturesEnabled = false
                     try {
                         tableViewModel.tableId = it.arguments?.getString("tableId")!!
+                        tableViewModel.timer.cancel()
                         tableViewModel.timer.start()
                     } catch (e: ItemNotFoundException) {
                         Toast.makeText(

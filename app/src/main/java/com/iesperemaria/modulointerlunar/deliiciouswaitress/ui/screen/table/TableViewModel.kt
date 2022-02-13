@@ -17,6 +17,7 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.tableusecase.
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.tableusecase.UpdateTableUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.ticketusecase.CreateTicketUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.ticketusecase.UpdateTicketUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.AppScreens
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
 
@@ -82,7 +83,7 @@ class TableViewModel : ViewModel() {
                 Toast.LENGTH_SHORT
             ).show()
 
-        navController.navigate("payment_screen/${table.value.id}")
+        navController.navigate( AppScreens.PaymentScreen.route + "/${table.value.id}")
     }
 
     fun createTicket(table: Table) {

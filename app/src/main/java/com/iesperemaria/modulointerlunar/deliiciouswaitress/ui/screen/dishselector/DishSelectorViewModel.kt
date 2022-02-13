@@ -91,7 +91,7 @@ class DishSelectorViewModel : ViewModel() {
         selectedOrders = selectedOrders + Order(dish = dish, table = table.value.id, _id = System.currentTimeMillis())
     }
 
-    fun sendOrders(context: Context) {
+    fun sendOrders(context: Context, callback: () -> Unit) {
         viewModelScope.launch {
             isLoading.value = true
             val ticket = table.value.actualTicket!!
@@ -113,7 +113,8 @@ class DishSelectorViewModel : ViewModel() {
 
             }
             updateTicketUseCase(ticket)
-
+            selectedOrders = listOf()
+            callback()
         }
     }
 }

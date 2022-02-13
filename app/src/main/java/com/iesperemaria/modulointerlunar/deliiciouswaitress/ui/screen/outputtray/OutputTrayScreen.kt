@@ -4,6 +4,7 @@ package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.outputtra
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -58,8 +59,6 @@ fun PreviewOutputTrayScreen() {
 
 @Composable
 fun OutputTrayContent(outputTrayViewModel: OutputTrayViewModel) {
-    val orders = outputTrayViewModel.orders.value
-
     Surface {
         Column(
             modifier = Modifier
@@ -76,13 +75,13 @@ fun OutputTrayContent(outputTrayViewModel: OutputTrayViewModel) {
             )
 
             LazyColumn(modifier = Modifier.padding(10.dp)) {
-                itemsIndexed(
-                    items = orders
-                ) { _, order ->
+                items(
+                    outputTrayViewModel.orders, {it.id}
+                ) { order ->
                     OrderItem(order = order, imageId = R.drawable.checkmark) {
                         outputTrayViewModel.setServed(order)
                     }
-                    Spacer(modifier = Modifier.height(5.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
                 }
             }
         }

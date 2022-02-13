@@ -3,7 +3,9 @@ package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.outputtra
 import android.os.CountDownTimer
 import android.util.Log
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
@@ -30,9 +32,10 @@ class OutputTrayViewModel : ViewModel() {
         }
     }
 
-    val orders: MutableState<List<Order>> = mutableStateOf(listOf())
-    val updatedOrder: MutableState<Order> = mutableStateOf(Order())
     var getOrdersCookedNotServedUseCase = GetOrdersCookedNotServedUseCase()
+
+    var orders by mutableStateOf(listOf<Order>())
+    val updatedOrder: MutableState<Order> = mutableStateOf(Order())
     var updateOrderUseCase = UpdateOrderUseCase()
 
     fun loadOrders(){
@@ -40,10 +43,8 @@ class OutputTrayViewModel : ViewModel() {
             isLoading.value = true
             try {
                 val result = getOrdersCookedNotServedUseCase()
-                if (!result.isNullOrEmpty()){
-                    orders.value = result
-                    isLoading.value = false
-                }
+                orders = result
+                isLoading.value = false
             } catch (e: Exception) {
                 Logger.e(e.message ?: e.toString())
             }

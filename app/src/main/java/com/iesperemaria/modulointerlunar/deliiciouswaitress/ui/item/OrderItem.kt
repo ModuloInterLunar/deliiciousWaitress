@@ -1,5 +1,6 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,13 +22,13 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.response
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 
-@OptIn(ExperimentalCoilApi::class)
+@OptIn(ExperimentalCoilApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
-fun OrderItem(order: Order, imageId: Int? = null, elevation: Dp = 8.dp, imageAction: (() -> Unit)? = null) {
+fun OrderItem(order: Order, dismissState: DismissState? = null, imageId: Int? = null, imageAction: (() -> Unit)? = null) {
     Card(
         shape = RoundedCornerShape(8.dp),
         backgroundColor = colorResource(id = R.color.white_2),
-        elevation = elevation
+        elevation = if (dismissState != null) animateDpAsState(targetValue = if (dismissState.dismissDirection != null) 12.dp else 8.dp).value else 8.dp
     ) {
         Row(
             modifier = Modifier
@@ -96,6 +97,7 @@ fun OrderItem(order: Order, imageId: Int? = null, elevation: Dp = 8.dp, imageAct
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = false)
 @Composable
 fun PreviewOrderItem() {
@@ -121,6 +123,7 @@ fun PreviewOrderItem() {
             table = "1",
             ticket = "1",
             description = "Sin sal"
-        )
+        ),
+        rememberDismissState()
     )
 }

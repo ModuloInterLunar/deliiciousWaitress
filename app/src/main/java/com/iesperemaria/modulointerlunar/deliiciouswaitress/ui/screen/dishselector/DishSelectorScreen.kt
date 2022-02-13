@@ -2,6 +2,7 @@ package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselec
 
 import android.content.res.Configuration
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -55,6 +56,12 @@ fun DishSelectorScreen(
         peekHeight = 150.dp
         headerHeight = 150.dp
     }
+
+    BackHandler(true) {
+        dishSelectorViewModel.selectedOrders = emptyList()
+        navController.popBackStack()
+    }
+
     BackdropScaffold (
         scaffoldState = scaffoldState,
         appBar = {
@@ -151,7 +158,7 @@ fun FrontLayerDishSelectorContent(navController: NavController, dishSelectorView
                 ) {
                     DishSelectorItem(
                         order = order,
-                        elevation = animateDpAsState(targetValue = if (dismissState.dismissDirection != null) 4.dp else 0.dp).value
+                        dismissState = dismissState
                     )
                 }
                 Spacer(
@@ -166,7 +173,11 @@ fun FrontLayerDishSelectorContent(navController: NavController, dishSelectorView
                 if (selectedOrders.isNotEmpty())
                     Box(modifier = Modifier.fillMaxWidth()){
                         Button(
-                            onClick = { dishSelectorViewModel.sendOrders(context) },
+                            onClick = {
+                                dishSelectorViewModel.sendOrders(context) {
+                                    navController.popBackStack()
+                                }
+                            },
                             Modifier.align(Alignment.Center)
                         ) {
                             Text(text = stringResource(id = R.string.send_dishes))
