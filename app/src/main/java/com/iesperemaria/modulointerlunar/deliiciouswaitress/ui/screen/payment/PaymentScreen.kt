@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.TopBar
 
@@ -153,4 +154,10 @@ fun PaymentContent(
             Text(text = "Cobrar")
         }
     }
+}
+
+@Preview
+@Composable
+fun PaymentScreenPreview(){
+    PaymentScreen(navController = rememberNavController(), paymentViewModel = PaymentViewModel())
 }

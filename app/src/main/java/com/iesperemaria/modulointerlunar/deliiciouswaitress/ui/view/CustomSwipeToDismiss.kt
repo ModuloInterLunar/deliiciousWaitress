@@ -33,7 +33,7 @@ fun CustomSwipeToDismiss(
     SwipeToDismiss(
         state = dismissState,
         directions = setOf(DismissDirection.StartToEnd),
-        dismissThresholds = { FractionalThreshold(0.3f) },
+        dismissThresholds = { FractionalThreshold(0.5f) },
         background = {
             val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
             val color by animateColorAsState(

@@ -5,7 +5,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -21,13 +21,17 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.response
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.MarqueeText
 
 @OptIn(ExperimentalCoilApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
 fun OrderItem(order: Order, dismissState: DismissState? = null, imageId: Int? = null, imageAction: (() -> Unit)? = null) {
+    var color by remember { mutableStateOf(R.color.dimmed_red)}
+    if (order.hasBeenCooked) color = R.color.dimmed_orange
+    if (order.hasBeenServed) color = R.color.dimmed_green
     Card(
         shape = RoundedCornerShape(8.dp),
-        backgroundColor = colorResource(id = R.color.white_2),
+        backgroundColor = colorResource(color),
         elevation = if (dismissState != null) animateDpAsState(targetValue = if (dismissState.dismissDirection != null) 12.dp else 8.dp).value else 8.dp
     ) {
         Row(
@@ -51,15 +55,18 @@ fun OrderItem(order: Order, dismissState: DismissState? = null, imageId: Int? = 
 
             Spacer(modifier = Modifier.width(10.dp))
 
-
-            Text(
-                text = order.dish.name,
-                maxLines = 2,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
+            Box(
+                Modifier
+                    .fillMaxWidth(0.4f)
                     .align(Alignment.CenterVertically)
-                    .padding(horizontal = 5.dp)
-            )
+            ) {
+                MarqueeText(
+                    text = order.dish.name,
+                    gradientEdgeColor = colorResource(id = color),
+                    modifier = Modifier
+                        .padding(horizontal = 5.dp)
+                )
+            }
 
             Spacer(modifier = Modifier.width(10.dp))
 
@@ -67,12 +74,14 @@ fun OrderItem(order: Order, dismissState: DismissState? = null, imageId: Int? = 
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .verticalScroll(rememberScrollState())
-                    .widthIn(max = 180.dp)
+                    .fillMaxWidth(0.7f)
                     .padding(vertical = 10.dp)
             ) {
-                Text(
+                MarqueeText(
                     text = order.description,
-                    textAlign = TextAlign.Center,
+                    gradientEdgeColor = colorResource(id = color),
+                    modifier = Modifier
+                        .padding(horizontal = 5.dp)
                 )
             }
 
@@ -113,7 +122,7 @@ fun PreviewOrderItem() {
             dish = Dish(
                 id = "1",
                 ingredientQties = emptyList(),
-                name = "Huevo con patatas",
+                name = "Empanadillas de atún",
                 price = 7.50,
                 type = "Food"
             ),
@@ -122,8 +131,9 @@ fun PreviewOrderItem() {
             isIncluded = false,
             table = "1",
             ticket = "1",
-            description = "Sin sal"
+            description = "Con extra de empanadilla"
         ),
-        rememberDismissState()
+        rememberDismissState(),
+        imageId = R.drawable.checkmark
     )
 }

@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -22,13 +24,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusState
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role.Companion.Image
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -90,23 +97,27 @@ fun DishSelectorScreen(
 
 @Composable
 fun BackLayerDishSelectorContent(navController: NavController, dishSelectorViewModel: DishSelectorViewModel){
-    val dishes by rememberUpdatedState(newValue = dishSelectorViewModel.dishes.value)
-
     Surface {
-        LazyColumn(
-            modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth()
-        ) {
-            itemsIndexed(
-                items = dishes
-            ) { _, dish ->
-                DishItem(
-                    dish = dish
-                ) {
-                    dishSelectorViewModel.addOrder(dish)
+        Column {
+            SearchBar(Modifier.fillMaxWidth(), hint = "Buscar un plato") {
+                dishSelectorViewModel.shownDishes = dishSelectorViewModel.dishes.filter { dish -> dish.name.lowercase().contains(it) }
+            }
+            LazyColumn(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxWidth()
+            ) {
+                items(
+                    dishSelectorViewModel.shownDishes,
+                    { it.id }
+                ) { dish ->
+                    DishItem(
+                        dish = dish
+                    ) {
+                        dishSelectorViewModel.addOrder(dish)
+                    }
+                    Spacer(modifier = Modifier.height(5.dp))
                 }
-                Spacer(modifier = Modifier.height(5.dp))
             }
         }
     }
@@ -186,5 +197,34 @@ fun FrontLayerDishSelectorContent(navController: NavController, dishSelectorView
                 Spacer(modifier = Modifier.padding(5.dp))
             }
         }
+    }
+}
+
+
+@Composable
+fun SearchBar(
+    modifier: Modifier = Modifier,
+    hint: String = "",
+    onSearch: (String) -> Unit = {}
+) {
+    var text by remember {
+        mutableStateOf("")
+    }
+
+    Box(modifier = modifier) {
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = text,
+            label = {
+                Text(text = hint)
+            },
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = colorResource(id = R.color.white)
+            ),
+            onValueChange = {
+                text = it
+                onSearch(it.lowercase())
+            }
+        )
     }
 }

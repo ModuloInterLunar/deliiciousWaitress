@@ -1,5 +1,6 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen
 
+import android.app.Application
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -34,6 +35,7 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist.
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist.TableListViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.Drawer
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.createNotificationChannel
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -57,6 +59,10 @@ fun MainScreen(
         }
     }
     val context = LocalContext.current
+    createNotificationChannel(
+        context.getString(R.string.app_name),
+        context = context
+    )
     Logger.i(currentScreen)
 
     DeliiciousWaitressTheme {
@@ -87,6 +93,7 @@ fun MainScreen(
                     gesturesEnabled = false
                     // auto-login
                     loginViewModel.login("alvaro", "12345", context) {
+                        outputTrayViewModel.loadOrders()
                         navController.navigate(AppScreens.TableListScreen.route){
                             popUpTo(0)
                         }
@@ -138,6 +145,7 @@ fun MainScreen(
                 }
                 composable(AppScreens.OutputTrayScreen.route) {
                     gesturesEnabled = true
+                    outputTrayViewModel.timer.cancel()
                     outputTrayViewModel.timer.start()
                     OutputTrayScreen(
                         navController = navController,

@@ -1,6 +1,7 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.outputtray
 
 
+import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -51,7 +52,7 @@ fun PreviewOutputTrayScreen() {
     DeliiciousWaitressTheme {
         OutputTrayScreen(
             navController = rememberNavController(),
-            outputTrayViewModel = OutputTrayViewModel(),
+            outputTrayViewModel = OutputTrayViewModel(Application()),
         )
         {}
     }

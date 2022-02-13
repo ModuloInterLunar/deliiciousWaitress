@@ -11,6 +11,9 @@
     <color name="light_grey">#FFAEAEAE</color>
     <color name="white">#FFFFFFFF</color>
     <color name="white_2">#FFFAFAFA</color>
+    <color name="dimmed_red">#FFFFDDDD</color>
+    <color name="dimmed_orange">#FFFFE8CC</color>
+    <color name="dimmed_green">#FFDDFFDD</color>
     <color name="lighter_grey">#FFD1D1D1</color>
     <color name="table_color">#FF7AA0CD</color>
 </resources>

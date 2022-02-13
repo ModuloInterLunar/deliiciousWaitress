@@ -70,7 +70,7 @@ class TableViewModel : ViewModel() {
                 ticket.orders.remove(order)
                 updateTicketUseCase(ticket)
             } catch (e: ItemNotFoundException) {
-                throw ItemNotFoundException("Error, ${e.message} not found.")
+                //throw ItemNotFoundException("Error, ${e.message} not found.")
             }
         }
     }
