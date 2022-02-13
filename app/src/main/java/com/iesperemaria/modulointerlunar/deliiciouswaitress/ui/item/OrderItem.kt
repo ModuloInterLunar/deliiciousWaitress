@@ -23,7 +23,7 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.response
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.MarqueeText
 
-@OptIn(ExperimentalCoilApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
+@OptIn(ExperimentalCoilApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun OrderItem(order: Order, dismissState: DismissState? = null, imageId: Int? = null, imageAction: (() -> Unit)? = null) {
     var color by remember { mutableStateOf(R.color.dimmed_red)}
@@ -77,8 +77,11 @@ fun OrderItem(order: Order, dismissState: DismissState? = null, imageId: Int? = 
                     .fillMaxWidth(0.7f)
                     .padding(vertical = 10.dp)
             ) {
+                var description = ""
+                if (dismissState == null) description = "Mesa ${order.table} "
+                description += order.description
                 MarqueeText(
-                    text = order.description,
+                    text = description,
                     gradientEdgeColor = colorResource(id = color),
                     modifier = Modifier
                         .padding(horizontal = 5.dp)
