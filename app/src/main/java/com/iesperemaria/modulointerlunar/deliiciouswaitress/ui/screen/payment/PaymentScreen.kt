@@ -145,7 +145,8 @@ fun PaymentContent(
 
         Button(
             onClick = {
-                /* TODO */
+                paymentViewModel.removeTicketFromTable()
+                navController.navigate("table_list_screen")
             },
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
