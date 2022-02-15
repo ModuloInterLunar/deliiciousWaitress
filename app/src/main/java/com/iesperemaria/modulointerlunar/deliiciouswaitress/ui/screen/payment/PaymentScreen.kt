@@ -1,5 +1,6 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.payment
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,6 +23,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.TopBar
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.format
+
+val TAG = "payment_screen"
 
 @Composable
 fun PaymentScreen(
@@ -47,6 +51,11 @@ fun PaymentContent(
     navController: NavController,
     paymentViewModel: PaymentViewModel
 ){
+    val groupedOrders = paymentViewModel.table.value.actualTicket?.orders?.groupBy { it.dish.id }
+    val groupedOrderValues = groupedOrders?.values?.toList()
+
+    Log.d(TAG, "[${groupedOrderValues?.joinToString(",")}]")
+
     Column {
         Divider(
             color = Color.Black,
@@ -84,20 +93,21 @@ fun PaymentContent(
                 .padding(5.dp)
         ) {
             itemsIndexed(
-                items = paymentViewModel.table.value.actualTicket?.orders ?: emptyList()
-            ) { index, order ->
+                items = groupedOrderValues.orEmpty()
+            ) { index, groupedOrders ->
+                val order = groupedOrders[0]
                 Row(
                     modifier = Modifier.padding(5.dp)
                 ) {
                     Text(
-                        text = "${index + 1}. ${order.dish.name}",
+                        text = "${index + 1}. ${order.dish.name} x ${groupedOrders.size}",
                         modifier = Modifier.fillMaxWidth(0.6f)
                     )
                     Text(
                         text = order.dish.formatedPrice()
                     )
                     Text(
-                        text = "IMPORTE",
+                        text = "${(order.dish.price * groupedOrders.size).format(2)} €",
                         modifier = Modifier
                             .fillMaxWidth(),
                         textAlign = TextAlign.Right
