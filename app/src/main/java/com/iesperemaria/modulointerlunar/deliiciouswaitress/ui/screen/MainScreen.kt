@@ -33,6 +33,8 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table.Tabl
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table.TableViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist.TableListScreen
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist.TableListViewModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.ticket.TicketListScreen
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.ticket.TicketListViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.Drawer
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.createNotificationChannel
@@ -47,7 +49,8 @@ fun MainScreen(
     outputTrayViewModel: OutputTrayViewModel,
     loginViewModel: LoginViewModel,
     dishSelectorViewModel: DishSelectorViewModel,
-    paymentViewModel: PaymentViewModel
+    paymentViewModel: PaymentViewModel,
+    ticketListViewModel: TicketListViewModel
 ) {
     var currentScreen by rememberSaveable { mutableStateOf(AppScreens.LoginScreen.route) }
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -201,6 +204,17 @@ fun MainScreen(
                     PaymentScreen(
                         navController = navController,
                         paymentViewModel = paymentViewModel
+                    )
+                }
+                composable(
+                    AppScreens.TicketListScreen.route
+                ) {
+                    gesturesEnabled = true
+
+                    TicketListScreen(
+                        navController = navController,
+                        ticketListViewModel = ticketListViewModel,
+                        openDrawer = { openDrawer() }
                     )
                 }
             }

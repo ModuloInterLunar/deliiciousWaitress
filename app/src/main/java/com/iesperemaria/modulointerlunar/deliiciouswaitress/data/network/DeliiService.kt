@@ -142,4 +142,10 @@ class DeliiService {
             throw ItemNotFoundException(response.message())
         return response.body()!!
     }
+
+    suspend fun getTicketPaid(): List<Ticket> {
+        val response = RetrofitHelper.getDeliiApiClient().getAllTicketsPaid()
+        Log.i(TAG, response.toString())
+        return response.body() ?: emptyList()
+    }
 }
