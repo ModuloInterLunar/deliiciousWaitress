@@ -1,5 +1,7 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -27,6 +29,8 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousW
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.FAB
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.TopBar
 import kotlin.math.absoluteValue
+
+val TAG_1 = "table_list_screen"
 
 @Composable
 fun TableListScreen(
@@ -69,7 +73,9 @@ fun TableListContent(navController: NavController, tableListViewModel: TableList
                 modifier = Modifier
                     .background(Color.White)
                     .fillMaxSize()
-                    .onGloballyPositioned { size = it.size }
+                    .onGloballyPositioned {
+                        size = it.size
+                    }
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.restaurante),

@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
@@ -59,14 +60,28 @@ fun LoginScreen (
             horizontalAlignment = CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(20.dp))
-            Image(
-                painter = painterResource(id = R.drawable.logo),
-                contentDescription = stringResource(id = R.string.app_name),
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(CenterHorizontally)
                     .height(400.dp)
-            )
+                    .align(CenterHorizontally)
+                    .background(Color.White)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.logo),
+                    contentDescription = stringResource(id = R.string.app_name),
+                    modifier = Modifier.fillMaxSize()
+                )
+                if (loginViewModel.isLoading().value)
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .width(50.dp)
+                            .align(Alignment.TopCenter)
+                            .padding(top = 30.dp),
+                        strokeWidth = 5.dp
+                    )
+            }
+
             Spacer(modifier = Modifier.height(20.dp))
 
             TextField(

@@ -3,7 +3,6 @@ package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselec
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.runtime.*
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.NotEnoughStockException
@@ -35,7 +34,8 @@ class DishSelectorViewModel : ViewModel() {
     val createOrderUseCase = CreateOrderUseCase()
     val updateTicketUseCase = UpdateTicketUseCase()
 
-    val dishes: MutableState<MutableList<Dish>> = mutableStateOf(mutableListOf())
+    var dishes by mutableStateOf(listOf<Dish>())
+    var shownDishes by mutableStateOf(listOf<Dish>())
     val table: MutableState<Table> = mutableStateOf(Table())
     val employee: MutableState<Employee> = mutableStateOf(Employee())
     var selectedOrders by mutableStateOf(listOf<Order>())
@@ -46,7 +46,8 @@ class DishSelectorViewModel : ViewModel() {
             try{
                 val result = getDishesUseCase()
                 if(!result.isNullOrEmpty()){
-                    dishes.value = result.toMutableList()
+                    dishes = result.toMutableList()
+                    shownDishes = result.toMutableList()
                     isLoading.value = false
                 }
             }catch (e: Exception) {
@@ -91,7 +92,7 @@ class DishSelectorViewModel : ViewModel() {
         selectedOrders = selectedOrders + Order(dish = dish, table = table.value.id, _id = System.currentTimeMillis())
     }
 
-    fun sendOrders(context: Context) {
+    fun sendOrders(context: Context, callback: () -> Unit) {
         viewModelScope.launch {
             isLoading.value = true
             val ticket = table.value.actualTicket!!
@@ -99,7 +100,7 @@ class DishSelectorViewModel : ViewModel() {
                 try {
                     reduceIngredientQuantityUseCase(order.dish)
                 } catch (e: NotEnoughStockException) {
-                    Toast.makeText(context, "${context.getString(R.string.not_enough_stockt_exception_message)}: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(R.string.not_enough_stock_exception_message, e.message!!.split("'")[1], order.dish.name), Toast.LENGTH_LONG).show()
                     return@forEach
                 }
                 order.ticket = ticket.id
@@ -113,7 +114,8 @@ class DishSelectorViewModel : ViewModel() {
 
             }
             updateTicketUseCase(ticket)
-
+            selectedOrders = listOf()
+            callback()
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.data.network
 
 import android.util.Log
+import com.google.gson.JsonObject
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.core.RetrofitHelper
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.ItemNotFoundException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.NotEnoughStockException
@@ -8,6 +9,7 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exceptio
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.*
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.*
 import com.orhanobut.logger.Logger
+import org.json.JSONObject
 
 class DeliiService {
     private val TAG = "DeliiService"
@@ -82,7 +84,7 @@ class DeliiService {
         val response = RetrofitHelper.getDeliiApiClient().patchOrder(orderModel, order.id)
         Log.i(TAG, response.toString())
         if (response.code() == 404)
-            throw ItemNotFoundException(response.message())
+            throw ItemNotFoundException((response.errorBody() as Message).message)
         return response.body()!!
     }
 
@@ -125,8 +127,10 @@ class DeliiService {
             val id = ingredientQty.ingredient.id
             val ingredientQtyModel = IngredientQtyModel(quantity = ingredientQty.quantity)
             val response = RetrofitHelper.getDeliiApiClient().reduceIngredientQuantity(ingredientQtyModel, id)
-            if (response.code() == 400)
-                throw NotEnoughStockException(response.message())
+            if (response.code() == 400){
+                val jObjError = JSONObject(response.errorBody()!!.string())
+                throw NotEnoughStockException(jObjError.getString("message"))
+            }
         }
     }
 

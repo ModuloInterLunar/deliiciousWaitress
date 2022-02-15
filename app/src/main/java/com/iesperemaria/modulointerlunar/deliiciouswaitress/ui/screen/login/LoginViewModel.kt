@@ -44,6 +44,8 @@ class LoginViewModel : ViewModel() {
                     context.getString(R.string.wrong_credentials_exception_message),
                     Toast.LENGTH_SHORT
                 ).show()
+                isLoading.value = false
+
             } catch (e: Exception) {
                 Toast.makeText(
                     context,
@@ -51,6 +53,8 @@ class LoginViewModel : ViewModel() {
                     Toast.LENGTH_SHORT
                 ).show()
                 Logger.e(e.message ?: e.toString())
+                isLoading.value = false
+
             }
         }
     }

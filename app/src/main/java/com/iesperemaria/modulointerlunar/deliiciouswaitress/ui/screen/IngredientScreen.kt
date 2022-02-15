@@ -32,20 +32,3 @@ fun IngredientScreen(
     }
 }
 
-@Composable
-fun SearchBar(
-    modifier: Modifier = Modifier,
-    hint: String = "",
-    onSearch: (String) -> Unit = {}
-) {
-    var text by remember {
-        mutableStateOf("")
-    }
-
-    var isHintDisplayed by remember {
-        mutableStateOf(hint != "")
-    }
-
-    Box(modifier = modifier) {
-    }
-}

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">deliiciousWaitress</string>
+    <string name="app_name">Deliicious</string>
     <string name="username">Usuario</string>
     <string name="password">Contraseña</string>
     <string name="moure_dev">¡Hola Hackermen!</string>
@@ -20,7 +20,7 @@
     <string name="send_dishes">Acceptar y enviar platos</string>
     <string name="connection_error_exception_message">Ha habido un problema de conexión con la API REST</string>
     <string name="ticket">Ticket:</string>
-    <string name="not_enough_stockt_exception_message">No hay suficientes ingredientes</string>
+    <string name="not_enough_stock_exception_message">No hay suficiente \'%1$s\' en stock para \'%2$s\'</string>
     <string name="payment">Pago</string>
     <string name="selected_dishes">Platos Seleccionados:</string>
     <string name="list_of_tickets">Lista de tickets:</string>

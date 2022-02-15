@@ -1,5 +1,7 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist
 
+import android.util.Log
+import android.util.Size
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,8 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -30,7 +33,10 @@ import androidx.navigation.compose.rememberNavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
+import java.util.logging.Logger
 import kotlin.math.roundToInt
+
+val TAG = "table_list_item"
 
 @Composable
 fun TableListItem(navController: NavController, tableListViewModel: TableListViewModel, tableId: String, parentSize: IntSize) {
@@ -42,29 +48,27 @@ fun TableListItem(navController: NavController, tableListViewModel: TableListVie
         modifier = Modifier
             .offset {
                 IntOffset(
-                    x = offsetX.value.roundToInt(),
-                    y = offsetY.value.roundToInt()
+                    x = offsetX.value.toInt(),
+                    y = offsetY.value.toInt()
                 )
             }
             .pointerInput(Unit) {
                 detectDragGestures { change, dragAmount ->
-                    change.consumeAllChanges()
-
-//                    Toast
-//                        .makeText(navController.context, "$parentSize", Toast.LENGTH_SHORT)
-//                        .show()
-
-                    val newOffset = correctOutOfParent(
-                        newPosition = Offset(dragAmount.x, dragAmount.y),
-                        radius = 25,
-                        size = parentSize
-                    )
-
-                    offsetX.value += newOffset.x
-                    offsetY.value += newOffset.y
+                    offsetX.value += dragAmount.x
+                    offsetY.value += dragAmount.y
                 }
             }
             .size(50.dp)
+            .onGloballyPositioned {
+                val newCoords = correctOutOfParent(
+                    it.positionInParent(),
+                    it.size,
+                    it.parentLayoutCoordinates?.size ?: IntSize(0, 0),
+                    table
+                )
+                offsetX.value = newCoords.x.toDouble()
+                offsetY.value = newCoords.y.toDouble()
+            }
             .clip(CircleShape)
             .background(colorResource(id = R.color.table_color))
             .clickable {
@@ -91,18 +95,27 @@ fun Preview2() {
     }
 }
 
+
 // Not working
-fun correctOutOfParent(newPosition: Offset, radius: Int, size: IntSize): Offset {
-    if (size.width == 0 || size.height == 0)
-        return newPosition
+fun correctOutOfParent(newPosition: Offset, size: IntSize, parentSize: IntSize, table: Table): Offset {
+    var x = newPosition.x
+    var y = newPosition.y
 
-    var x: Float = newPosition.x
-    var y: Float = newPosition.y
+    if(newPosition.x == 0f && newPosition.y == 0f && table.posX != 0.0 && table.posY != 0.0){
+        x = (table.posX * parentSize.width).toFloat()
+        y = (table.posY * parentSize.height).toFloat()
+        return Offset(x, y)
+    }
 
-    if (x + radius > size.width)
-        x = (size.width - radius).toFloat()
-    if (y + radius > size.height)
-        y = (size.height - radius).toFloat()
+    if (x + size.width > parentSize.width)
+        x = (parentSize.width - size.width).toFloat()
+    else if(x < 0)
+        x = 0f
+
+    if (y + size.height > parentSize.height)
+        y = (parentSize.height - size.height).toFloat()
+    else if(y < 0)
+        y = 0f
 
     return Offset(x, y)
 }
