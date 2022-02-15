@@ -2,6 +2,7 @@ package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist
 
 import android.util.Log
 import android.util.Size
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -35,7 +36,6 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousW
 import java.util.logging.Logger
 import kotlin.math.roundToInt
 
-
 val TAG = "table_list_item"
 
 @Composable
@@ -63,7 +63,8 @@ fun TableListItem(navController: NavController, tableListViewModel: TableListVie
                 val newCoords = correctOutOfParent(
                     it.positionInParent(),
                     it.size,
-                    it.parentLayoutCoordinates?.size ?: IntSize(0, 0)
+                    it.parentLayoutCoordinates?.size ?: IntSize(0, 0),
+                    table
                 )
                 offsetX.value = newCoords.x.toDouble()
                 offsetY.value = newCoords.y.toDouble()
@@ -96,9 +97,15 @@ fun Preview2() {
 
 
 // Not working
-fun correctOutOfParent(newPosition: Offset, size: IntSize, parentSize: IntSize): Offset {
+fun correctOutOfParent(newPosition: Offset, size: IntSize, parentSize: IntSize, table: Table): Offset {
     var x = newPosition.x
     var y = newPosition.y
+
+    if(newPosition.x == 0f && newPosition.y == 0f && table.posX != 0.0 && table.posY != 0.0){
+        x = (table.posX * parentSize.width).toFloat()
+        y = (table.posY * parentSize.height).toFloat()
+        return Offset(x, y)
+    }
 
     if (x + size.width > parentSize.width)
         x = (parentSize.width - size.width).toFloat()
