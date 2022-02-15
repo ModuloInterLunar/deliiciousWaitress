@@ -23,7 +23,8 @@ fun Drawer(
     val screens = listOf(
         AppScreens.TableListScreen,
         AppScreens.OutputTrayScreen,
-        AppScreens.IngredientScreen
+        AppScreens.IngredientScreen,
+        AppScreens.TicketListScreen
     )
 
     Column(

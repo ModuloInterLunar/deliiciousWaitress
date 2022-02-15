@@ -9,4 +9,5 @@ sealed class AppScreens(val route: String, val name: Int) {
     object TableScreen: AppScreens("table_screen", R.string.table)
     object TableListScreen: AppScreens("table_list_screen", R.string.tables)
     object IngredientScreen: AppScreens("ingredient_screen", R.string.ingredients)
+    object TicketListScreen: AppScreens("ticket_list_screen", R.string.list_of_tickets)
 }

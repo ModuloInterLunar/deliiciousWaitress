@@ -75,4 +75,7 @@ interface DeliiApiClient {
         @Path("id") id: String
     ): Response<Table>
 
+    @GET
+    suspend fun getAllTicketsPaid(): Response<List<Ticket>>
+
 }
