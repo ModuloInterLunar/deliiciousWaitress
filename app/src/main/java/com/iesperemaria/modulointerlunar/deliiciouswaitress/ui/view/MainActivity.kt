@@ -36,14 +36,12 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.Logi
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.LoginViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.outputtray.OutputTrayViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.payment.PaymentViewModel
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.viewmodel.IngredientListViewModel
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
-    private val ingredientViewModel: IngredientListViewModel by viewModels()
     private val tableListViewModel: TableListViewModel by viewModels()
     private val tableViewModel: TableViewModel by viewModels()
     private val outputTrayViewModel: OutputTrayViewModel by viewModels()
