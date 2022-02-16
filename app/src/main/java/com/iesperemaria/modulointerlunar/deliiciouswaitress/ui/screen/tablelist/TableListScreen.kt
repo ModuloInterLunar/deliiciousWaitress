@@ -43,6 +43,7 @@ fun TableListScreen(
             TopBar(
                 title = stringResource(id = R.string.tables),
                 buttonIcon = painterResource(id = R.drawable.hamburger_icon),
+                navController = navController,
                 onButtonClicked = { openDrawer() }
             )
         },

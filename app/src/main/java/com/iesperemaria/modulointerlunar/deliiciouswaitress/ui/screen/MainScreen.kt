@@ -17,7 +17,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.core.RetrofitHelper
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.ItemNotFoundException
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.employeeusecase.GetEmployeeFromTokenUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselector.DishSelectorScreen
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselector.DishSelectorViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.LoginScreen
@@ -34,8 +36,10 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.ticket.Tic
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.ticket.TicketListViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.Drawer
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.UserPreferences
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.createNotificationChannel
 import com.orhanobut.logger.Logger
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
@@ -49,6 +53,7 @@ fun MainScreen(
     ticketListViewModel: TicketListViewModel,
     intent: Intent
 ) {
+    val context = LocalContext.current
     var currentScreen by rememberSaveable { mutableStateOf(AppScreens.LoginScreen.route) }
     if (!intent.getStringExtra("screen").isNullOrBlank())
         currentScreen = intent.getStringExtra("screen")!!
@@ -60,7 +65,6 @@ fun MainScreen(
             drawerState.open()
         }
     }
-    val context = LocalContext.current
     createNotificationChannel(
         context.getString(R.string.app_name),
         context = context
@@ -94,14 +98,7 @@ fun MainScreen(
             ) {
                 composable(AppScreens.LoginScreen.route) {
                     gesturesEnabled = false
-                    // auto-login
-                    loginViewModel.login("alvaro", "12345", context) {
-                        outputTrayViewModel.loadOrders()
-                        navController.navigate(AppScreens.TableListScreen.route){
-                            popUpTo(0)
-                        }
-                    }
-                    // auto-login
+                    currentScreen = AppScreens.LoginScreen.route
                     LoginScreen(
                         navController = navController,
                         loginViewModel = loginViewModel
@@ -139,6 +136,7 @@ fun MainScreen(
                             stringResource(id = R.string.table_not_found_exception_message),
                             Toast.LENGTH_SHORT
                         ).show()
+                        currentScreen = AppScreens.TableListScreen.route
                     }
 
                     TableScreen(
@@ -148,6 +146,7 @@ fun MainScreen(
                 }
                 composable(AppScreens.OutputTrayScreen.route) {
                     gesturesEnabled = true
+                    currentScreen = AppScreens.OutputTrayScreen.route
                     outputTrayViewModel.timer.cancel()
                     outputTrayViewModel.timer.start()
                     OutputTrayScreen(
@@ -158,6 +157,7 @@ fun MainScreen(
                     }
                 }
                 composable(AppScreens.IngredientScreen.route) {
+                    currentScreen = AppScreens.IngredientScreen.route
                     IngredientScreen(navController = navController)
                 }
                 composable(
@@ -209,6 +209,7 @@ fun MainScreen(
                 composable(
                     AppScreens.TicketListScreen.route
                 ) {
+                    currentScreen = AppScreens.TicketListScreen.route
                     gesturesEnabled = true
 
                     ticketListViewModel.loadTickets()

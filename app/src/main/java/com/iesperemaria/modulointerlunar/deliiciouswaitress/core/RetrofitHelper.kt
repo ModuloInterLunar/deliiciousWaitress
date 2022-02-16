@@ -26,12 +26,10 @@ object RetrofitHelper {
     fun setToken(token: String) {
         mtoken = token
         Log.i("RetrofitHelper", "This is my new token: $mtoken")
-        if (mtoken.isNotEmpty()) {
-            val interceptor = AuthenticationInterceptor("Bearer $mtoken")
-            if (!httpClient.interceptors().contains(interceptor)) {
-                httpClient.addInterceptor(interceptor)
-                builder.client(httpClient.build())
-            }
+        val interceptor = AuthenticationInterceptor("Bearer $mtoken")
+        if (!httpClient.interceptors().contains(interceptor)) {
+            httpClient.addInterceptor(interceptor)
+            builder.client(httpClient.build())
         }
         deliiApiClient = builder.build().create(DeliiApiClient::class.java)
     }

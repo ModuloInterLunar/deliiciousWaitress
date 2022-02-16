@@ -38,6 +38,7 @@ fun PaymentScreen(
             TopBar(
                 title = stringResource(id = R.string.ticket),
                 buttonIcon = painterResource(id = R.drawable.back_arrow),
+                navController = navController,
                 onButtonClicked = { navController.popBackStack() }
             )
         },

@@ -32,6 +32,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.AppScreens
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 import java.util.logging.Logger
 import kotlin.math.roundToInt
@@ -72,7 +73,7 @@ fun TableListItem(navController: NavController, tableListViewModel: TableListVie
             .clip(CircleShape)
             .background(colorResource(id = R.color.table_color))
             .clickable {
-                navController.navigate("table_screen/${table.id}")
+                navController.navigate("${AppScreens.TableScreen.route}/${table.id}")
             },
         contentAlignment = Alignment.Center
     ) {

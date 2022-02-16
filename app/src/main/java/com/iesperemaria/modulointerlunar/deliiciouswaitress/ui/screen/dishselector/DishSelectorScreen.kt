@@ -75,6 +75,7 @@ fun DishSelectorScreen(
             TopBar(
                 title = stringResource(id = AppScreens.DishSelectorScreen.name),
                 buttonIcon = painterResource(id = R.drawable.back_arrow),
+                navController = navController,
                 onButtonClicked = { navController.popBackStack() }
             )
         },

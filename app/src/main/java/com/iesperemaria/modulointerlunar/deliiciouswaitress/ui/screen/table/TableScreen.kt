@@ -36,6 +36,7 @@ fun TableScreen(
             TopBar(
                 title = stringResource(id = R.string.table) + " " + tableViewModel.table.value.id,
                 buttonIcon = painterResource(id = R.drawable.back_arrow),
+                navController = navController,
                 onButtonClicked = { navController.popBackStack() }
             )
         },

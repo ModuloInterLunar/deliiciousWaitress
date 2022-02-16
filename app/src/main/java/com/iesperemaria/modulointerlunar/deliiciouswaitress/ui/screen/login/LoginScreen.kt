@@ -44,6 +44,14 @@ fun LoginScreen (
     loginViewModel: LoginViewModel
 ) {
     val context = LocalContext.current
+    LaunchedEffect("login_test") {
+        loginViewModel.testToken(context) {
+            navController.navigate(AppScreens.TableListScreen.route){
+                popUpTo(0)
+            }
+        }
+    }
+
     var username by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
     var passwordVisibility by rememberSaveable { mutableStateOf(false) }

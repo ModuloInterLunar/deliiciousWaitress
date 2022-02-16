@@ -3,6 +3,7 @@ package com.iesperemaria.modulointerlunar.deliiciouswaitress.data.network
 import android.util.Log
 import com.google.gson.JsonObject
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.core.RetrofitHelper
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.DeliiApiException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.ItemNotFoundException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.NotEnoughStockException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.WrongCredentialsException
@@ -64,6 +65,8 @@ class DeliiService {
     suspend fun getEmployeeFromToken(): Employee {
         val response = RetrofitHelper.getDeliiApiClient().getEmployeeFromToken()
         Log.i(TAG, response.toString())
+        if (response.code() != 200)
+            throw DeliiApiException("authentication failed")
         return response.body()!!
     }
 
