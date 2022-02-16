@@ -1,9 +1,6 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.data.network
 
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.AuthModel
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.OrderModel
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.TableModel
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.TicketModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.model.*
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.*
 import retrofit2.Response
 import retrofit2.http.*
@@ -55,4 +52,30 @@ interface DeliiApiClient {
         @Body ticketModel: TicketModel,
         @Path("id") id: String
     ): Response<Ticket>
+
+    @PATCH("api/ingredients/reduce/{id}")
+    suspend fun reduceIngredientQuantity(
+        @Body ingredientQtyModel: IngredientQtyModel,
+        @Path("id") id: String
+    ): Response<Message>
+
+    @POST("api/orders")
+    suspend fun createOrder(
+        @Body orderModel: OrderModel
+    ): Response<Order>
+
+    @POST("api/tickets")
+    suspend fun createTicket(
+        @Body ticketModel: TicketModel
+    ): Response<Ticket>
+
+    @PATCH("api/tables/{id}")
+    suspend fun patchTable(
+        @Body tableModel: TableModel,
+        @Path("id") id: String
+    ): Response<Table>
+
+    @GET
+    suspend fun getAllTicketsPaid(): Response<List<Ticket>>
+
 }

@@ -1,9 +1,10 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table
 
-import android.widget.Toast
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -13,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -21,7 +21,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item.OrderItem
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.AppScreens
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.CustomSwipeToDismiss
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.TopBar
 
 @Composable
@@ -63,6 +65,7 @@ fun PreviewTableScreen() {
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TableContent(tableViewModel: TableViewModel, navController: NavController) {
     val table = tableViewModel.table.value
@@ -87,11 +90,23 @@ fun TableContent(tableViewModel: TableViewModel, navController: NavController) {
                     .padding(10.dp)
                     .fillMaxHeight(0.9f)
             ) {
-                itemsIndexed(
-                    items = table.actualTicket?.orders ?: emptyList()
-                ) { _, order ->
-                    OrderItem(order = order, R.drawable.bin_icon) {
-                        tableViewModel.deleteOrder(order, table.actualTicket!!)
+                items(
+                    table.actualTicket?.orders?.toList() ?: emptyList(),
+                    { it.id }
+                ) { order ->
+                    val dismissState = rememberDismissState()
+                    CustomSwipeToDismiss(
+                        swipeAction = {
+                            tableViewModel.deleteOrder(order)
+                        },
+                        dismissState = dismissState
+                    ) {
+                        OrderItem(
+                            order = order,
+                            dismissState = dismissState
+                        ) {
+                            tableViewModel.deleteOrder(order)
+                        }
                     }
                     Spacer(modifier = Modifier.height(5.dp))
                 }
@@ -112,14 +127,14 @@ fun TableContent(tableViewModel: TableViewModel, navController: NavController) {
 
 @Composable
 fun TableFAB(navController: NavController, tableViewModel: TableViewModel) {
-    val ticket = tableViewModel.table.value.actualTicket
-    if (ticket == null)
-        tableViewModel.createTicket()
 
     FloatingActionButton(
         onClick = {
+            val ticket = tableViewModel.table.value.actualTicket
+            if (ticket == null)
+                tableViewModel.createTicket(tableViewModel.table.value)
             navController.navigate(
-                "dish_selector_screen/${tableViewModel.table.value.id}"
+                AppScreens.DishSelectorScreen.route + "/${tableViewModel.table.value.id}"
             )}
     ) {
         Text("+")

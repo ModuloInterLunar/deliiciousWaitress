@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.ItemNotFoundException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.tableusecase.GetTableByIdUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.tableusecase.UpdateTableUseCase
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
 
@@ -20,19 +21,31 @@ class PaymentViewModel : ViewModel() {
 
     val table: MutableState<Table> = mutableStateOf(Table())
     val getTableByIdUseCase = GetTableByIdUseCase()
+    val updateTableUseCase = UpdateTableUseCase()
 
     fun loadTable(id: String) {
         viewModelScope.launch {
             isLoading.value = true
             try {
                 val result = getTableByIdUseCase(id)
-                if (result != null) {
-                    table.value = result
-                    isLoading.value = false
-                }
+                table.value = result
+                isLoading.value = false
             } catch (e: ItemNotFoundException) {
                 throw ItemNotFoundException("Error, table not found.")
             } catch (e: Exception) {
+                Logger.e(e.message ?: e.toString())
+            }
+        }
+    }
+
+    fun removeTicketFromTable(){
+        viewModelScope.launch {
+            try {
+                table.value.actualTicket?.isPaid = true
+                table.value.actualTicket = null
+                table.value = updateTableUseCase(table.value)
+            }
+            catch (e: Exception) {
                 Logger.e(e.message ?: e.toString())
             }
         }

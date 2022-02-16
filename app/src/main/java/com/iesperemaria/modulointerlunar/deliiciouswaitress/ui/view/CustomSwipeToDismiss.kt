@@ -23,18 +23,17 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselect
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CustomSwipeToDismiss(
-    dishSelectorViewModel: DishSelectorViewModel,
-    order: Order,
+    swipeAction: () -> Unit,
     dismissState: DismissState,
     content: @Composable () -> Unit
 ) {
     if (dismissState.isDismissed(DismissDirection.StartToEnd)) {
-        dishSelectorViewModel.removeOrder(order)
+        swipeAction()
     }
     SwipeToDismiss(
         state = dismissState,
         directions = setOf(DismissDirection.StartToEnd),
-        dismissThresholds = { FractionalThreshold(0.3f) },
+        dismissThresholds = { FractionalThreshold(0.5f) },
         background = {
             val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
             val color by animateColorAsState(
@@ -63,6 +62,7 @@ fun CustomSwipeToDismiss(
                     modifier = Modifier
                         .fillMaxHeight()
                         .align(Alignment.CenterStart)
+                        .padding(start = 5.dp)
                         .scale(scale)
                 )
             }

@@ -67,7 +67,7 @@ fun DishItem(dish: Dish, action: () -> Unit) {
             Text(
                 text = dish.name,
                 maxLines = 2,
-                textAlign = TextAlign.Center,
+                textAlign = TextAlign.Start,
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .padding(horizontal = 5.dp)
@@ -75,25 +75,31 @@ fun DishItem(dish: Dish, action: () -> Unit) {
 
             Spacer(modifier = Modifier.width(10.dp))
 
-            Text(
-                modifier = Modifier
-                    .align(Alignment.CenterVertically),
-                text = dish.formatedPrice(),
-                textAlign = TextAlign.Right,
-            )
-
-            Image(
-                painter = painterResource(id = R.drawable.add_icon),
-                contentDescription = "",
+            Row(
                 modifier = Modifier
                     .weight(1f)
-                    .align(Alignment.CenterVertically)
                     .wrapContentWidth(Alignment.End)
-                    .width(50.dp)
-                    .height(50.dp)
-                    .padding(5.dp)
-                    .clickable { action() }
-            )
+                    .align(Alignment.CenterVertically)
+            ) {
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically),
+                    text = dish.formatedPrice(),
+                    textAlign = TextAlign.Right,
+                )
+
+                Image(
+                    painter = painterResource(id = R.drawable.add_icon),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .width(50.dp)
+                        .height(50.dp)
+                        .padding(5.dp)
+                        .clickable { action() }
+                )
+            }
+
         }
     }
 }

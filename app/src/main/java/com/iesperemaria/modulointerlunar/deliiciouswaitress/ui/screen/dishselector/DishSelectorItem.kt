@@ -1,15 +1,13 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselector
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,18 +31,18 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.response
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 
-@OptIn(ExperimentalCoilApi::class)
+@OptIn(ExperimentalCoilApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
-fun DishSelectorItem(order: Order, elevation: Dp = 5.dp) {
+fun DishSelectorItem(order: Order, dismissState: DismissState) {
     var description by rememberSaveable { mutableStateOf("") }
 
     Card(
         shape = RoundedCornerShape(8.dp),
-        elevation = elevation
+        elevation = animateDpAsState(targetValue = if (dismissState.dismissDirection != null) 12.dp else 8.dp).value
     ) {
         Row(
             modifier = Modifier
-                .height(100.dp)
+                .height(120.dp)
                 .fillMaxWidth(),
         ) {
             Image(
@@ -67,27 +65,38 @@ fun DishSelectorItem(order: Order, elevation: Dp = 5.dp) {
                 Row(
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(bottom = 10.dp)
+                    modifier = Modifier
+                        .padding(bottom = 10.dp)
+                        .fillMaxWidth()
                 ){
                     Text(
                         text = order.dish.name,
                         maxLines = 2,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .weight(1f)
+                            .wrapContentWidth(Alignment.Start)
                     )
-
-                    Spacer(modifier = Modifier.width(10.dp))
 
                     Text(
                         text = order.dish.formatedPrice(),
-                        textAlign = TextAlign.Right
+                        textAlign = TextAlign.Right,
+                        modifier = Modifier
+                            .weight(1f)
+                            .wrapContentWidth(Alignment.End)
                     )
                 }
-
                 TextField(
                     shape = AbsoluteRoundedCornerShape(10.dp, 10.dp),
                     singleLine = true,
                     value = description,
-                    onValueChange = { description = it },
+                    onValueChange = {
+                        description = it
+                        order.description = it
+                    },
+                    modifier = Modifier
+                        .padding(start = 20.dp)
+                        .fillMaxWidth(),
                     label = { Text(stringResource(R.string.description)) },
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = colorResource(id = R.color.text_field_bg)
@@ -96,4 +105,11 @@ fun DishSelectorItem(order: Order, elevation: Dp = 5.dp) {
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Preview
+@Composable
+fun DishSelectorItemPrev() {
+    DishSelectorItem(Order(dish = Dish(name="coca cola")), dismissState = rememberDismissState())
 }

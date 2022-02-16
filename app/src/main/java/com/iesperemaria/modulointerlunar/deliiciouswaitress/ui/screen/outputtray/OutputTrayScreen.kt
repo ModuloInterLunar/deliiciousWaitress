@@ -1,9 +1,11 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.outputtray
 
 
+import android.app.Application
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -12,16 +14,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item.OrderItem
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table.TableViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.TopBar
 
@@ -53,7 +52,7 @@ fun PreviewOutputTrayScreen() {
     DeliiciousWaitressTheme {
         OutputTrayScreen(
             navController = rememberNavController(),
-            outputTrayViewModel = OutputTrayViewModel(),
+            outputTrayViewModel = OutputTrayViewModel(Application()),
         )
         {}
     }
@@ -61,8 +60,6 @@ fun PreviewOutputTrayScreen() {
 
 @Composable
 fun OutputTrayContent(outputTrayViewModel: OutputTrayViewModel) {
-    val orders = outputTrayViewModel.orders.value
-
     Surface {
         Column(
             modifier = Modifier
@@ -79,13 +76,13 @@ fun OutputTrayContent(outputTrayViewModel: OutputTrayViewModel) {
             )
 
             LazyColumn(modifier = Modifier.padding(10.dp)) {
-                itemsIndexed(
-                    items = orders
-                ) { _, order ->
+                items(
+                    outputTrayViewModel.orders, {it.id}
+                ) { order ->
                     OrderItem(order = order, imageId = R.drawable.checkmark) {
                         outputTrayViewModel.setServed(order)
                     }
-                    Spacer(modifier = Modifier.height(5.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
                 }
             }
         }

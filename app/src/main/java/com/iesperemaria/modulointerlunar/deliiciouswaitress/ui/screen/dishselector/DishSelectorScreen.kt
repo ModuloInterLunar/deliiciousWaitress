@@ -2,6 +2,7 @@ package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselec
 
 import android.content.res.Configuration
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -12,7 +13,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -21,13 +24,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusState
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role.Companion.Image
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -35,6 +43,7 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Dish
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item.DishItem
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.AppScreens
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.CustomSwipeToDismiss
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.TopBar
 
@@ -54,11 +63,17 @@ fun DishSelectorScreen(
         peekHeight = 150.dp
         headerHeight = 150.dp
     }
+
+    BackHandler(true) {
+        dishSelectorViewModel.selectedOrders = emptyList()
+        navController.popBackStack()
+    }
+
     BackdropScaffold (
         scaffoldState = scaffoldState,
         appBar = {
             TopBar(
-                title = stringResource(id = R.string.dishes_list),
+                title = stringResource(id = AppScreens.DishSelectorScreen.name),
                 buttonIcon = painterResource(id = R.drawable.back_arrow),
                 onButtonClicked = { navController.popBackStack() }
             )
@@ -82,23 +97,27 @@ fun DishSelectorScreen(
 
 @Composable
 fun BackLayerDishSelectorContent(navController: NavController, dishSelectorViewModel: DishSelectorViewModel){
-    val dishes by rememberUpdatedState(newValue = dishSelectorViewModel.dishes.value)
-
     Surface {
-        LazyColumn(
-            modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth()
-        ) {
-            itemsIndexed(
-                items = dishes
-            ) { _, dish ->
-                DishItem(
-                    dish = dish
-                ) {
-                    dishSelectorViewModel.addOrder(dish)
+        Column {
+            SearchBar(Modifier.fillMaxWidth(), hint = "Buscar un plato") {
+                dishSelectorViewModel.shownDishes = dishSelectorViewModel.dishes.filter { dish -> dish.name.lowercase().contains(it) }
+            }
+            LazyColumn(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxWidth()
+            ) {
+                items(
+                    dishSelectorViewModel.shownDishes,
+                    { it.id }
+                ) { dish ->
+                    DishItem(
+                        dish = dish
+                    ) {
+                        dishSelectorViewModel.addOrder(dish)
+                    }
+                    Spacer(modifier = Modifier.height(5.dp))
                 }
-                Spacer(modifier = Modifier.height(5.dp))
             }
         }
     }
@@ -107,6 +126,7 @@ fun BackLayerDishSelectorContent(navController: NavController, dishSelectorViewM
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FrontLayerDishSelectorContent(navController: NavController, dishSelectorViewModel: DishSelectorViewModel) {
+    val context = LocalContext.current
     val selectedOrders = dishSelectorViewModel.selectedOrders
      Surface {
          Column(
@@ -131,7 +151,7 @@ fun FrontLayerDishSelectorContent(navController: NavController, dishSelectorView
          ) {
              item{
                  Text(
-                     text = "Platos Seleccionados:",
+                     text = stringResource(id = R.string.selected_dishes),
                      color = Color.DarkGray,
                      fontWeight = FontWeight.SemiBold,
                      modifier = Modifier.padding(10.dp)
@@ -142,13 +162,14 @@ fun FrontLayerDishSelectorContent(navController: NavController, dishSelectorView
             ) { order ->
                 val dismissState = rememberDismissState()
                 CustomSwipeToDismiss(
-                    dishSelectorViewModel = dishSelectorViewModel,
-                    order,
+                    swipeAction = {
+                        dishSelectorViewModel.removeOrder(order)
+                    },
                     dismissState
                 ) {
                     DishSelectorItem(
                         order = order,
-                        elevation = animateDpAsState(targetValue = if (dismissState.dismissDirection != null) 4.dp else 0.dp).value
+                        dismissState = dismissState
                     )
                 }
                 Spacer(
@@ -163,7 +184,11 @@ fun FrontLayerDishSelectorContent(navController: NavController, dishSelectorView
                 if (selectedOrders.isNotEmpty())
                     Box(modifier = Modifier.fillMaxWidth()){
                         Button(
-                            onClick = { /*TODO*/ },
+                            onClick = {
+                                dishSelectorViewModel.sendOrders(context) {
+                                    navController.popBackStack()
+                                }
+                            },
                             Modifier.align(Alignment.Center)
                         ) {
                             Text(text = stringResource(id = R.string.send_dishes))
@@ -172,5 +197,34 @@ fun FrontLayerDishSelectorContent(navController: NavController, dishSelectorView
                 Spacer(modifier = Modifier.padding(5.dp))
             }
         }
+    }
+}
+
+
+@Composable
+fun SearchBar(
+    modifier: Modifier = Modifier,
+    hint: String = "",
+    onSearch: (String) -> Unit = {}
+) {
+    var text by remember {
+        mutableStateOf("")
+    }
+
+    Box(modifier = modifier) {
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = text,
+            label = {
+                Text(text = hint)
+            },
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = colorResource(id = R.color.white)
+            ),
+            onValueChange = {
+                text = it
+                onSearch(it.lowercase())
+            }
+        )
     }
 }

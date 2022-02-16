@@ -1,29 +1,38 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Dish
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Order
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.MarqueeText
 
+@OptIn(ExperimentalCoilApi::class, ExperimentalMaterialApi::class)
 @Composable
-fun OrderItem(order: Order, imageId: Int, action: () -> Unit) {
+fun OrderItem(order: Order, dismissState: DismissState? = null, imageId: Int? = null, imageAction: (() -> Unit)? = null) {
+    var color by remember { mutableStateOf(R.color.dimmed_red)}
+    if (order.hasBeenCooked) color = R.color.dimmed_orange
+    if (order.hasBeenServed) color = R.color.dimmed_green
     Card(
         shape = RoundedCornerShape(8.dp),
-        elevation = 4.dp
+        backgroundColor = colorResource(color),
+        elevation = if (dismissState != null) animateDpAsState(targetValue = if (dismissState.dismissDirection != null) 12.dp else 8.dp).value else 8.dp
     ) {
         Row(
             modifier = Modifier
@@ -46,15 +55,18 @@ fun OrderItem(order: Order, imageId: Int, action: () -> Unit) {
 
             Spacer(modifier = Modifier.width(10.dp))
 
-
-            Text(
-                text = order.dish.name,
-                maxLines = 2,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
+            Box(
+                Modifier
+                    .fillMaxWidth(0.4f)
                     .align(Alignment.CenterVertically)
-                    .padding(horizontal = 5.dp)
-            )
+            ) {
+                MarqueeText(
+                    text = order.dish.name,
+                    gradientEdgeColor = colorResource(id = color),
+                    modifier = Modifier
+                        .padding(horizontal = 5.dp)
+                )
+            }
 
             Spacer(modifier = Modifier.width(10.dp))
 
@@ -62,33 +74,42 @@ fun OrderItem(order: Order, imageId: Int, action: () -> Unit) {
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .verticalScroll(rememberScrollState())
-                    .widthIn(max = 180.dp)
+                    .fillMaxWidth(0.7f)
                     .padding(vertical = 10.dp)
             ) {
-                Text(
-                    text = order.description,
-                    textAlign = TextAlign.Center,
+                var description = ""
+                if (dismissState == null) description = "Mesa ${order.table} "
+                description += order.description
+                MarqueeText(
+                    text = description,
+                    gradientEdgeColor = colorResource(id = color),
+                    modifier = Modifier
+                        .padding(horizontal = 5.dp)
                 )
             }
 
             Spacer(modifier = Modifier.width(1.dp))
 
-            Image(
-                painter = painterResource(id = imageId),
-                contentDescription = "",
-                modifier = Modifier
-                    .weight(1f)
-                    .align(Alignment.CenterVertically)
-                    .wrapContentWidth(Alignment.End)
-                    .width(30.dp)
-                    .height(30.dp)
-                    .padding(end = 5.dp)
-                    .clickable { action() }
-            )
+            if (imageId != null)
+                Image(
+                    painter = painterResource(id = imageId),
+                    contentDescription = "",
+                    modifier = Modifier
+                        .weight(1f)
+                        .align(Alignment.CenterVertically)
+                        .wrapContentWidth(Alignment.End)
+                        .width(30.dp)
+                        .height(30.dp)
+                        .padding(end = 5.dp)
+                        .clickable { imageAction!!() }
+                )
+
+
         }
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = false)
 @Composable
 fun PreviewOrderItem() {
@@ -104,7 +125,7 @@ fun PreviewOrderItem() {
             dish = Dish(
                 id = "1",
                 ingredientQties = emptyList(),
-                name = "Huevo con patatas",
+                name = "Empanadillas de atún",
                 price = 7.50,
                 type = "Food"
             ),
@@ -113,10 +134,9 @@ fun PreviewOrderItem() {
             isIncluded = false,
             table = "1",
             ticket = "1",
-            description = "Sin sal"
+            description = "Con extra de empanadilla"
         ),
-        R.drawable.bin_icon,
-    ) {
-
-    }
+        rememberDismissState(),
+        imageId = R.drawable.checkmark
+    )
 }

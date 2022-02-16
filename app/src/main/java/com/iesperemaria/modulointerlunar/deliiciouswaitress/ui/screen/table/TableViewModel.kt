@@ -14,7 +14,10 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.response
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Ticket
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.orderusecase.DeleteOrderUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.tableusecase.GetTableByIdUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.tableusecase.UpdateTableUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.ticketusecase.CreateTicketUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.ticketusecase.UpdateTicketUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.AppScreens
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
 
@@ -41,16 +44,16 @@ class TableViewModel : ViewModel() {
     val getTableByIdUseCase = GetTableByIdUseCase()
     val deleteOrderUseCase = DeleteOrderUseCase()
     val updateTicketUseCase = UpdateTicketUseCase()
+    val updateTableUseCase = UpdateTableUseCase()
+    val createTicketUseCase = CreateTicketUseCase()
 
     fun loadTable(id: String) {
         viewModelScope.launch {
             isLoading.value = true
             try {
                 val result = getTableByIdUseCase(id)
-                if (result != null) {
-                    table.value = result
-                    isLoading.value = false
-                }
+                table.value = result
+                isLoading.value = false
             } catch (e: ItemNotFoundException) {
                 throw ItemNotFoundException("Error, table not found.")
             } catch (e: Exception) {
@@ -59,14 +62,15 @@ class TableViewModel : ViewModel() {
         }
     }
 
-    fun deleteOrder(order: Order, ticket: Ticket) {
+    fun deleteOrder(order: Order) {
         viewModelScope.launch {
             try {
+                val ticket = table.value.actualTicket!!
                 deleteOrderUseCase(order)
                 ticket.orders.remove(order)
                 updateTicketUseCase(ticket)
             } catch (e: ItemNotFoundException) {
-                throw ItemNotFoundException("Error, ${e.message} not found.")
+                //throw ItemNotFoundException("Error, ${e.message} not found.")
             }
         }
     }
@@ -79,10 +83,19 @@ class TableViewModel : ViewModel() {
                 Toast.LENGTH_SHORT
             ).show()
 
-        navController.navigate("payment_screen/${table.value.id}")
+        navController.navigate( AppScreens.PaymentScreen.route + "/${table.value.id}")
     }
 
-    fun createTicket() { 
-        /*TODO*/
+    fun createTicket(table: Table) {
+        viewModelScope.launch {
+            isLoading.value = true
+            try {
+                val ticket = createTicketUseCase(Ticket())
+                table.actualTicket = ticket
+                updateTableUseCase(table)
+            }catch (e: Exception){
+                Logger.e(e.message ?: e.toString())
+            }
+        }
     }
 }
