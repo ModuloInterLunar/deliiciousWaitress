@@ -24,8 +24,10 @@ class TableListViewModel : ViewModel(){
 
     val timer = object : CountDownTimer(Long.MAX_VALUE, 1000) {
         override fun onTick(millisRemaning: Long) {
-            loadTables()
-            Log.i(TAG, "ticking")
+            viewModelScope.launch {
+                loadTables()
+                Log.i(TAG, "ticking")
+            }
         }
 
         override fun onFinish() {

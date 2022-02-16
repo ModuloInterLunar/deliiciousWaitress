@@ -1,16 +1,13 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen
 
-import android.app.Application
+import android.content.Intent
 import android.widget.Toast
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,7 +37,6 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.Drawer
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.createNotificationChannel
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 @Composable
 fun MainScreen(
@@ -50,9 +46,12 @@ fun MainScreen(
     loginViewModel: LoginViewModel,
     dishSelectorViewModel: DishSelectorViewModel,
     paymentViewModel: PaymentViewModel,
-    ticketListViewModel: TicketListViewModel
+    ticketListViewModel: TicketListViewModel,
+    intent: Intent
 ) {
     var currentScreen by rememberSaveable { mutableStateOf(AppScreens.LoginScreen.route) }
+    if (!intent.getStringExtra("screen").isNullOrBlank())
+        currentScreen = intent.getStringExtra("screen")!!
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     var gesturesEnabled by remember { mutableStateOf(false) }
@@ -80,6 +79,7 @@ fun MainScreen(
                         scope.launch {
                             drawerState.close()
                         }
+
                         navController.navigate(route) {
                             popUpTo = navController.graph.startDestinationId
                             launchSingleTop = true
@@ -185,18 +185,18 @@ fun MainScreen(
                     )
                 }
                 composable(
-                    AppScreens.PaymentScreen.route + "/{tableId}",
+                    AppScreens.PaymentScreen.route + "/{ticketId}",
                     arguments = listOf(
-                        navArgument("tableId") { type = NavType.StringType }
+                        navArgument("ticketId") { type = NavType.StringType }
                     )
                 ) {
                     gesturesEnabled = false
                     try{
-                        paymentViewModel.loadTable(it.arguments?.getString("tableId")!!)
+                        paymentViewModel.loadTicket(it.arguments?.getString("ticketId")!!)
                     }catch (e: ItemNotFoundException){
                         Toast.makeText(
                             context,
-                            stringResource(id = R.string.table_not_found_exception_message),
+                            stringResource(id = R.string.ticket_not_found_exception_message),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -211,6 +211,7 @@ fun MainScreen(
                 ) {
                     gesturesEnabled = true
 
+                    ticketListViewModel.loadTickets()
                     TicketListScreen(
                         navController = navController,
                         ticketListViewModel = ticketListViewModel,
@@ -222,7 +223,6 @@ fun MainScreen(
     }
 }
 
-@Preview
 @Composable
 fun ViewContainer() {
     Scaffold(

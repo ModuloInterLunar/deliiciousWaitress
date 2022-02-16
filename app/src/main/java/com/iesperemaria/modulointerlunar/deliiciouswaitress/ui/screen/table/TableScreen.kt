@@ -112,6 +112,7 @@ fun TableContent(tableViewModel: TableViewModel, navController: NavController) {
                 }
             }
 
+            if (table.actualTicket != null && table.actualTicket!!.orders.size > 0)
             Button(
                 onClick = { tableViewModel.loadPaymentScreen(navController) },
                 modifier = Modifier
@@ -131,11 +132,18 @@ fun TableFAB(navController: NavController, tableViewModel: TableViewModel) {
     FloatingActionButton(
         onClick = {
             val ticket = tableViewModel.table.value.actualTicket
-            if (ticket == null)
-                tableViewModel.createTicket(tableViewModel.table.value)
-            navController.navigate(
-                AppScreens.DishSelectorScreen.route + "/${tableViewModel.table.value.id}"
-            )}
+            if (ticket == null) {
+                tableViewModel.createTicket(tableViewModel.table.value) {
+                    navController.navigate(
+                        AppScreens.DishSelectorScreen.route + "/${tableViewModel.table.value.id}"
+                    )
+                }
+            } else {
+                navController.navigate(
+                    AppScreens.DishSelectorScreen.route + "/${tableViewModel.table.value.id}"
+                )
+            }
+        }
     ) {
         Text("+")
     }

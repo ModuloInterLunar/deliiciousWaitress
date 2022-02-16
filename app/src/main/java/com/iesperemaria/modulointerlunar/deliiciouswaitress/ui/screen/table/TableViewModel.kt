@@ -83,16 +83,17 @@ class TableViewModel : ViewModel() {
                 Toast.LENGTH_SHORT
             ).show()
 
-        navController.navigate( AppScreens.PaymentScreen.route + "/${table.value.id}")
+        navController.navigate( AppScreens.PaymentScreen.route + "/${table.value.actualTicket!!.id}")
     }
 
-    fun createTicket(table: Table) {
+    fun createTicket(table: Table, callback: () -> Unit) {
         viewModelScope.launch {
             isLoading.value = true
             try {
                 val ticket = createTicketUseCase(Ticket())
                 table.actualTicket = ticket
                 updateTableUseCase(table)
+                callback()
             }catch (e: Exception){
                 Logger.e(e.message ?: e.toString())
             }

@@ -15,5 +15,7 @@ data class Ticket(
         total = orders.fold(0.0) { acc, cur -> acc + cur.dish.price }
     }
 
+    fun createdAtFormatted(): String = "${createdAt.subSequence(0,10)} a las ${createdAt.subSequence(11,16)}"
+
     fun totalFormatted(): String = "${total.format(2)} €"
 }

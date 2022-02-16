@@ -22,10 +22,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.AppScreens
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.TopBar
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.format
 
-val TAG = "payment_screen"
+const val TAG = "payment_screen"
 
 @Composable
 fun PaymentScreen(
@@ -51,10 +52,11 @@ fun PaymentContent(
     navController: NavController,
     paymentViewModel: PaymentViewModel
 ){
-    val groupedOrders = paymentViewModel.table.value.actualTicket?.orders?.groupBy { it.dish.id }
-    val groupedOrderValues = groupedOrders?.values?.toList()
+    val ticket = paymentViewModel.ticket.value
+    val groupedOrders = ticket.orders.groupBy { it.dish.id }
+    val groupedOrderValues = groupedOrders.values.toList()
 
-    Log.d(TAG, "[${groupedOrderValues?.joinToString(",")}]")
+    Log.d(TAG, "[${groupedOrderValues.joinToString(",")}]")
 
     Column {
         Divider(
@@ -93,14 +95,14 @@ fun PaymentContent(
                 .padding(5.dp)
         ) {
             itemsIndexed(
-                items = groupedOrderValues.orEmpty()
+                items = groupedOrderValues
             ) { index, groupedOrders ->
                 val order = groupedOrders[0]
                 Row(
                     modifier = Modifier.padding(5.dp)
                 ) {
                     Text(
-                        text = "${index + 1}. ${order.dish.name} x ${groupedOrders.size}",
+                        text = "${groupedOrders.size} x ${order.dish.name}",
                         modifier = Modifier.fillMaxWidth(0.6f)
                     )
                     Text(
@@ -136,11 +138,10 @@ fun PaymentContent(
             modifier = Modifier.padding(horizontal = 5.dp)
         )
 
-        val ticket = paymentViewModel.table.value.actualTicket
-        ticket?.setTotal()
+        ticket.setTotal()
 
         Text(
-            text = "Total: ${ticket?.totalFormatted() ?: ""}",
+            text = "Total: ${ticket.totalFormatted() ?: ""}",
             modifier = Modifier
                 .padding(5.dp)
                 .fillMaxWidth(),
@@ -153,17 +154,20 @@ fun PaymentContent(
             modifier = Modifier.padding(horizontal = 10.dp)
         )
 
-        Button(
-            onClick = {
-                paymentViewModel.removeTicketFromTable()
-                navController.navigate("table_list_screen")
-            },
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(vertical = 10.dp)
-        ) {
-            Text(text = "Cobrar")
-        }
+        if (!ticket.isPaid)
+            Button(
+                onClick = {
+                    paymentViewModel.removeTicketFromTable()
+                    navController.navigate(AppScreens.TableListScreen.route) {
+                        popUpTo(AppScreens.TableListScreen.route)
+                    }
+                },
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(vertical = 10.dp)
+            ) {
+                Text(text = "Cobrar")
+            }
     }
 }
 
