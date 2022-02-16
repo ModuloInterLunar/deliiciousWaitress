@@ -1,7 +1,10 @@
-package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view
+package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.ingredient
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -16,7 +19,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Ingredient
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
-
 
 @Composable
 fun IngredientItem(navController: NavController, ingredient: Ingredient, id: Int) {
@@ -59,4 +61,3 @@ fun Preview2() {
         IngredientItem(navController = rememberNavController(), ingredient = ingredient, id = 0)
     }
 }
-

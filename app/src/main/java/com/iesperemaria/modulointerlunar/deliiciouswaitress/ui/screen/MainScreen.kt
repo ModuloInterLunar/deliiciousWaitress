@@ -1,15 +1,12 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen
 
 import android.widget.Toast
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,6 +19,8 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.ItemNotFoundException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselector.DishSelectorScreen
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselector.DishSelectorViewModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.ingredient.IngredientScreen
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.ingredient.IngredientViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.LoginScreen
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.LoginViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.outputtray.OutputTrayScreen
@@ -36,7 +35,6 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousW
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.Drawer
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 @Composable
 fun MainScreen(
@@ -45,7 +43,8 @@ fun MainScreen(
     outputTrayViewModel: OutputTrayViewModel,
     loginViewModel: LoginViewModel,
     dishSelectorViewModel: DishSelectorViewModel,
-    paymentViewModel: PaymentViewModel
+    paymentViewModel: PaymentViewModel,
+    ingredientViewModel: IngredientViewModel
 ) {
     var currentScreen by rememberSaveable { mutableStateOf("login") }
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -136,7 +135,10 @@ fun MainScreen(
                     }
                 }
                 composable("ingredient_screen") {
-                    IngredientScreen(navController = navController)
+                    IngredientScreen(
+                        navController = navController,
+                        ingredientViewModel = ingredientViewModel
+                    )
                 }
                 composable(
                     "dish_selector_screen/{tableId}",
