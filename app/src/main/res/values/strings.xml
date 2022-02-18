@@ -26,4 +26,7 @@
     <string name="list_of_paid_tickets">Lista de tickets pagados:</string>
     <string name="paid_tickets">Tickets pagados</string>
     <string name="ticket_not_found_exception_message">No se ha podido encontrar el ticket</string>
+    <string name="ticket_paid">Ticket pagado con éxito !</string>
+    <string name="ticket_title_2">DELIICIOUS</string>
+    <string name="ticket_title_1">MESON RESTAURANTE</string>
 </resources>

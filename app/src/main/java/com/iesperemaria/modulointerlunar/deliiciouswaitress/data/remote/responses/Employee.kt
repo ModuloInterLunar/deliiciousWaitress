@@ -10,4 +10,6 @@ data class Employee(
     var isAdmin: Boolean = false,
     var createdAt: String = "",
     var updatedAt: String = ""
-)
+) {
+    fun fullName(): String = "$name $surname"
+}

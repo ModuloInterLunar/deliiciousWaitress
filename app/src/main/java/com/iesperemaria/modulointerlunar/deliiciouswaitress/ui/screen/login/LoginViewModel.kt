@@ -70,7 +70,7 @@ class LoginViewModel : ViewModel() {
             val authToken = UserPreferences(context).authToken
             authToken.collect { token ->
                 try {
-                    Logger.e("Token -> $token")
+                    Logger.i("Token -> $token")
                     RetrofitHelper.setToken(token ?: "")
                     val response = GetEmployeeFromTokenUseCase().invoke()
                     onSuccessCallback()

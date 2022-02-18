@@ -108,6 +108,8 @@ fun MainScreen(
                 {
                     gesturesEnabled = true
                     currentScreen = AppScreens.TableListScreen.route
+                    outputTrayViewModel.timer.cancel() // para recibir
+                    outputTrayViewModel.timer.start() // las notificaciones
                     tableListViewModel.timer.cancel()
                     tableListViewModel.timer.start()
                     TableListScreen(
