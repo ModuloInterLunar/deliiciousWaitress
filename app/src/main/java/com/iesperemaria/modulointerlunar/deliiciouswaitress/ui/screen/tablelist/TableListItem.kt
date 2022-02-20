@@ -55,6 +55,8 @@ fun TableListItem(navController: NavController, tableListViewModel: TableListVie
             }
             .pointerInput(Unit) {
                 detectDragGestures { change, dragAmount ->
+                    if(!tableListViewModel.canMoveTables)
+                        return@detectDragGestures
                     offsetX.value += dragAmount.x
                     offsetY.value += dragAmount.y
                 }
@@ -67,8 +69,11 @@ fun TableListItem(navController: NavController, tableListViewModel: TableListVie
                     it.parentLayoutCoordinates?.size ?: IntSize(0, 0),
                     table
                 )
+
                 offsetX.value = newCoords.x.toDouble()
                 offsetY.value = newCoords.y.toDouble()
+                table.posX = newCoords.x.toDouble() / it.parentLayoutCoordinates?.size?.width!!
+                table.posY = newCoords.y.toDouble() / it.parentLayoutCoordinates?.size?.height!!
             }
             .clip(CircleShape)
             .background(colorResource(id = R.color.table_color))

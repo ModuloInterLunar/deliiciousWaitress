@@ -2,15 +2,15 @@ package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist
 
 import android.os.CountDownTimer
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import android.util.Size
+import androidx.compose.runtime.*
+import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.tableusecase.CreateTableUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.tableusecase.GetTablesUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.tableusecase.UpdateTableUseCase
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.launch
 
@@ -31,12 +31,19 @@ class TableListViewModel : ViewModel(){
         }
 
         override fun onFinish() {
+
         }
     }
 
     var tables by mutableStateOf(listOf<Table>())
     var getTablesUseCase = GetTablesUseCase()
     var createTableUseCase = CreateTableUseCase()
+    var updateTableUseCase = UpdateTableUseCase()
+    var canMoveTables = false
+
+    fun changeMovementState() {
+        canMoveTables = !canMoveTables
+    }
 
     fun loadTables(){
         viewModelScope.launch {
@@ -54,11 +61,23 @@ class TableListViewModel : ViewModel(){
     }
 
     fun createTable(table: Table) {
+        isLoading.value = true
         viewModelScope.launch {
-            isLoading.value = true
             try {
                 createTableUseCase(table)
                 tables = tables + table
+                isLoading.value = false
+            }catch (e: Exception){
+                Logger.e(e.message ?: e.toString())
+            }
+        }
+    }
+
+    fun updateTables() {
+        isLoading.value = true
+        viewModelScope.launch {
+            try{
+                tables.forEach { table -> updateTableUseCase(table) }
                 isLoading.value = false
             }catch (e: Exception){
                 Logger.e(e.message ?: e.toString())

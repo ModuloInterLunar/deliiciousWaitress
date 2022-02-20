@@ -24,6 +24,10 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item.multiplefloatingactionbutton.FabIcon
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item.multiplefloatingactionbutton.FabOption
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item.multiplefloatingactionbutton.MultiFabItem
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item.multiplefloatingactionbutton.MultiFloatingActionButton
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table.*
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.FAB
@@ -54,9 +58,39 @@ fun TableListScreen(
             )
         },
         floatingActionButton = {
-            FAB {
-                tableListViewModel.createTable(Table())
-            }
+            MultiFloatingActionButton(
+                items = listOf(
+                    MultiFabItem(
+                        id = 1,
+                        iconRes = R.drawable.add_icon,
+                        label = "Add table",
+                        onClick = {
+                            tableListViewModel.createTable(Table())
+                        }
+                    ),
+                    MultiFabItem(
+                        id = 2,
+                        iconRes = R.drawable.move_icon,
+                        label = "Move tables",
+                        onClick = {
+                            tableListViewModel.changeMovementState()
+                        }
+                    ),
+                    MultiFabItem(
+                        id = 3,
+                        iconRes = R.drawable.save_icon,
+                        label = "Save distribution",
+                        onClick = {
+                            tableListViewModel.updateTables()
+                        }
+                    )
+                ),
+                fabIcon = FabIcon(iconRes = R.drawable.back_arrow),
+                fabOption = FabOption(
+                    iconTint = Color.White,
+                    showLabel = false
+                )
+            )
         }
     )
 }
