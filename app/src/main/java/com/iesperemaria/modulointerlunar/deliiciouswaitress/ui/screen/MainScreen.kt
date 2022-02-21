@@ -23,6 +23,8 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.response
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.employeeusecase.GetEmployeeFromTokenUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselector.DishSelectorScreen
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselector.DishSelectorViewModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.ingredient.IngredientScreen
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.ingredient.IngredientViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.LoginScreen
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.LoginViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.outputtray.OutputTrayScreen
@@ -53,6 +55,7 @@ fun MainScreen(
     dishSelectorViewModel: DishSelectorViewModel,
     paymentViewModel: PaymentViewModel,
     ticketListViewModel: TicketListViewModel,
+    ingredientViewModel: IngredientViewModel,
     intent: Intent
 ) {
     val context = LocalContext.current
@@ -164,7 +167,10 @@ fun MainScreen(
                 }
                 composable(AppScreens.IngredientScreen.route) {
                     currentScreen = AppScreens.IngredientScreen.route
-                    IngredientScreen(navController = navController)
+                    IngredientScreen(
+                        navController = navController,
+                        ingredientViewModel = ingredientViewModel
+                    )
                 }
                 composable(
                     AppScreens.DishSelectorScreen.route + "/{tableId}",

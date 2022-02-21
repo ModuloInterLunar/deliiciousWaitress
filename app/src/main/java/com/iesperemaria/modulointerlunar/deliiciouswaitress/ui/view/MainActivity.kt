@@ -12,11 +12,13 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.Logi
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.outputtray.OutputTrayViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.payment.PaymentViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.ticket.TicketListViewModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.ingredient.IngredientViewModel
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 
 class MainActivity : ComponentActivity() {
 
+    private val ingredientViewModel: IngredientViewModel by viewModels()
     private val tableListViewModel: TableListViewModel by viewModels()
     private val tableViewModel: TableViewModel by viewModels()
     private val outputTrayViewModel: OutputTrayViewModel by viewModels()
@@ -37,6 +39,7 @@ class MainActivity : ComponentActivity() {
                 loginViewModel,
                 dishSelectorViewModel,
                 paymentViewModel,
+                ingredientViewModel,
                 ticketListViewModel,
                 intent
             )
