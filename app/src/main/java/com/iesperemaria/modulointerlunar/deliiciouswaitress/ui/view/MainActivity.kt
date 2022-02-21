@@ -39,8 +39,8 @@ class MainActivity : ComponentActivity() {
                 loginViewModel,
                 dishSelectorViewModel,
                 paymentViewModel,
-                ingredientViewModel,
                 ticketListViewModel,
+                ingredientViewModel,
                 intent
             )
         }

@@ -167,9 +167,11 @@ fun MainScreen(
                 }
                 composable(AppScreens.IngredientScreen.route) {
                     currentScreen = AppScreens.IngredientScreen.route
+                    ingredientViewModel.loadIngredients()
                     IngredientScreen(
                         navController = navController,
-                        ingredientViewModel = ingredientViewModel
+                        ingredientViewModel = ingredientViewModel,
+                        openDrawer = {openDrawer()}
                     )
                 }
                 composable(

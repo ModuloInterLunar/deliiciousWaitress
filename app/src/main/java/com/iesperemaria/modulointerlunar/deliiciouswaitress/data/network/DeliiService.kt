@@ -109,6 +109,16 @@ class DeliiService {
         return response.body()!!
     }
 
+    suspend fun updateIngredient(ingredient: Ingredient): Ingredient {
+        val ingredientModel = IngredientModel(ingredient)
+        val response = RetrofitHelper.getDeliiApiClient().patchIngredient(ingredientModel, ingredient.id)
+        Log.i(TAG, response.toString())
+        if(response.code() == 404)
+            throw ItemNotFoundException(response.message())
+        return response.body()!!
+    }
+
+
     suspend fun deleteOrder(order: Order) {
         val response = RetrofitHelper.getDeliiApiClient().deleteOrder(order.id)
         Log.i(TAG, response.toString())

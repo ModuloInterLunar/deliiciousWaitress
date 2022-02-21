@@ -42,6 +42,12 @@ interface DeliiApiClient {
         @Path("id") id: String
     ): Response<Order>
 
+    @PATCH("api/ingredients/{id}")
+    suspend fun patchIngredient(
+        @Body ingredientModel: IngredientModel,
+        @Path("id") id: String
+    ): Response<Ingredient>
+
     @DELETE("api/orders/{id}")
     suspend fun deleteOrder(
         @Path("id") id: String
