@@ -83,4 +83,14 @@ interface DeliiApiClient {
         @Path("id") id: String
     ): Response<Ticket>
 
+    @DELETE("api/tables/{id}")
+    suspend fun deleteTable(
+        @Path("id") id: String
+    ): Response<Message>
+
+    @DELETE("api/tickets/{id}")
+    suspend fun deleteTicket(
+        @Path("id") id: String
+    ): Response<Message>
+
 }

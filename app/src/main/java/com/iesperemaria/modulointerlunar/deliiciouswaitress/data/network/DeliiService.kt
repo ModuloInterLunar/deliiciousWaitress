@@ -159,4 +159,18 @@ class DeliiService {
             throw ItemNotFoundException(response.message())
         return response.body()!!
     }
+
+    suspend fun deleteTable(table: Table) {
+        val response = RetrofitHelper.getDeliiApiClient().deleteTable(table.id)
+        Log.i(TAG, response.toString())
+        if (response.code() == 404)
+            throw ItemNotFoundException(response.message())
+    }
+
+    suspend fun deleteTicket(ticket: Ticket) {
+        val response = RetrofitHelper.getDeliiApiClient().deleteTicket(ticket.id)
+        Log.i(TAG, response.toString())
+        if (response.code() == 404)
+            throw ItemNotFoundException(response.message())
+    }
 }

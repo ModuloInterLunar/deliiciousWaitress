@@ -13,9 +13,11 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.response
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Ticket
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.orderusecase.DeleteOrderUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.tableusecase.DeleteTableUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.tableusecase.GetTableByIdUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.tableusecase.UpdateTableUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.ticketusecase.CreateTicketUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.ticketusecase.DeleteTicketUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.ticketusecase.UpdateTicketUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.AppScreens
 import com.orhanobut.logger.Logger
@@ -46,6 +48,8 @@ class TableViewModel : ViewModel() {
     val updateTicketUseCase = UpdateTicketUseCase()
     val updateTableUseCase = UpdateTableUseCase()
     val createTicketUseCase = CreateTicketUseCase()
+    val deleteTableUseCase = DeleteTableUseCase()
+    val deleteTicketUseCase = DeleteTicketUseCase()
 
     fun loadTable(id: String) {
         viewModelScope.launch {
@@ -86,17 +90,43 @@ class TableViewModel : ViewModel() {
         navController.navigate( AppScreens.PaymentScreen.route + "/${table.value.actualTicket!!.id}")
     }
 
-    fun createTicket(table: Table, callback: () -> Unit) {
+    fun loadDishSelectorScreen(navController: NavController){
+        navController.navigate(
+            AppScreens.DishSelectorScreen.route + "/${table.value.id}"
+        )
+    }
+
+    fun createTicket(table: Table) {
         viewModelScope.launch {
             isLoading.value = true
             try {
                 val ticket = createTicketUseCase(Ticket())
                 table.actualTicket = ticket
                 updateTableUseCase(table)
-                callback()
             }catch (e: Exception){
                 Logger.e(e.message ?: e.toString())
             }
+        }
+    }
+
+    fun deleteTable(navController: NavController) {
+        viewModelScope.launch {
+            isLoading.value = true
+            val orders = table.value.actualTicket?.orders ?: emptyList()
+            if(orders.isNotEmpty()){
+                Toast.makeText(
+                    navController.context,
+                    "Error, todavia hay pedidos pendientes de cobro",
+                    Toast.LENGTH_SHORT).
+                show()
+                return@launch
+            }
+            orders.forEach { order -> deleteOrder(order) }
+            if(table.value.actualTicket != null)
+                deleteTicketUseCase(table.value.actualTicket!!)
+
+            deleteTableUseCase(table.value)
+            navController.popBackStack()
         }
     }
 }
