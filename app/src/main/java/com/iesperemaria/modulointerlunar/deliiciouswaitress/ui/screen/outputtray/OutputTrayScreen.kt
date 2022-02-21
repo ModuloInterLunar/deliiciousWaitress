@@ -35,6 +35,7 @@ fun OutputTrayScreen(
             TopBar(
                 title = stringResource(id = R.string.output_tray),
                 buttonIcon = painterResource(id = R.drawable.hamburger_icon),
+                navController = navController,
                 onButtonClicked = { openDrawer() }
             )
         },

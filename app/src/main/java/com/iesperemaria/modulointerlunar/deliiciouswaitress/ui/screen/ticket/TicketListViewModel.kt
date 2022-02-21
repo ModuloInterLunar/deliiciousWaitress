@@ -21,7 +21,7 @@ class TicketListViewModel: ViewModel() {
 
     val timer = object : CountDownTimer(Long.MAX_VALUE, 1000) {
         override fun onTick(millisRemaning: Long) {
-            loadOrders()
+            loadTickets()
             Log.i(TAG,"ticking")
         }
 
@@ -32,7 +32,7 @@ class TicketListViewModel: ViewModel() {
     val getTicketsPaidUseCase = GetTicketsPaidUseCase()
     val tickets: MutableState<List<Ticket>> = mutableStateOf(listOf())
 
-    fun loadOrders(){
+    fun loadTickets(){
         viewModelScope.launch {
             isLoading.value = true
             try {

@@ -1,5 +1,6 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist
 
+import android.os.CountDownTimer
 import android.util.Log
 import android.util.Size
 import android.widget.Toast
@@ -28,11 +29,14 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.AppScreens
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
+import kotlinx.coroutines.launch
 import java.util.logging.Logger
 import kotlin.math.roundToInt
 
@@ -54,25 +58,30 @@ fun TableListItem(navController: NavController, tableListViewModel: TableListVie
             }
             .pointerInput(Unit) {
                 detectDragGestures { change, dragAmount ->
+                    if(!tableListViewModel.canMoveTables)
+                        return@detectDragGestures
                     offsetX.value += dragAmount.x
                     offsetY.value += dragAmount.y
                 }
             }
             .size(50.dp)
             .onGloballyPositioned {
-                val newCoords = correctOutOfParent(
+                val newCoords = tableListViewModel.correctOutOfParent(
                     it.positionInParent(),
                     it.size,
                     it.parentLayoutCoordinates?.size ?: IntSize(0, 0),
                     table
                 )
+
                 offsetX.value = newCoords.x.toDouble()
                 offsetY.value = newCoords.y.toDouble()
+                table.posX = newCoords.x.toDouble() / it.parentLayoutCoordinates?.size?.width!!
+                table.posY = newCoords.y.toDouble() / it.parentLayoutCoordinates?.size?.height!!
             }
             .clip(CircleShape)
             .background(colorResource(id = R.color.table_color))
             .clickable {
-                navController.navigate("table_screen/${table.id}")
+                navController.navigate("${AppScreens.TableScreen.route}/${table.id}")
             },
         contentAlignment = Alignment.Center
     ) {
@@ -93,29 +102,4 @@ fun Preview2() {
         val table = Table(id = "1")
         TableListItem(rememberNavController(), TableListViewModel(), tableId = table.id, IntSize(100, 100))
     }
-}
-
-
-// Not working
-fun correctOutOfParent(newPosition: Offset, size: IntSize, parentSize: IntSize, table: Table): Offset {
-    var x = newPosition.x
-    var y = newPosition.y
-
-    if(newPosition.x == 0f && newPosition.y == 0f && table.posX != 0.0 && table.posY != 0.0){
-        x = (table.posX * parentSize.width).toFloat()
-        y = (table.posY * parentSize.height).toFloat()
-        return Offset(x, y)
-    }
-
-    if (x + size.width > parentSize.width)
-        x = (parentSize.width - size.width).toFloat()
-    else if(x < 0)
-        x = 0f
-
-    if (y + size.height > parentSize.height)
-        y = (parentSize.height - size.height).toFloat()
-    else if(y < 0)
-        y = 0f
-
-    return Offset(x, y)
 }

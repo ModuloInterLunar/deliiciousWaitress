@@ -22,8 +22,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.outputtray.OutputTrayContent
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.outputtray.OutputTrayViewModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.AppScreens
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.TopBar
 
 @Composable
@@ -37,11 +36,13 @@ fun TicketListScreen (
             TopBar(
                 title = stringResource(id = R.string.output_tray),
                 buttonIcon = painterResource(id = R.drawable.hamburger_icon),
+                navController = navController,
                 onButtonClicked = { openDrawer() }
             )
         },
         content = {
             TicketListContent(
+                navController = navController,
                 ticketListViewModel = ticketListViewModel
             )
         }
@@ -51,6 +52,7 @@ fun TicketListScreen (
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TicketListContent (
+    navController: NavController,
     ticketListViewModel: TicketListViewModel
 ) {
     val tickets = ticketListViewModel.tickets.value
@@ -62,7 +64,7 @@ fun TicketListContent (
                 .background(Color.White)
         ) {
             Text(
-                text = stringResource(id = R.string.list_of_tickets),
+                text = stringResource(id = R.string.list_of_paid_tickets),
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier
                     .padding(10.dp)
@@ -71,10 +73,12 @@ fun TicketListContent (
             )
 
             LazyVerticalGrid(
-                cells = GridCells.Adaptive(minSize = 128.dp)
+                cells = GridCells.Adaptive(minSize = 172.dp)
             ) {
                 items(tickets) { ticket ->
-                    TicketListItem(ticket = ticket)
+                    TicketListItem(ticket = ticket) {
+                        navController.navigate(AppScreens.PaymentScreen.route + "/${ticket.id}")
+                    }
                 }
             }
         }

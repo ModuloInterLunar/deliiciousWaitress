@@ -3,6 +3,7 @@ package com.iesperemaria.modulointerlunar.deliiciouswaitress.data.network
 import android.util.Log
 import com.google.gson.JsonObject
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.core.RetrofitHelper
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.DeliiApiException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.ItemNotFoundException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.NotEnoughStockException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.WrongCredentialsException
@@ -64,6 +65,8 @@ class DeliiService {
     suspend fun getEmployeeFromToken(): Employee {
         val response = RetrofitHelper.getDeliiApiClient().getEmployeeFromToken()
         Log.i(TAG, response.toString())
+        if (response.code() != 200)
+            throw DeliiApiException("authentication failed")
         return response.body()!!
     }
 
@@ -147,5 +150,27 @@ class DeliiService {
         val response = RetrofitHelper.getDeliiApiClient().getAllTicketsPaid()
         Log.i(TAG, response.toString())
         return response.body() ?: emptyList()
+    }
+
+    suspend fun getTicketById(id: String): Ticket {
+        val response = RetrofitHelper.getDeliiApiClient().getTicket(id)
+        Logger.i(response.toString())
+        if(response.code() == 404)
+            throw ItemNotFoundException(response.message())
+        return response.body()!!
+    }
+
+    suspend fun deleteTable(table: Table) {
+        val response = RetrofitHelper.getDeliiApiClient().deleteTable(table.id)
+        Log.i(TAG, response.toString())
+        if (response.code() == 404)
+            throw ItemNotFoundException(response.message())
+    }
+
+    suspend fun deleteTicket(ticket: Ticket) {
+        val response = RetrofitHelper.getDeliiApiClient().deleteTicket(ticket.id)
+        Log.i(TAG, response.toString())
+        if (response.code() == 404)
+            throw ItemNotFoundException(response.message())
     }
 }

@@ -1,18 +1,23 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.core.RetrofitHelper
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.WrongCredentialsException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.employeeusecase.GetEmployeeFromTokenUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.employeeusecase.LoginUseCase
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.UserPreferences
 import com.orhanobut.logger.Logger
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
@@ -24,9 +29,10 @@ class LoginViewModel : ViewModel() {
 
     val tables: MutableState<List<Table>> = mutableStateOf(listOf())
     var loginUseCase = LoginUseCase()
+    val getEmployeeFromTokenUseCase = GetEmployeeFromTokenUseCase()
 
 
-    fun login(username: String, password: String, context: Context, ifSuccessfulCallback: () -> Unit){
+    fun login(username: String, password: String, context: Context, onSuccessCallback: () -> Unit){
         viewModelScope.launch {
             isLoading.value = true
             try {
@@ -35,8 +41,9 @@ class LoginViewModel : ViewModel() {
                     isLoading.value = false
                 }
                 Logger.i(token)
-
-                ifSuccessfulCallback()
+                val userPreferences = UserPreferences(context)
+                userPreferences.saveAuthToken(token)
+                onSuccessCallback()
 
             } catch (e: WrongCredentialsException) {
                 Toast.makeText(
@@ -56,6 +63,23 @@ class LoginViewModel : ViewModel() {
                 isLoading.value = false
 
             }
+        }
+    }
+
+    fun testToken(context: Context, onSuccessCallback: () -> Unit) {
+        viewModelScope.launch {
+            val authToken = UserPreferences(context).authToken
+            authToken.collect { token ->
+                try {
+                    Logger.i("Token -> $token")
+                    RetrofitHelper.setToken(token ?: "")
+                    val response = getEmployeeFromTokenUseCase()
+                    onSuccessCallback()
+                }
+                catch (e: Exception) {
+                }
+            }
+
         }
     }
 }

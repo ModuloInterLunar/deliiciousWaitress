@@ -1,5 +1,6 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.table
 
+import android.widget.Toast
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -7,6 +8,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +25,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item.OrderItem
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item.multiplefloatingactionbutton.FabIcon
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item.multiplefloatingactionbutton.MultiFabItem
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item.multiplefloatingactionbutton.MultiFloatingActionButton
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.AppScreens
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.CustomSwipeToDismiss
@@ -36,6 +43,7 @@ fun TableScreen(
             TopBar(
                 title = stringResource(id = R.string.table) + " " + tableViewModel.table.value.id,
                 buttonIcon = painterResource(id = R.drawable.back_arrow),
+                navController = navController,
                 onButtonClicked = { navController.popBackStack() }
             )
         },
@@ -112,6 +120,7 @@ fun TableContent(tableViewModel: TableViewModel, navController: NavController) {
                 }
             }
 
+            if (table.actualTicket != null && table.actualTicket!!.orders.size > 0)
             Button(
                 onClick = { tableViewModel.loadPaymentScreen(navController) },
                 modifier = Modifier
@@ -127,16 +136,33 @@ fun TableContent(tableViewModel: TableViewModel, navController: NavController) {
 
 @Composable
 fun TableFAB(navController: NavController, tableViewModel: TableViewModel) {
+    MultiFloatingActionButton(
+        items = listOf(
+            MultiFabItem(
+                id = 1,
+                imageVector = Icons.Filled.Add,
+                onClick = {
+                    val ticket = tableViewModel.table.value.actualTicket
+                    if (ticket == null)
+                        tableViewModel.createTicket(tableViewModel.table.value)
 
-    FloatingActionButton(
-        onClick = {
-            val ticket = tableViewModel.table.value.actualTicket
-            if (ticket == null)
-                tableViewModel.createTicket(tableViewModel.table.value)
-            navController.navigate(
-                AppScreens.DishSelectorScreen.route + "/${tableViewModel.table.value.id}"
-            )}
-    ) {
-        Text("+")
-    }
+                    tableViewModel.loadDishSelectorScreen(navController)
+                }
+            ),
+            MultiFabItem(
+                id = 2,
+                imageVector = Icons.Filled.Delete,
+                onClick = {
+                    /*
+                    if(tableViewModel.table.value.actualTicket?.orders == null || tableViewModel.table.value.actualTicket?.orders!!.size == 0)
+                        tableViewModel.deleteTable(navController)
+                    else
+                        Toast.makeText(navController.context, "Error, la mesa tiene un ticket activo", Toast.LENGTH_SHORT).show()
+                     */
+                    /* TODO */
+                }
+            )
+        ),
+        fabIcon = FabIcon()
+    )
 }

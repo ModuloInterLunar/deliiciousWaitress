@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.getSystemService
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.AppScreens
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.MainActivity
 
 fun createNotificationChannel(channelId: String, context: Context) {
@@ -37,7 +38,7 @@ fun simpleNotificationWithTapAction(
     val intent = Intent(context, MainActivity::class.java).apply {
         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
     }
-
+    intent.putExtra("screen", AppScreens.OutputTrayScreen.route)
     val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
     val builder = NotificationCompat.Builder(context, channelId)
