@@ -32,6 +32,7 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.AppScreens
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.CustomSwipeToDismiss
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.TopBar
+import com.orhanobut.logger.Logger
 
 @Composable
 fun TableScreen(
@@ -153,13 +154,18 @@ fun TableFAB(navController: NavController, tableViewModel: TableViewModel) {
                 id = 2,
                 imageVector = Icons.Filled.Delete,
                 onClick = {
-                    /*
-                    if(tableViewModel.table.value.actualTicket?.orders == null || tableViewModel.table.value.actualTicket?.orders!!.size == 0)
-                        tableViewModel.deleteTable(navController)
-                    else
-                        Toast.makeText(navController.context, "Error, la mesa tiene un ticket activo", Toast.LENGTH_SHORT).show()
-                     */
-                    /* TODO */
+                    tableViewModel.deleteTable(
+                        onSuccessCallback = {
+                            navController.navigate(AppScreens.TableListScreen.route) {
+                                popUpTo(0)
+                                tableViewModel.timer.cancel()
+                            }
+                        },
+                        onFailCallback = {
+                            Logger.e(it.message ?: "Unknown exception")
+                            Toast.makeText(navController.context,"Error, no se ha podido borrar la mesa", Toast.LENGTH_SHORT).show()
+                        }
+                    )
                 }
             )
         ),

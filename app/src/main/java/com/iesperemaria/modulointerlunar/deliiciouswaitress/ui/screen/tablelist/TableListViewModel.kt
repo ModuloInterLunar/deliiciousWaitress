@@ -65,8 +65,8 @@ class TableListViewModel : ViewModel(){
         isLoading.value = true
         viewModelScope.launch {
             try {
-                createTableUseCase(table)
-                tables = tables + table
+                val createdTable = createTableUseCase(table)
+                tables = tables + createdTable
                 isLoading.value = false
             }catch (e: Exception){
                 Logger.e(e.message ?: e.toString())
