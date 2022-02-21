@@ -19,6 +19,7 @@ import androidx.navigation.navArgument
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.core.RetrofitHelper
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.ItemNotFoundException
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.employeeusecase.GetEmployeeFromTokenUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselector.DishSelectorScreen
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselector.DishSelectorViewModel
@@ -36,6 +37,7 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.ticket.Tic
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.ticket.TicketListViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.Drawer
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.getCurrentEmployee
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.UserPreferences
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.createNotificationChannel
 import com.orhanobut.logger.Logger
@@ -60,9 +62,11 @@ fun MainScreen(
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     var gesturesEnabled by remember { mutableStateOf(false) }
+    val currentEmployee = remember {mutableStateOf(Employee())}
     val openDrawer = {
         scope.launch {
             drawerState.open()
+            currentEmployee.value = getCurrentEmployee()
         }
     }
     createNotificationChannel(
@@ -73,7 +77,6 @@ fun MainScreen(
 
     DeliiciousWaitressTheme {
         val navController = rememberNavController()
-
         ModalDrawer(
             drawerState = drawerState,
             gesturesEnabled = gesturesEnabled,
@@ -88,7 +91,8 @@ fun MainScreen(
                             popUpTo = navController.graph.startDestinationId
                             launchSingleTop = true
                         }
-                    }
+                    },
+                    currentEmployee = currentEmployee
                 )
             }
         ) {

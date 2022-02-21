@@ -5,20 +5,29 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.employeeusecase.GetEmployeeFromTokenUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.AppScreens
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
+suspend fun getCurrentEmployee(): Employee {
+    val getEmployeeFromTokenUseCase = GetEmployeeFromTokenUseCase()
+    return getEmployeeFromTokenUseCase()
+}
 
 @Composable
 fun Drawer(
     modifier: Modifier = Modifier,
-    onDestinationClicked: (route: String) -> Unit
+    onDestinationClicked: (route: String) -> Unit,
+    currentEmployee: State<Employee> = mutableStateOf(Employee())
 ) {
     val screens = listOf(
         AppScreens.TableListScreen,
@@ -50,6 +59,13 @@ fun Drawer(
                     }
             )
         }
+        Text(
+            text = "Empleado: " + currentEmployee.value.fullName(),
+            modifier = Modifier
+                .weight(1f)
+                .wrapContentHeight(Alignment.Bottom)
+                .padding(bottom = 30.dp)
+        )
 
     }
 }

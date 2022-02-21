@@ -29,6 +29,7 @@ class LoginViewModel : ViewModel() {
 
     val tables: MutableState<List<Table>> = mutableStateOf(listOf())
     var loginUseCase = LoginUseCase()
+    val getEmployeeFromTokenUseCase = GetEmployeeFromTokenUseCase()
 
 
     fun login(username: String, password: String, context: Context, onSuccessCallback: () -> Unit){
@@ -72,7 +73,7 @@ class LoginViewModel : ViewModel() {
                 try {
                     Logger.i("Token -> $token")
                     RetrofitHelper.setToken(token ?: "")
-                    val response = GetEmployeeFromTokenUseCase().invoke()
+                    val response = getEmployeeFromTokenUseCase()
                     onSuccessCallback()
                 }
                 catch (e: Exception) {
