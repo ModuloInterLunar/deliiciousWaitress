@@ -7,6 +7,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowLeft
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -73,7 +77,10 @@ fun MultiFloatingActionButton(
             contentColor = Color.White
         ) {
             Icon(
-                painter = rememberVectorPainter(image = fabIcon.imageVector),
+                painter = rememberVectorPainter(
+                    image = if(fabState.value.isExpanded()) fabIcon.imageVectorExpanded
+                            else fabIcon.imageVectorCollapsed
+                ),
                 contentDescription = "FAB",
                 modifier = Modifier
                     .rotate(rotation)

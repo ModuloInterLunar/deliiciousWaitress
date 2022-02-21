@@ -79,7 +79,7 @@ fun TableListScreen(
                         }
                     )
                 ),
-                fabIcon = FabIcon(imageVector = Icons.Filled.ArrowUpward),
+                fabIcon = FabIcon(),
                 fabOption = FabOption(
                     iconTint = Color.White,
                     showLabel = false
