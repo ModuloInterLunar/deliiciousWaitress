@@ -1,5 +1,6 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.tablelist
 
+import android.os.CountDownTimer
 import android.util.Log
 import android.util.Size
 import android.widget.Toast
@@ -28,12 +29,14 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Table
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.AppScreens
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
+import kotlinx.coroutines.launch
 import java.util.logging.Logger
 import kotlin.math.roundToInt
 

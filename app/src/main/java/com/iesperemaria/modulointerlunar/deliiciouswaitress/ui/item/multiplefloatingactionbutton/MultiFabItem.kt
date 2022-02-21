@@ -1,10 +1,10 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item.multiplefloatingactionbutton
 
-import androidx.annotation.DrawableRes
+import androidx.compose.ui.graphics.vector.ImageVector
 
 class MultiFabItem(
     val id: Int,
-    @DrawableRes val iconRes: Int,
+    val imageVector: ImageVector,
     val label: String = "",
     val onClick: () -> Unit
 )

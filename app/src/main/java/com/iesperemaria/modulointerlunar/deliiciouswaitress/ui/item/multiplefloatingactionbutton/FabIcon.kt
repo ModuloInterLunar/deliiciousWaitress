@@ -1,22 +1,22 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item.multiplefloatingactionbutton
 
-import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.graphics.vector.ImageVector
 
 @Immutable
 interface  FabIcon {
-    @Stable val iconRes: Int
+    @Stable val imageVector: ImageVector
     @Stable val iconRotate: Float?
 }
 
 private class FabIconImpl(
-    override val iconRes: Int,
+    override val imageVector: ImageVector,
     override val iconRotate: Float?
 ) : FabIcon
 
 fun FabIcon(
-    @DrawableRes iconRes: Int,
+    imageVector: ImageVector,
     iconRotate: Float? = null
 ) : FabIcon =
-    FabIconImpl(iconRes, iconRotate)
+    FabIconImpl(imageVector, iconRotate)

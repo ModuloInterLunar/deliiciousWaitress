@@ -1,14 +1,11 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.item.multiplefloatingactionbutton
 
-import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -17,11 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -77,7 +73,7 @@ fun MultiFloatingActionButton(
             contentColor = Color.White
         ) {
             Icon(
-                painter = painterResource(id = fabIcon.iconRes),
+                painter = rememberVectorPainter(image = fabIcon.imageVector),
                 contentDescription = "FAB",
                 modifier = Modifier
                     .rotate(rotation)
@@ -117,11 +113,7 @@ fun MiniFabItem(
             backgroundColor = fabOption.backgroundTint,
             contentColor = fabOption.iconTint,
         ) {
-            Icon(
-                painter = painterResource(id = item.iconRes),
-                contentDescription = "Float Icon",
-                tint = fabOption.iconTint
-            )
+            Icon(imageVector = item.imageVector, contentDescription = "")
         }
     }
 }
