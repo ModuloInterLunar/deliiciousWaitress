@@ -58,8 +58,6 @@ class TableViewModel : ViewModel() {
                 val result = getTableByIdUseCase(id)
                 table.value = result
                 isLoading.value = false
-            } catch (e: ItemNotFoundException) {
-                throw ItemNotFoundException("Error, table not found.")
             } catch (e: Exception) {
                 Logger.e(e.message ?: e.toString())
             }
@@ -109,24 +107,22 @@ class TableViewModel : ViewModel() {
         }
     }
 
-    fun deleteTable(navController: NavController) {
+    fun deleteTable(onSuccessCallback: () -> Unit, onFailCallback: (e: Exception) -> Unit) {
         viewModelScope.launch {
-            isLoading.value = true
-            val orders = table.value.actualTicket?.orders ?: emptyList()
-            if(orders.isNotEmpty()){
-                Toast.makeText(
-                    navController.context,
-                    "Error, todavia hay pedidos pendientes de cobro",
-                    Toast.LENGTH_SHORT).
-                show()
-                return@launch
-            }
-            orders.forEach { order -> deleteOrder(order) }
-            if(table.value.actualTicket != null)
-                deleteTicketUseCase(table.value.actualTicket!!)
+            try {
+                isLoading.value = true
+                val orders = table.value.actualTicket?.orders ?: emptyList()
+                orders.forEach { order -> deleteOrder(order) }
+                if (table.value.actualTicket != null)
+                    deleteTicketUseCase(table.value.actualTicket!!)
 
-            deleteTableUseCase(table.value)
-            navController.popBackStack()
+                deleteTableUseCase(table.value)
+                isLoading.value = false
+                onSuccessCallback()
+            } catch (e: Exception) {
+                onFailCallback(e)
+            }
+
         }
     }
 }
