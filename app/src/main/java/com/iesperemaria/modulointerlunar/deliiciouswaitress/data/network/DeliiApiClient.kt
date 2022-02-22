@@ -99,4 +99,9 @@ interface DeliiApiClient {
         @Path("id") id: String
     ): Response<Message>
 
+    @POST("api/ingredients")
+    suspend fun createIngredient(
+        @Body ingredientModel: IngredientModel
+    ): Response<Ingredient>
+
 }
