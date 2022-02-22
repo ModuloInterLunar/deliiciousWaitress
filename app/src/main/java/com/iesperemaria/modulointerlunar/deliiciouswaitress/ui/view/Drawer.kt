@@ -15,8 +15,6 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.employeeusecase.GetEmployeeFromTokenUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.AppScreens
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 
 suspend fun getCurrentEmployee(): Employee {
     val getEmployeeFromTokenUseCase = GetEmployeeFromTokenUseCase()
@@ -32,7 +30,7 @@ fun Drawer(
     val screens = listOf(
         AppScreens.TableListScreen,
         AppScreens.OutputTrayScreen,
-        AppScreens.IngredientScreen,
+        AppScreens.IngredientListScreen,
         AppScreens.TicketListScreen
     )
 

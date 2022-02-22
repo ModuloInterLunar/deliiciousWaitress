@@ -9,7 +9,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -17,14 +16,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.core.RetrofitHelper
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.exception.ItemNotFoundException
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Employee
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.domain.employeeusecase.GetEmployeeFromTokenUseCase
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselector.DishSelectorScreen
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.dishselector.DishSelectorViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.ingredient.IngredientScreen
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.ingredient.IngredientViewModel
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.ingredientlist.IngredientListScreen
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.ingredientlist.IngredientListViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.LoginScreen
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.login.LoginViewModel
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.outputtray.OutputTrayScreen
@@ -40,10 +39,8 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.ticket.Tic
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.Drawer
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.getCurrentEmployee
-import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.UserPreferences
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.util.createNotificationChannel
 import com.orhanobut.logger.Logger
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
@@ -55,6 +52,7 @@ fun MainScreen(
     dishSelectorViewModel: DishSelectorViewModel,
     paymentViewModel: PaymentViewModel,
     ticketListViewModel: TicketListViewModel,
+    ingredientListViewModel: IngredientListViewModel,
     ingredientViewModel: IngredientViewModel,
     intent: Intent
 ) {
@@ -165,12 +163,12 @@ fun MainScreen(
                         openDrawer()
                     }
                 }
-                composable(AppScreens.IngredientScreen.route) {
-                    currentScreen = AppScreens.IngredientScreen.route
-                    ingredientViewModel.loadIngredients()
-                    IngredientScreen(
+                composable(AppScreens.IngredientListScreen.route) {
+                    currentScreen = AppScreens.IngredientListScreen.route
+                    ingredientListViewModel.loadIngredients()
+                    IngredientListScreen(
                         navController = navController,
-                        ingredientViewModel = ingredientViewModel,
+                        ingredientListViewModel = ingredientListViewModel,
                         openDrawer = {openDrawer()}
                     )
                 }
@@ -232,6 +230,16 @@ fun MainScreen(
                         ticketListViewModel = ticketListViewModel,
                         openDrawer = { openDrawer() }
                     )
+                }
+                composable (
+                    AppScreens.IngredientScreen.route
+                ){
+                    currentScreen = AppScreens.IngredientScreen.route
+                    gesturesEnabled = false
+
+                    IngredientScreen(
+                        navController = navController,
+                        ingredientViewModel = ingredientViewModel)
                 }
             }
         }

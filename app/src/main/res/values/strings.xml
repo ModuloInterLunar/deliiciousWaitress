@@ -29,4 +29,5 @@
     <string name="ticket_paid">Ticket pagado con éxito !</string>
     <string name="ticket_title_2">DELIICIOUS</string>
     <string name="ticket_title_1">MESON RESTAURANTE</string>
+    <string name="add_ingredient">Añadir ingrediente</string>
 </resources>

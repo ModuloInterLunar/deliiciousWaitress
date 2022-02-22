@@ -1,6 +1,8 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view
 
 import android.widget.Toast
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material.Card
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable

@@ -1,28 +1,23 @@
-package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.ingredient
+package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.ingredientlist
 
-import androidx.compose.foundation.background
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.R
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.data.remote.responses.Ingredient
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.theme.DeliiciousWaitressTheme
@@ -79,13 +74,14 @@ fun Preview2() {
 fun ExtendIngredientItem(ingredient: Ingredient, action: () -> Unit, send: ()-> Unit) {
     var quantityToAdd by rememberSaveable { mutableStateOf("") }
     var totalQuantity by rememberSaveable { mutableStateOf( ingredient.quantity) }
+    val context = LocalContext.current
 
     Card(modifier = Modifier
         .padding(8.dp, 4.dp)
         .fillMaxWidth()
         .height(150.dp)
         .clickable {
-             action()
+            action()
         },
         shape = RoundedCornerShape(8.dp),
         elevation = 4.dp
@@ -127,15 +123,21 @@ fun ExtendIngredientItem(ingredient: Ingredient, action: () -> Unit, send: ()-> 
                 )
                 Button(
                     onClick = {
-                        totalQuantity = quantityToAdd.toDouble() - ingredient.quantity
+                        if (ingredient.quantity - quantityToAdd.toDouble() >= 0 )
+                            totalQuantity = ingredient.quantity - quantityToAdd.toDouble()
+                        else
+                            Toast.makeText(context,"La cantidad total tiene que ser positiva", Toast.LENGTH_SHORT)
                     }
                 ) {
                     Text ("-")
                 }
 
                 Button(onClick = {
-                          totalQuantity =  ingredient.quantity + quantityToAdd.toDouble()
-                        },
+                    if (ingredient.quantity + quantityToAdd.toDouble() >= 0 )
+                        totalQuantity = quantityToAdd.toDouble() + ingredient.quantity
+                    else
+                        Toast.makeText(context,"La cantidad total tiene que ser positiva", Toast.LENGTH_SHORT)
+                    },
                     colors = ButtonDefaults.buttonColors(
                         colorResource(
                             id = R.color.purple_200
@@ -151,7 +153,10 @@ fun ExtendIngredientItem(ingredient: Ingredient, action: () -> Unit, send: ()-> 
                         )
                     ),
                     onClick = {
-                        totalQuantity = quantityToAdd.toDouble()
+                        if (quantityToAdd.toDouble() >= 0 )
+                            totalQuantity = quantityToAdd.toDouble()
+                        else
+                            Toast.makeText(context,"La cantidad total tiene que ser positiva", Toast.LENGTH_SHORT)
                     },
                 ) {
                     Text ("Total")
