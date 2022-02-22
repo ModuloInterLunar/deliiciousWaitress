@@ -46,8 +46,8 @@ class DishSelectorViewModel : ViewModel() {
             try{
                 val result = getDishesUseCase()
                 if(!result.isNullOrEmpty()){
-                    dishes = result.toMutableList()
-                    shownDishes = result.toMutableList()
+                    dishes = result.toMutableList().sortedBy { it.name }
+                    shownDishes = result.toMutableList().sortedBy { it.name }
                     isLoading.value = false
                 }
             }catch (e: Exception) {
