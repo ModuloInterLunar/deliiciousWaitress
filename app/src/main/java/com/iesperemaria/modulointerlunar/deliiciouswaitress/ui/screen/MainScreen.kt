@@ -234,7 +234,6 @@ fun MainScreen(
                 composable (
                     AppScreens.IngredientScreen.route
                 ){
-                    currentScreen = AppScreens.IngredientScreen.route
                     gesturesEnabled = false
 
                     IngredientScreen(

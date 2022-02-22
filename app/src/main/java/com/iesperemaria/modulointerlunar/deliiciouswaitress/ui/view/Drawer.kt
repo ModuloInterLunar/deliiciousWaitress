@@ -27,12 +27,13 @@ fun Drawer(
     onDestinationClicked: (route: String) -> Unit,
     currentEmployee: State<Employee> = mutableStateOf(Employee())
 ) {
-    val screens = listOf(
+    val screens = mutableListOf(
         AppScreens.TableListScreen,
         AppScreens.OutputTrayScreen,
-        AppScreens.IngredientListScreen,
         AppScreens.TicketListScreen
     )
+    if (currentEmployee.value.isAdmin)
+        screens.add(AppScreens.IngredientListScreen)
 
     Column(
         modifier = modifier

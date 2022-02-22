@@ -47,7 +47,7 @@ fun IngredientItem(navController: NavController, ingredient: Ingredient, action:
                     .align(Alignment.CenterVertically)
             )
             Text (
-                text = ingredient.quantity.toString() + ingredient.measure,
+                text = ingredient.quantity.toString() + " " + ingredient.measure,
                 style = MaterialTheme.typography.caption,
                 modifier = Modifier
                     .padding(4.dp)
@@ -65,7 +65,7 @@ fun IngredientItem(navController: NavController, ingredient: Ingredient, action:
 @Composable
 fun Preview2() {
     DeliiciousWaitressTheme() {
-        val ingredient = Ingredient("0","g","Salsa", 2, 200.0)
+        val ingredient = Ingredient("0","g","Salsa", 200.0)
         ExtendIngredientItem( ingredient = ingredient, action = {}){}
     }
 }

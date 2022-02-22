@@ -31,4 +31,7 @@
     <string name="ticket_title_1">MESON RESTAURANTE</string>
     <string name="add_ingredient">Añadir ingrediente</string>
     <string name="orders_not_served_exception_message">No se puede pedir la cuenta si hay pedidos pendientes de servir!</string>
+    <string name="ingredient_empty_error">Se tienen que rellenar todos los campos !</string>
+    <string name="ingredient_created">El ingrediente ha sido creado</string>
+    <string name="ingredient_creation_exception_message">"Hubo un error al crear el ingrediente: "</string>
 </resources>

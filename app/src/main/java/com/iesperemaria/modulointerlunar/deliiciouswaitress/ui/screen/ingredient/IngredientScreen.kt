@@ -1,5 +1,6 @@
 package com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.ingredient
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -23,9 +24,11 @@ import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.TopBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.compose.rememberNavController
+import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.screen.AppScreens
 import com.iesperemaria.modulointerlunar.deliiciouswaitress.ui.view.FAB
 
 
@@ -39,7 +42,7 @@ fun IngredientScreen(
         topBar = {
             TopBar(
                 title = stringResource(id = R.string.add_ingredient),
-                buttonIcon = painterResource(id = R.drawable.hamburger_icon),
+                buttonIcon = painterResource(id = R.drawable.back_arrow),
                 onButtonClicked = { navController.popBackStack() },
                 navController = navController
             )
@@ -57,6 +60,7 @@ fun IngredientScreen(
 @Composable
 fun IngredientContent(navController: NavController, ingredientViewModel: IngredientViewModel) {
 
+    var context = LocalContext.current
     var ingredientName by rememberSaveable { mutableStateOf("") }
     var ingredientQuantity by rememberSaveable { mutableStateOf("") }
     var expanded by rememberSaveable { mutableStateOf(false) }
@@ -74,6 +78,7 @@ fun IngredientContent(navController: NavController, ingredientViewModel: Ingredi
                     onValueChange = {
                         ingredientName = it
                     },
+                    modifier = Modifier.padding(2.dp),
                     label = { Text("Nombre") }
                 )
                 OutlinedTextField(
@@ -81,12 +86,15 @@ fun IngredientContent(navController: NavController, ingredientViewModel: Ingredi
                     onValueChange = {
                         ingredientQuantity = it
                     },
+                    modifier = Modifier.padding(2.dp),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     label = { Text("Cantidad") })
             }
             Row() {
                 OutlinedTextField(value = selectedMeasure,
                     onValueChange = { selectedMeasure = it },
                     modifier = Modifier
+                        .padding(2.dp)
                         .fillMaxWidth()
                         .onGloballyPositioned { coordinates ->
                             textFieldSize = coordinates.size.toSize()
@@ -113,11 +121,32 @@ fun IngredientContent(navController: NavController, ingredientViewModel: Ingredi
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
-            Button(onClick = {
-                ingredientViewModel.createIngredient()
-            },
-            modifier = Modifier
-                .fillMaxWidth()){
+            Button(
+                onClick = {
+                    val quantity = ingredientQuantity.toDoubleOrNull()
+                    if (ingredientName.isBlank() || quantity == null || selectedMeasure.isBlank()) {
+                        Toast.makeText(context, context.getString(R.string.ingredient_empty_error), Toast.LENGTH_SHORT).show()
+                        return@Button
+                    }
+                    ingredientViewModel.createIngredient(
+                        name = ingredientName,
+                        quantity = quantity,
+                        measure = selectedMeasure,
+                        onSuccessCallback = {
+                            Toast.makeText(context, context.getString(R.string.ingredient_created), Toast.LENGTH_SHORT).show()
+                            navController.navigate(AppScreens.IngredientListScreen.route) {
+                                popUpTo(0)
+                            }
+                        },
+                        onErrorCallback = {
+                            Toast.makeText(context, context.getString(R.string.ingredient_creation_exception_message) + it, Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                },
+                modifier = Modifier
+                    .padding(2.dp)
+                    .fillMaxWidth()
+            ){
                 Text(text = "Enviar")
             }
         }
@@ -127,7 +156,7 @@ fun IngredientContent(navController: NavController, ingredientViewModel: Ingredi
 
 @Preview
 @Composable
-fun previewIngredientScreen() {
+fun PreviewIngredientScreen() {
     IngredientContent(navController = rememberNavController() , ingredientViewModel = IngredientViewModel())
 }
 

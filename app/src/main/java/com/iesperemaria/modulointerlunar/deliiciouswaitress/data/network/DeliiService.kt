@@ -190,6 +190,8 @@ class DeliiService {
         Logger.i(response.toString())
         if(response.code() == 404)
             throw ItemNotFoundException(response.message())
+        if(response.code() != 201)
+            throw DeliiApiException(response.message())
         return response.body()!!
     }
 }
