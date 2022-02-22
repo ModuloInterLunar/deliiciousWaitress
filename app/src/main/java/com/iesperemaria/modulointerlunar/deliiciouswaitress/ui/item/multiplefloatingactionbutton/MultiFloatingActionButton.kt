@@ -118,7 +118,7 @@ fun MiniFabItem(
             onClick = { onFabItemClicked() },
             modifier = Modifier.size(40.dp),
             backgroundColor = fabOption.backgroundTint,
-            contentColor = fabOption.iconTint,
+            contentColor = item.color ?: fabOption.iconTint,
         ) {
             Icon(imageVector = item.imageVector, contentDescription = "")
         }

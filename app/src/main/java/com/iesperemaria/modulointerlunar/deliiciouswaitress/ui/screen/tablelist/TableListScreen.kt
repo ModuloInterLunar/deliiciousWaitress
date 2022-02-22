@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.OpenWith
-import androidx.compose.material.icons.outlined.Save
+import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.twotone.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +36,7 @@ fun TableListScreen(
     tableListViewModel: TableListViewModel,
     openDrawer: () -> Unit
 ) {
+    var color by remember { mutableStateOf(Color.White)}
     Scaffold(
         topBar = {
             TopBar(
@@ -64,10 +65,15 @@ fun TableListScreen(
                     ),
                     MultiFabItem(
                         id = 2,
-                        imageVector = Icons.Outlined.OpenWith,
+                        imageVector = Icons.Filled.OpenWith,
                         label = "Move tables",
+                        color = color,
                         onClick = {
                             tableListViewModel.changeMovementState()
+                            color = if (tableListViewModel.canMoveTables)
+                                Color.Green
+                            else
+                                Color.White
                         }
                     ),
                     MultiFabItem(
@@ -76,6 +82,8 @@ fun TableListScreen(
                         label = "Save distribution",
                         onClick = {
                             tableListViewModel.updateTables()
+                            tableListViewModel.setMovementStateFalse()
+                            color = Color.White
                         }
                     )
                 ),

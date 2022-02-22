@@ -46,6 +46,10 @@ class TableListViewModel : ViewModel(){
         canMoveTables = !canMoveTables
     }
 
+    fun setMovementStateFalse() {
+        canMoveTables = false
+    }
+
     fun loadTables(){
         viewModelScope.launch {
             isLoading.value = true

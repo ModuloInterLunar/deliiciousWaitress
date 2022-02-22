@@ -183,4 +183,13 @@ class DeliiService {
         if (response.code() == 404)
             throw ItemNotFoundException(response.message())
     }
+
+    suspend fun createIngredient(ingredient: Ingredient): Ingredient {
+        val ingredientModel = IngredientModel(ingredient)
+        val response = RetrofitHelper.getDeliiApiClient().createIngredient(ingredientModel)
+        Logger.i(response.toString())
+        if(response.code() == 404)
+            throw ItemNotFoundException(response.message())
+        return response.body()!!
+    }
 }

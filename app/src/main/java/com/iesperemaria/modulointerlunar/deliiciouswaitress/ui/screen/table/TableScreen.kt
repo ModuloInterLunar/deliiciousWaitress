@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -77,6 +78,7 @@ fun PreviewTableScreen() {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TableContent(tableViewModel: TableViewModel, navController: NavController) {
+    val context = LocalContext.current
     val table = tableViewModel.table.value
 
     Surface {
@@ -123,7 +125,12 @@ fun TableContent(tableViewModel: TableViewModel, navController: NavController) {
 
             if (table.actualTicket != null && table.actualTicket!!.orders.size > 0)
             Button(
-                onClick = { tableViewModel.loadPaymentScreen(navController) },
+                onClick = {
+                    if (table.actualTicket!!.orders.any{ !it.hasBeenServed })
+                        Toast.makeText(context, context.getString(R.string.orders_not_served_exception_message), Toast.LENGTH_SHORT).show()
+                    else
+                        tableViewModel.loadPaymentScreen(navController)
+                },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .fillMaxHeight()
