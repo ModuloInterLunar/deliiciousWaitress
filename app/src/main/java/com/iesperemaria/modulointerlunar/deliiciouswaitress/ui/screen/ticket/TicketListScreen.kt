@@ -34,7 +34,7 @@ fun TicketListScreen (
     Scaffold(
         topBar = {
             TopBar(
-                title = stringResource(id = R.string.output_tray),
+                title = stringResource(id = R.string.list_of_paid_tickets),
                 buttonIcon = painterResource(id = R.drawable.hamburger_icon),
                 navController = navController,
                 onButtonClicked = { openDrawer() }
@@ -63,14 +63,6 @@ fun TicketListContent (
                 .fillMaxSize()
                 .background(Color.White)
         ) {
-            Text(
-                text = stringResource(id = R.string.list_of_paid_tickets),
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier
-                    .padding(10.dp)
-                    .fillMaxWidth(),
-                textDecoration = TextDecoration.Underline
-            )
 
             LazyVerticalGrid(
                 cells = GridCells.Adaptive(minSize = 172.dp)
